@@ -5,7 +5,7 @@ import io.Source
 import java.nio.{ByteOrder, ByteBuffer}
 import collection.mutable.ListBuffer
 
-class RdbIndexEntry(rdbType: Int, id: Int) {
+class RdbIndexEntry(rdbType: Int, id: Int, fileNum: Byte = 0, dataOffset: Int = 0, length: Int = 0, hash: Array[Byte] = Array()) {
   override def toString = "type: " + rdbType + ", id: " + id
 }
 
@@ -29,8 +29,10 @@ class RdbIndexFileReader(file: File) extends RdbFileReader {
     println("Found " + numEntries + " index entries.")
     for(i <- 0 until numEntries) {
       val indexEntry = readIndexEntry
-      println(indexEntry)
       listOfIndexEntries += indexEntry
+    }
+    for (i <- 0 until numEntries) {
+      val
     }
     println(listOfIndexEntries.size)
 
