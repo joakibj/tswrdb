@@ -1,0 +1,34 @@
+tswrdb
+======
+
+tswrdb is a program for extracting *.rdbdata files. It is written in Scala.
+
+Note: all active development takes place in the `develop` branch. Stable releases are merged into `master`.
+
+Setup
+==========
+
+tswrdb uses sbt to build.
+
+Building
+========
+TODO
+
+Documentation
+=============
+TODO (documentation on Wiki)
+
+Usage
+=====
+
+To use tswrdb you need the following:
+
+* A shell
+* Java 6 runtime
+* A set of .rdbdata files with the associated le.idx file.
+
+License
+=======
+
+Please refer to the LICENSE file.
+
