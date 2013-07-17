@@ -9,7 +9,12 @@ object RdbIndexEntry {
     new RdbIndexEntry(tup2._1, tup2._2, tup4._1, tup4._2, tup4._3, tup4._4)
 }
 
-class RdbIndexEntry(rdbType: Int, id: Int, fileNum: Byte, dataOffset: Int, length: Int, hash: Array[Byte]) {
+class RdbIndexEntry(val rdbType: Int,
+                    val id: Int,
+                    val fileNum: Byte,
+                    val dataOffset: Int,
+                    val length: Int,
+                    val hash: Array[Byte]) {
   override def toString = {
     "type: " + rdbType +
       ", id: " + id +
@@ -42,7 +47,6 @@ class RdbIndexFileReader(file: File) extends RdbFileReader {
     bufferedInputStream.reset()
     bufferedInputStream.skip(28)
     val indexTable = ArrayBuffer[(Int, Int)]()
-    println("Found " + numEntries + " index entries.")
     for (i <- 0 until numEntries) {
       val indexEntry = readIndexEntry(i)
       indexTable += indexEntry
