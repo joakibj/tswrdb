@@ -1,7 +1,7 @@
 tswrdb
 ======
 
-tswrdb is a program for extracting *.rdbdata files. It is written in Scala.
+tswrdb is a program for extracting contents in *.rdbdata files. It is written in Scala.
 
 Note: all active development takes place in the `develop` branch. Stable releases are merged into `master`.
 
