@@ -1,9 +1,5 @@
 package com.joakibj.tswrdb.rdb
 
-object FileType {
-  def apply(extension: String) = new FileType(extension)
-}
-
 case class FileType(val extension: String) {
   override def toString = extension
 }
@@ -11,11 +7,17 @@ case class FileType(val extension: String) {
 object RdbType {
   def apply(id: Int, name: String, fileType: FileType) = new RdbType(id, name, fileType)
 }
+class RdbType(val id: Int,
+              val name: String,
+              val fileType: FileType)
 
-class RdbType(id: Int, name: String, fileType: FileType)
+object RdbTypes {
+  private val types = new RdbTypes
 
+  def find(id: Int): Option[RdbType] = types.data find(_.id == id)
+}
 final class RdbTypes {
-  final val types: List[RdbType] = List(
+  final val data: List[RdbType] = List(
     RdbType(1000001, "Map Info", FileType("dat")),
 
     RdbType(1000005, "PC64", FileType("dat")),
@@ -110,7 +112,7 @@ final class RdbTypes {
     RdbType(1010007, "Morph", FileType("morph")),
     RdbType(1010008, "Icons - PNG", FileType("dat")),
 
-    RdbType(101000, "Materials MTI", FileType("dat")),
+    RdbType(1010002, "Materials MTI", FileType("dat")),
     RdbType(1010013, "Maps Merged", FileType("jpg")),
 
     RdbType(1010028, "XML - Sound Scripts", FileType("xml")),
