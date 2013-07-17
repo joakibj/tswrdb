@@ -1,7 +1,7 @@
 package com.joakibj.tswrdb
 
 import java.io._
-import rdb.{RdbIndexEntry, RdbIndexFileReader}
+import rdb.{RdbDataFileReader, RdbIndexEntry, RdbIndexFileReader}
 import scala.io.Source
 
 object TswRdb {
@@ -12,5 +12,8 @@ object TswRdb {
 
     val indexEntries = indexReader.readIndexEntries
     println("Found: " + indexEntries.length + " index entries")
+    val icons = indexEntries.filter((indexEntry: RdbIndexEntry) => indexEntry.rdbType == 1010008 && indexEntry.fileNum == 4)
+
+    val dataReader = RdbDataFileReader(new File(directory + "\\04.rdbdata"), icons.toArray)
   }
 }
