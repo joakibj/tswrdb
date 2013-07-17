@@ -15,10 +15,12 @@ class RdbIndexEntry(val rdbType: Int,
                     val dataOffset: Int,
                     val length: Int,
                     val hash: Array[Byte]) {
+  val fileName = "%02d.rdbdata" format fileNum
   override def toString = {
     "type: " + rdbType +
       ", id: " + id +
       ", fileNum: " + fileNum +
+      ", fileName: " + fileName +
       ", dataOffset: " + dataOffset +
       ", length: " + length
   }
@@ -32,19 +34,14 @@ class RdbIndexFileReader(file: File) extends RdbFileReader {
   require(file.isFile, "Must be a file")
 
   val MagicNumber: String = "IBDR"
-  private val fileInputStream = new FileInputStream(file)
-  private val bufferedInputStream = new BufferedInputStream(fileInputStream)
-  bufferedInputStream.mark(8)
-  private val littleEndianInt = ByteBuffer.wrap(_: Array[Byte]).order(ByteOrder.LITTLE_ENDIAN).getInt
-  private val littleEndianByte = ByteBuffer.wrap(_: Array[Byte]).order(ByteOrder.LITTLE_ENDIAN).get
-  private val littleEndianArray = ByteBuffer.wrap(_: Array[Byte]).order(ByteOrder.LITTLE_ENDIAN).array
+  val fileInputStream = new FileInputStream(file)
+  val bufferedInputStream = new BufferedInputStream(fileInputStream)
 
-  require(isIndexFile, "Must be an Index file")
+  require(hasMagicNumber(), "File is the index file")
 
   val numEntries = readNumIndexEntries
 
   def readIndexEntries: ArrayBuffer[RdbIndexEntry] = {
-    bufferedInputStream.reset()
     bufferedInputStream.skip(28)
     val indexTable = ArrayBuffer[(Int, Int)]()
     for (i <- 0 until numEntries) {
@@ -58,6 +55,7 @@ class RdbIndexFileReader(file: File) extends RdbFileReader {
       val indexEntry = indexTable(i)
       indexEntries += RdbIndexEntry(indexEntry, indexEntryDetails)
     }
+    bufferedInputStream.close()
 
     indexEntries
   }
@@ -67,9 +65,9 @@ class RdbIndexFileReader(file: File) extends RdbFileReader {
     if (bufferedInputStream.read(buf, 0, 8) != -1) {
       val splitBuf = buf.splitAt(4)
       val rdbType = littleEndianInt(splitBuf._1)
-      val rdbIndex = littleEndianInt(splitBuf._2)
+      val rdbId = littleEndianInt(splitBuf._2)
 
-      (rdbType, rdbIndex)
+      (rdbId, rdbType)
     } else {
       throw new RuntimeException("Prematurely got to end of file")
     }
@@ -93,14 +91,8 @@ class RdbIndexFileReader(file: File) extends RdbFileReader {
 
   private def readNumIndexEntries: Int = {
     var buf: Array[Byte] = new Array(4)
-    bufferedInputStream.skip(20)
+    bufferedInputStream.skip(24)
     bufferedInputStream.read(buf, 0, 4)
     littleEndianInt(buf)
-  }
-
-  private def isIndexFile: Boolean = {
-    var buf: Array[Byte] = new Array(4)
-    bufferedInputStream.read(buf, 0, 4)
-    if (new String(buf) == MagicNumber) true else false
   }
 }
