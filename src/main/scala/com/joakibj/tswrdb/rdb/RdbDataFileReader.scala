@@ -45,6 +45,6 @@ class RdbDataFileReader(file: File, ie: Array[RdbIndexEntry]) extends RdbFileRea
   }
 
   private def isCorrectDataEntry(): Boolean = {
-
+    false
   }
 }
