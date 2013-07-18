@@ -13,6 +13,6 @@ import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
 
 @RunWith(classOf[JUnitRunner])
-class RdbIndexFileReaderTest extends FunSuite with BeforeAndAfterAll with ShouldMatchers {
+class RdbDataFileReaderTest extends FunSuite with BeforeAndAfterAll with ShouldMatchers {
 
 }
