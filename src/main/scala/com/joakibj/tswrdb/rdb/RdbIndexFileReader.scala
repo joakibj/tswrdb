@@ -37,7 +37,7 @@ class RdbIndexFileReader(file: File) extends RdbFileReader {
   val fileInputStream = new FileInputStream(file)
   val bufferedInputStream = new BufferedInputStream(fileInputStream)
 
-  require(hasMagicNumber(), "File is the index file")
+  require(hasMagicNumber(), "File does not have the required MagicNumber and is not the index file")
 
   val numEntries = readNumIndexEntries
 
