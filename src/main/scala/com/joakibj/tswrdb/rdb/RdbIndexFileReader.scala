@@ -5,6 +5,8 @@ import java.nio.{ByteOrder, ByteBuffer}
 import scala.collection.mutable.ArrayBuffer
 
 object RdbIndexEntry {
+  def apply(rdbType: Int, id: Int, fileNum: Byte, dataOffset: Int, length: Int, hash: Array[Byte]) =
+    new RdbIndexEntry(rdbType, id, fileNum, dataOffset, length, hash)
   def apply(tup2: Tuple2[Int, Int], tup4: Tuple4[Byte, Int, Int, Array[Byte]]) =
     new RdbIndexEntry(tup2._1, tup2._2, tup4._1, tup4._2, tup4._3, tup4._4)
 }
