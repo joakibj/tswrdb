@@ -53,13 +53,13 @@ class RdbIndexFileReader(file: File) extends RdbFileReader {
     skipHeader()
     val indexTable = ArrayBuffer[(Int, Int)]()
     for (i <- 0 until numEntries) {
-      val indexEntry = readIndexEntry(i)
+      val indexEntry = readNextIndexEntry()
       indexTable += indexEntry
     }
 
     val indexEntries = ArrayBuffer[RdbIndexEntry]()
     for (i <- 0 until numEntries) {
-      val indexEntryDetails = readIndexEntryDetails(i)
+      val indexEntryDetails = readNextIndexEntryDetail()
       val indexEntry = indexTable(i)
       indexEntries += RdbIndexEntry(indexEntry, indexEntryDetails)
     }
@@ -68,26 +68,26 @@ class RdbIndexFileReader(file: File) extends RdbFileReader {
     indexEntries
   }
 
-  private def readIndexEntry(indexNum: Int): (Int, Int) = {
+  private def readNextIndexEntry(): (Int, Int) = {
     var buf: Array[Byte] = new Array(8)
     if (bufferedInputStream.read(buf, 0, 8) != -1) {
       val splitBuf = buf.splitAt(4)
       val rdbType = littleEndianInt(splitBuf._1)
       val rdbId = littleEndianInt(splitBuf._2)
 
-      (rdbId, rdbType)
+      (rdbType, rdbId)
     } else {
       throw new RuntimeException("Prematurely got to end of file")
     }
   }
 
-  private def readIndexEntryDetails(indexNum: Int) = {
-    var buf2: Array[Byte] = new Array(28)
-    if (bufferedInputStream.read(buf2, 0, 28) != -1) {
-      val fileNum = littleEndianByte(buf2.slice(0, 1))
-      val offset = littleEndianInt(buf2.slice(4, 8))
-      val length = littleEndianInt(buf2.slice(8, 12))
-      val hash = buf2.slice(12, 28)
+  private def readNextIndexEntryDetail() = {
+    var buf: Array[Byte] = new Array(28)
+    if (bufferedInputStream.read(buf, 0, 28) != -1) {
+      val fileNum = littleEndianByte(buf.slice(0, 1))
+      val offset = littleEndianInt(buf.slice(4, 8))
+      val length = littleEndianInt(buf.slice(8, 12))
+      val hash = buf.slice(12, 28)
 
       (fileNum, offset, length, hash)
     } else {
