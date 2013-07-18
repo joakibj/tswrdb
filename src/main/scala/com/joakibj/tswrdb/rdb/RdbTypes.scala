@@ -98,11 +98,11 @@ final class RdbTypes {
     RdbType(1000621, "Spells", 0, FileType("dat")),
     RdbType(1000622, "XML - Effect Packages", 0, FileType("xml")),
     RdbType(1000623, "Text Files", 12, FileType("txt")),
-    RdbType(1000624, "Media - Flash", 0, FileType("dat")),
+    RdbType(1000624, "Media - Flash", 0, FileType("swf")),
     RdbType(1000625, "Token State Data", 12, FileType("dat")),
     RdbType(1000626, "Chat Filter", 0, FileType("dat")),
     RdbType(1000635, "Media - Video", 0, FileType("dat")),
-    RdbType(1000636, "Media - Images", 0, FileType("dat")),
+    RdbType(1000636, "Media - Images", 12, FileType("png")),
     RdbType(1000637, "", 0, FileType("dat")),
     RdbType(1000638, "Footsteps", 0, FileType("dat")),
 
@@ -113,7 +113,7 @@ final class RdbTypes {
 
     RdbType(1010006, "FCTX Textures", 0, FileType("dat")),
     RdbType(1010007, "Morph", 0, FileType("morph")),
-    RdbType(1010008, "Icons - PNG", 12, FileType("dat")),
+    RdbType(1010008, "Icons - PNG", 12, FileType("png")),
 
     RdbType(1010012, "Materials MTI", 0, FileType("dat")),
     RdbType(1010013, "Maps Merged", 0, FileType("jpg")),
@@ -140,7 +140,7 @@ final class RdbTypes {
     RdbType(1010207, "Particle Effects", 12, FileType("particleeffect")),
     RdbType(1010210, "Bump Maps", 12, FileType("png")),
     RdbType(1010211, "Bump Maps", 12, FileType("png")),
-    RdbType(1010213, "Del Portal Image - PNG", 0, FileType("dat")),
+    RdbType(1010213, "Del Portal Image - PNG", 12, FileType("png")),
     RdbType(1010216, "XML - Cars", 12, FileType("xml")),
     RdbType(1010217, "Flora Images - TGA", 0, FileType("dat")),
     RdbType(1010218, "Textures Flora", 0, FileType("dat")),
