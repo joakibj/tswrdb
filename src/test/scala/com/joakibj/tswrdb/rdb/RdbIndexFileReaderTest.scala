@@ -58,6 +58,7 @@ class RdbIndexFileReaderTest extends FunSuite with BeforeAndAfterAll with Should
     val reader = RdbIndexFileReader(tmpFile)
     val result = reader.readIndexEntries()
 
+    ///TODO: this is an ugly hack, why doesn't deep object inspection happen? use should have on properties instead?
     result(0).toString should be(RdbIndexEntry(100000, 1, 1, 0, 15, DummyHash).toString)
     result(1).toString should be(RdbIndexEntry(100000, 2, 1, 15, 15, DummyHash).toString)
     result(2).toString should be(RdbIndexEntry(100000, 3, 1, 30, 15, DummyHash).toString)
