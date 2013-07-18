@@ -28,7 +28,7 @@ class RdbIndexFileReaderTest extends FunSuite with BeforeAndAfterAll with Should
 
   test("should have read number of index entries in the header") {
   	val reader = RdbIndexFileReader(tmpFile)
-  	assert(reader.numEntries === 10)	
+  	assert(reader.numEntries === 10)
   }
 
   test("should read next index table entry") {
@@ -43,7 +43,7 @@ class RdbIndexFileReaderTest extends FunSuite with BeforeAndAfterAll with Should
 
   test("should read next index entry details") {
     val reader = RdbIndexFileReader(tmpFile)
-    reader.bufferedInputStream.skip(28 + (10 * 8))
+    reader.fileInputStream.skip(28 + (10 * 8))
 
     val readNextIndexEntryDetail = PrivateMethod[(Int, Int, Int, Array[Byte])]('readNextIndexEntryDetail)
     val result = reader invokePrivate readNextIndexEntryDetail()
@@ -88,13 +88,13 @@ class RdbIndexFileReaderTest extends FunSuite with BeforeAndAfterAll with Should
 
   def generateTestData: Array[Byte] = {
     val MagicNumber: Array[Byte] = "IBDR" map(_.toByte) toArray
-    val header: Array[Byte] =  MagicNumber ++ 
-                              intToBytes(7) ++ 
+    val header: Array[Byte] =  MagicNumber ++
+                              intToBytes(7) ++
                               padding(16) ++
                               intToBytes(10)
 
-    header ++ 
-    generateIndexTable(10) ++ 
+    header ++
+    generateIndexTable(10) ++
     generateIndexEntries(10)
   }
 
@@ -102,13 +102,13 @@ class RdbIndexFileReaderTest extends FunSuite with BeforeAndAfterAll with Should
   	val table: ArrayBuffer[Byte] = ArrayBuffer()
 
     (1 to num).foreach {
-      (i) => 
+      (i) =>
         var entry = Array[Byte]()
         if(i <= 5)
-          entry = intToBytes(100000) ++ 
+          entry = intToBytes(100000) ++
                   intToBytes(i)
         else
-          entry = intToBytes(100001) ++ 
+          entry = intToBytes(100001) ++
                   intToBytes(i)
         table ++= entry
     }
@@ -120,19 +120,19 @@ class RdbIndexFileReaderTest extends FunSuite with BeforeAndAfterAll with Should
     val entries: ArrayBuffer[Byte] = ArrayBuffer()
 
     (0 until num).foreach {
-      (i) => 
+      (i) =>
         var entry = Array[Byte]()
         if(i < 5)
-          entry = byteToBytes(1) ++ 
-                  padding(3) ++ 
-                  intToBytes(i * 15) ++ 
-                  intToBytes(15) ++ 
+          entry = byteToBytes(1) ++
+                  padding(3) ++
+                  intToBytes(i * 15) ++
+                  intToBytes(15) ++
                   DummyHash
         else
-          entry = byteToBytes(2) ++ 
-                  padding(3) ++ 
-                  intToBytes((5 * 15) +  (i - 5) * 10) ++ 
-                  intToBytes(10) ++ 
+          entry = byteToBytes(2) ++
+                  padding(3) ++
+                  intToBytes((5 * 15) +  (i - 5) * 10) ++
+                  intToBytes(10) ++
                   DummyHash
         entries ++= entry
     }
