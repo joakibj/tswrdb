@@ -17,6 +17,7 @@ object RdbTypes {
   private val types = new RdbTypes
 
   def find(id: Int): Option[RdbType] = types.data find (_.id == id)
+  def exists(id: Int): Boolean = find(id) != None
 }
 
 final class RdbTypes {
@@ -126,7 +127,7 @@ final class RdbTypes {
     RdbType(1010036, "", 12, FileType("enl")),
     RdbType(1010039, "", 0, FileType("dat")),
     RdbType(1010040, "", 0, FileType("dat")),
-    RdbType(1010042, "Loading Screen Images", 0, FileType("dat")),
+    RdbType(1010042, "Loading Screen Images", 0, FileType("jpg")),
     RdbType(1010043, "", 0, FileType("dat")),
     RdbType(1010060, "", 0, FileType("dat")),
 

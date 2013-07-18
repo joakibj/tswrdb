@@ -18,11 +18,20 @@ class RdbDataEntry(val rdbType: Int, val id: Int, val length: Int) {
   }
 }
 
-object RdbDataFileReader {
-  def apply(file: File, indexEntries: Array[RdbIndexEntry]) = new RdbDataFileReader(file, indexEntries)
+object RdbDataExporter {
+  def exportAll(rdbDataDirectory: File, groupedIndexEntries: Map[Int, Array[RdbIndexEntry]]) {
+    groupedIndexEntries.keys.foreach {
+      (key) =>
+        val rdbDataFile = new File(rdbDataDirectory, "%02d.rdbdata" format key)
+        val dataExporter = RdbDataExporter(rdbDataFile, groupedIndexEntries.get(key).get)
+        println("Exporting entries from: " + rdbDataFile.getName)
+        dataExporter.exportDataEntries()
+    }
+  }
+  def apply(file: File, indexEntries: Array[RdbIndexEntry]) = new RdbDataExporter(file, indexEntries)
 }
 
-class RdbDataFileReader(file: File, ie: Array[RdbIndexEntry]) extends RdbFileReader {
+class RdbDataExporter(file: File, ie: Array[RdbIndexEntry]) extends RdbFileReader {
   require(file.isFile, "Datafile does not exist")
 
   val MagicNumber: String = "RDB0"
@@ -39,7 +48,7 @@ class RdbDataFileReader(file: File, ie: Array[RdbIndexEntry]) extends RdbFileRea
   private def validIndexEntries(indexEntries: Array[RdbIndexEntry]): Boolean =
     indexEntries.count((indexEntry: RdbIndexEntry) => indexEntry.fileName == file.getName) == indexEntries.size
 
-  def readDataEntries() {
+  def exportDataEntries() {
 
     val firstIndexEntry = indexEntries(0)
     processEntry(firstIndexEntry, 4)
