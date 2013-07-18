@@ -41,8 +41,14 @@ class RdbIndexFileReader(file: File) extends RdbFileReader {
 
   val numEntries = readNumIndexEntries
 
-  def readIndexEntries: ArrayBuffer[RdbIndexEntry] = {
+  bufferedInputStream.reset()
+
+  def skipHeader() {
     bufferedInputStream.skip(28)
+  }
+
+  def readIndexEntries(): ArrayBuffer[RdbIndexEntry] = {
+    skipHeader()
     val indexTable = ArrayBuffer[(Int, Int)]()
     for (i <- 0 until numEntries) {
       val indexEntry = readIndexEntry(i)
