@@ -76,15 +76,8 @@ class RdbIndexFileReaderTest extends FunSuite with BeforeAndAfterAll with Should
   }
 
   def setupData() {
-  	val MagicNumber: Array[Byte] = "IBDR" map(_.toByte) toArray
-  	val header: Array[Byte] =  MagicNumber ++ 
-                              intToBytes(7) ++ 
-                              padding(16) ++
-                              intToBytes(10)
-
-  	val testData: Array[Byte] = header ++ generateIndexTable(10) ++ generateIndexEntries(10)
   	val fos = new FileOutputStream(tmpFile)
-  	fos.write(testData)
+  	fos.write(generateTestData)
   	fos.close()
   }
 
@@ -92,6 +85,18 @@ class RdbIndexFileReaderTest extends FunSuite with BeforeAndAfterAll with Should
   def byteToBytes(b: Byte): Array[Byte] = Array(b)
   def padding(num: Int): Array[Byte] = Array.fill(num)(0.toByte)
   def toHex(buffer: Array[Byte]): String = buffer.map("%02X" format _).mkString
+
+  def generateTestData: Array[Byte] = {
+    val MagicNumber: Array[Byte] = "IBDR" map(_.toByte) toArray
+    val header: Array[Byte] =  MagicNumber ++ 
+                              intToBytes(7) ++ 
+                              padding(16) ++
+                              intToBytes(10)
+
+    header ++ 
+    generateIndexTable(10) ++ 
+    generateIndexEntries(10)
+  }
 
   def generateIndexTable(num: Int): Array[Byte] = {
   	val table: ArrayBuffer[Byte] = ArrayBuffer()
