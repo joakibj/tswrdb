@@ -28,6 +28,7 @@ object RdbDataExporter {
         dataExporter.exportDataEntries()
     }
   }
+
   def apply(file: File, indexEntries: Array[RdbIndexEntry]) = new RdbDataExporter(file, indexEntries)
 }
 
@@ -56,8 +57,7 @@ class RdbDataExporter(file: File, ie: Array[RdbIndexEntry]) extends RdbFileReade
       it =>
         val indexEntry1 = it.head
         val indexEntry2 = it.last
-        val rdbType = RdbTypes.find(indexEntry1.rdbType).get
-        processEntry(indexEntry2, indexEntry1.dataOffset + indexEntry1.length + rdbType.skipBytes)
+        processEntry(indexEntry2, indexEntry1.dataOffset + indexEntry1.length)
     }
     fileInputStream.close()
   }
@@ -66,16 +66,16 @@ class RdbDataExporter(file: File, ie: Array[RdbIndexEntry]) extends RdbFileReade
     val dataEntry = readNextDataEntryHeader((indexEntry.dataOffset - 16) - skipBytes)
     if (isCorrectDataEntry(indexEntry, dataEntry)) {
       val rdbType = RdbTypes.find(indexEntry.rdbType).get
-      val buf = readData(rdbType.skipBytes, dataEntry.length)
+      val buf = readData(indexEntry.length)
       val fileName = dir + indexEntry.id + "." + rdbType.fileType.extension
-      writeData(new File(fileName), buf)
+      writeData(new File(fileName), buf.drop(rdbType.skipBytes))
     } else {
       throw new RuntimeException("A mismatching data entry was read")
     }
   }
 
   private def readNextDataEntryHeader(skipBytes: Int): RdbDataEntry = {
-    val skipped = fileInputStream.skip(skipBytes)
+    fileInputStream.skip(skipBytes)
 
     val buf: Array[Byte] = new Array(16)
     fileInputStream.read(buf, 0, 16)
@@ -87,8 +87,7 @@ class RdbDataExporter(file: File, ie: Array[RdbIndexEntry]) extends RdbFileReade
     RdbDataEntry(dataType, dataId, dataLength)
   }
 
-  private def readData(skipBytes: Int, len: Int): Array[Byte] = {
-    fileInputStream.skip(skipBytes)
+  private def readData(len: Int): Array[Byte] = {
     val buf: Array[Byte] = new Array(len)
     fileInputStream.read(buf, 0, len)
     buf
