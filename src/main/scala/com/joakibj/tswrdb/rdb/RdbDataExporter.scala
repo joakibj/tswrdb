@@ -73,7 +73,7 @@ class RdbDataExporter(file: File, ie: Array[RdbIndexEntry]) extends RdbFileReade
       val fileName = dir + indexEntry.id + "." + rdbType.fileType.extension
       writeData(new File(fileName), buf.drop(rdbType.skipBytes))
     } else {
-      throw new RuntimeException("A mismatching data entry was read")
+      throw new RdbIOException("A mismatching data entry was read")
     }
   }
 

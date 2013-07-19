@@ -36,7 +36,8 @@ class RdbDataIndexTable(tbl: ArrayBuffer[RdbIndexEntry]) {
   def types = tbl.map(_.rdbType).toSet
 
   def entriesForType(in: Int) = {
-    if (!RdbTypes.exists(in)) throw new RuntimeException("RdbType not found")
+    if (!RdbTypes.exists(in)) throw new RdbTypeNotFoundException("RdbType not found")
+
     table.filter((indexEntry: RdbIndexEntry) => indexEntry.rdbType == in).toArray.groupBy((indexEntry: RdbIndexEntry) => indexEntry.fileNum.toInt)
   }
 }

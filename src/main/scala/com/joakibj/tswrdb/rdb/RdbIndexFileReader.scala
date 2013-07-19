@@ -18,10 +18,6 @@ class RdbIndexFileReader(file: File) extends RdbFileReader {
 
   val numEntries = readNumIndexEntries
 
-  def skipHeader() {
-    fileInputStream.skip(28)
-  }
-
   def getIndexTable: RdbDataIndexTable = new RdbDataIndexTable(readIndexEntries())
   
   def readIndexEntries(): ArrayBuffer[RdbIndexEntry] = {
@@ -51,7 +47,7 @@ class RdbIndexFileReader(file: File) extends RdbFileReader {
 
       (rdbType, rdbId)
     } else {
-      throw new RuntimeException("Prematurely got to end of file")
+      throw new RdbIOException("Prematurely got to end of file", Severity.Mayan)
     }
   }
 
@@ -65,7 +61,7 @@ class RdbIndexFileReader(file: File) extends RdbFileReader {
 
       (fileNum, offset, length, hash)
     } else {
-      throw new RuntimeException("Prematurely got to end of file")
+      throw new RdbIOException("Prematurely got to end of file", Severity.Mayan)
     }
   }
 
