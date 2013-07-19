@@ -53,6 +53,9 @@ class RdbDataExporter(file: File, ie: Array[RdbIndexEntry]) extends RdbFileReade
 
     val firstIndexEntry = indexEntries(0)
     processEntry(firstIndexEntry, 4)
+
+    if(indexEntries.size == 1) return
+
     indexEntries.sliding(2).foreach {
       it =>
         val indexEntry1 = it.head
