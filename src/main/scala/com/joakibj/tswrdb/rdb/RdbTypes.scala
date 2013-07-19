@@ -11,7 +11,13 @@ object RdbType {
 class RdbType(val id: Int,
               val name: String,
               val skipBytes: Int,
-              val fileType: FileType)
+              val fileType: FileType) {
+
+  override def equals(other: Any) = other match { 
+    case that: RdbType => this.id == that.id
+    case _ => false 
+  }
+}
 
 object RdbTypes {
   private val types = new RdbTypes
@@ -20,7 +26,7 @@ object RdbTypes {
   def exists(id: Int): Boolean = find(id) != None
 }
 
-final class RdbTypes {
+class RdbTypes {
   final val data: List[RdbType] = List(
     RdbType(1000001, "Map Info", 0, FileType("dat")),
 

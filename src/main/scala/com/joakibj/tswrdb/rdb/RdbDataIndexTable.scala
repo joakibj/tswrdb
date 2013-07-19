@@ -18,22 +18,37 @@ class RdbIndexEntry(val rdbType: Int,
                     val hash: Array[Byte]) {
   val fileName = "%02d.rdbdata" format fileNum
 
+  override def equals(other: Any) = other match { 
+    case that: RdbIndexEntry => {
+      this.rdbType == that.rdbType &&
+      this.id == that.id &&
+      this.fileNum == that.fileNum &&
+      this.dataOffset == that.dataOffset &&
+      this.length == that.length
+    }
+    case _ => false 
+  }
+
   override def toString = {
-    "type: " + rdbType +
+    "(type: " + rdbType +
       ", id: " + id +
       ", fileNum: " + fileNum +
       ", fileName: " + fileName +
       ", dataOffset: " + dataOffset +
-      ", length: " + length
+      ", length: " + length + ")"
   }
+}
+
+object RdbDataIndexTable {
+  def apply(tbl: ArrayBuffer[RdbIndexEntry]) = new RdbDataIndexTable(tbl)
 }
 
 class RdbDataIndexTable(tbl: ArrayBuffer[RdbIndexEntry]) {
   private val table = tbl
 
-  def length = tbl.size
+  def length = table.size
 
-  def types = tbl.map(_.rdbType).toSet
+  def types = table.map(_.rdbType).toSet
 
   def entriesForType(in: Int) = {
     if (!RdbTypes.exists(in)) throw new RuntimeException("RdbType not found")
