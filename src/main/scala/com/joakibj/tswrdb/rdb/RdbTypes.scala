@@ -25,8 +25,10 @@ final class RdbTypes {
     RdbType(1000001, "Map Info", 0, FileType("dat")),
 
     RdbType(1000005, "PC64", 0, FileType("dat")),
+    RdbType(1000006, "Unknown", 0, FileType("dat")), //new
     RdbType(1000007, "XML - PhysX", 0, FileType("xml")),
     RdbType(1000010, "File Names", 12, FileType("dat")),
+    RdbType(1000012, "Unknown", 0, FileType("dat")), //new
     RdbType(1000013, "K-D Tree KDv2", 0, FileType("dat")),
     RdbType(1000015, "K-D Tree KDv2", 0, FileType("dat")),
     RdbType(1000016, "K-D Tree KDv3", 0, FileType("dat")),
@@ -147,6 +149,7 @@ final class RdbTypes {
     RdbType(1010218, "Textures Flora", 0, FileType("dat")),
     RdbType(1010220, "Grass Data", 0, FileType("dat")),
     RdbType(1010221, "Grass Mesh", 0, FileType("dat")),
+    RdbType(1010222, "Unknown", 0, FileType("dat")), //new
     RdbType(1010223, "Lua Scripts", 0, FileType("dat")),
     RdbType(1010226, "Looks Package", 0, FileType("lkz")),
     RdbType(1010230, "Compiled Lua", 0, FileType("dat")),
@@ -156,6 +159,8 @@ final class RdbTypes {
     RdbType(1010302, "Flora FME Mesh Data", 0, FileType("fme")),
     RdbType(1010303, "Grass", 0, FileType("dat")),
     RdbType(1010400, "XML - Formation", 12, FileType("xml")),
+
+    RdbType(1010450, "Unknown", 0, FileType("dat")), //new
 
     RdbType(1010500, "Binary XML - BCT Group", 0, FileType("bxml")),
     RdbType(1010501, "Binary XML - BCT Mesh", 0, FileType("bxml")),
@@ -206,6 +211,8 @@ final class RdbTypes {
     RdbType(1066611, "", 0, FileType("dat")),
 
     RdbType(1070003, "XML - Playfield", 12, FileType("xml")),
-    RdbType(1070010, "XML - DataFilterInstanceInfo", 0, FileType("xml"))
+    RdbType(1070010, "XML - DataFilterInstanceInfo", 0, FileType("xml")),
+    RdbType(1070014, "Unknown", 0, FileType("xml")), //new
+    RdbType(1070020, "Unknown", 0, FileType("xml"))  //new
     )
 }
