@@ -6,5 +6,7 @@ import org.junit.runner.RunWith
 
 @RunWith(classOf[JUnitRunner])
 class TswRdbTest extends FunSuite {
-
+  test("TODO") {
+    
+  }
 }
