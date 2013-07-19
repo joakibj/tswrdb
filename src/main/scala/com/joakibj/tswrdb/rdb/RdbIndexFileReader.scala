@@ -55,7 +55,7 @@ class RdbIndexFileReader(file: File) extends RdbFileReader {
     }
   }
 
-  private def readNextIndexEntryDetail() = {
+  private def readNextIndexEntryDetail(): (Byte, Int, Int, Array[Byte]) = {
     var buf: Array[Byte] = new Array(28)
     if (fileInputStream.read(buf, 0, 28) != -1) {
       val fileNum = littleEndianByte(buf.slice(0, 1))
