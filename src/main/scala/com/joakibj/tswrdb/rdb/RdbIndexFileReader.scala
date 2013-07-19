@@ -1,7 +1,6 @@
 package com.joakibj.tswrdb.rdb
 
-import java.io.{BufferedInputStream, FileInputStream, File}
-import java.nio.{ByteOrder, ByteBuffer}
+import java.io.{FileInputStream, File}
 import scala.collection.mutable.ArrayBuffer
 
 object RdbIndexFileReader {

@@ -1,6 +1,6 @@
 package com.joakibj.tswrdb.rdb
 
-import java.io.{FileInputStream, BufferedInputStream}
+import java.io.FileInputStream
 import java.nio.{ByteOrder, ByteBuffer}
 
 abstract class RdbFileReader {

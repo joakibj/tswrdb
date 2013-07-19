@@ -1,8 +1,6 @@
 package com.joakibj.tswrdb.rdb
 
-import java.io.{FileOutputStream, BufferedInputStream, FileInputStream, File}
-import collection.mutable.ArrayBuffer
-import java.nio.{ByteOrder, ByteBuffer}
+import java.io.{FileOutputStream, FileInputStream, File}
 
 object RdbDataEntry {
   def apply(rdbType: Int, id: Int, length: Int) = new RdbDataEntry(rdbType, id, length)
