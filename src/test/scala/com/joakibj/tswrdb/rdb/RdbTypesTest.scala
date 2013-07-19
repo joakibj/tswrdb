@@ -9,7 +9,7 @@ class RdbTypesTest extends FunSuite with ShouldMatchers {
   test("should find RdbType by id") {
     val rdbType = RdbTypes.find(1000001)
 
-    rdbType should not be(None)
+    rdbType should be(Some(RdbType(1000001, "Map Info", 0, FileType("dat"))))
   }
 
   test("should return none if RdbType does not exist") {
