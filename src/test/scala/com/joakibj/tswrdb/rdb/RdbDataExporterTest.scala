@@ -14,5 +14,7 @@ import org.junit.runner.RunWith
 
 @RunWith(classOf[JUnitRunner])
 class RdbDataExporterTest extends FunSuite with BeforeAndAfterAll with ShouldMatchers {
-
+  test("TODO") {
+    
+  }
 }

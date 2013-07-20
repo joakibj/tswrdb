@@ -58,17 +58,16 @@ class RdbIndexFileReaderTest extends FunSuite with BeforeAndAfterAll with Should
     val reader = RdbIndexFileReader(tmpFile)
     val result = reader.readIndexEntries()
 
-    ///TODO: this is an ugly hack, why doesn't deep object inspection happen? use should have on properties instead?
-    result(0).toString should be(RdbIndexEntry(100000, 1, 1, 0, 15, DummyHash).toString)
-    result(1).toString should be(RdbIndexEntry(100000, 2, 1, 15, 15, DummyHash).toString)
-    result(2).toString should be(RdbIndexEntry(100000, 3, 1, 30, 15, DummyHash).toString)
-    result(3).toString should be(RdbIndexEntry(100000, 4, 1, 45, 15, DummyHash).toString)
-    result(4).toString should be(RdbIndexEntry(100000, 5, 1, 60, 15, DummyHash).toString)
-    result(5).toString should be(RdbIndexEntry(100001, 6, 2, 75, 10, DummyHash).toString)
-    result(6).toString should be(RdbIndexEntry(100001, 7, 2, 85, 10, DummyHash).toString)
-    result(7).toString should be(RdbIndexEntry(100001, 8, 2, 95, 10, DummyHash).toString)
-    result(8).toString should be(RdbIndexEntry(100001, 9, 2, 105, 10, DummyHash).toString)
-    result(9).toString should be(RdbIndexEntry(100001, 10, 2, 115, 10, DummyHash).toString)
+    result(0) should equal(RdbIndexEntry(100000, 1, 1, 0, 15, DummyHash))
+    result(1) should equal(RdbIndexEntry(100000, 2, 1, 15, 15, DummyHash))
+    result(2) should equal(RdbIndexEntry(100000, 3, 1, 30, 15, DummyHash))
+    result(3) should equal(RdbIndexEntry(100000, 4, 1, 45, 15, DummyHash))
+    result(4) should equal(RdbIndexEntry(100000, 5, 1, 60, 15, DummyHash))
+    result(5) should equal(RdbIndexEntry(100001, 6, 2, 75, 10, DummyHash))
+    result(6) should equal(RdbIndexEntry(100001, 7, 2, 85, 10, DummyHash))
+    result(7) should equal(RdbIndexEntry(100001, 8, 2, 95, 10, DummyHash))
+    result(8) should equal(RdbIndexEntry(100001, 9, 2, 105, 10, DummyHash))
+    result(9) should equal(RdbIndexEntry(100001, 10, 2, 115, 10, DummyHash))
   }
 
   override def afterAll {
