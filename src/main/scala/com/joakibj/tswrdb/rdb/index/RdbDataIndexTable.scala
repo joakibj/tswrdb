@@ -1,6 +1,7 @@
-package com.joakibj.tswrdb.rdb
+package com.joakibj.tswrdb.rdb.index
 
 import collection.mutable.ArrayBuffer
+import com.joakibj.tswrdb.rdb.{RdbTypeNotFoundException, RdbTypes}
 
 object RdbIndexEntry {
   def apply(rdbType: Int, id: Int, fileNum: Byte, dataOffset: Int, length: Int, hash: Array[Byte]) =

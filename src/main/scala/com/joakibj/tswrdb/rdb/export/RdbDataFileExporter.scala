@@ -1,6 +1,8 @@
-package com.joakibj.tswrdb.rdb
+package com.joakibj.tswrdb.rdb.export
 
 import java.io.{FileOutputStream, FileInputStream, File}
+import com.joakibj.tswrdb.rdb.index.RdbIndexEntry
+import com.joakibj.tswrdb.rdb.{RdbIOException, RdbTypes, RdbFileReader}
 
 object RdbDataEntry {
   def apply(rdbType: Int, id: Int, length: Int) = new RdbDataEntry(rdbType, id, length)

@@ -1,7 +1,9 @@
-package com.joakibj.tswrdb.rdb
+package com.joakibj.tswrdb.rdb.index
 
 import java.io.{FileInputStream, File}
 import scala.collection.mutable.ArrayBuffer
+import com.joakibj.tswrdb.rdb._
+import com.joakibj.tswrdb.rdb.RdbIOException
 
 object RdbIndexFileReader {
   def apply(file: File) = new RdbIndexFileReader(file)

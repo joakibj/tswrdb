@@ -1,6 +1,8 @@
-package com.joakibj.tswrdb.rdb
+package com.joakibj.tswrdb.rdb.export
 
 import java.io.File
+import com.joakibj.tswrdb.rdb.index.{RdbIndexEntry, RdbIndexFileReader}
+import com.joakibj.tswrdb.rdb.{Severity, RdbIOException}
 
 object RdbExporter {
   def apply(rdbFilename: String) = new RdbExporter(new File(rdbFilename))

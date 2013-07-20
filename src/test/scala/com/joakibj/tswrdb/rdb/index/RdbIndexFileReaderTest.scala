@@ -1,4 +1,4 @@
-package com.joakibj.tswrdb.rdb
+package com.joakibj.tswrdb.rdb.index
 
 import java.nio.ByteBuffer
 import java.nio.ByteOrder

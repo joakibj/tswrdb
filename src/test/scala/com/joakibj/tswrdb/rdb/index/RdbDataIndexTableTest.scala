@@ -1,4 +1,4 @@
-package com.joakibj.tswrdb.rdb
+package com.joakibj.tswrdb.rdb.index
 
 import scala.collection.mutable.ArrayBuffer
 import org.junit.runner.RunWith

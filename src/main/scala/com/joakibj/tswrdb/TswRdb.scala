@@ -1,6 +1,6 @@
 package com.joakibj.tswrdb
 
-import rdb.RdbExporter
+import rdb.export.RdbExporter
 
 object TswRdb {
   def main(args: Array[String]) {

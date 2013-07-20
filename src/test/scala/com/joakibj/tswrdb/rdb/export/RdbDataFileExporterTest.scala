@@ -1,4 +1,4 @@
-package com.joakibj.tswrdb.rdb
+package com.joakibj.tswrdb.rdb.export
 
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -13,7 +13,7 @@ import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
 
 @RunWith(classOf[JUnitRunner])
-class RdbDataExporterTest extends FunSuite with BeforeAndAfterAll with ShouldMatchers {
+class RdbDataFileExporterTest extends FunSuite with BeforeAndAfterAll with ShouldMatchers {
   test("TODO") {
     
   }
