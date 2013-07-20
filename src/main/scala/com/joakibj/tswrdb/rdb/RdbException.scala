@@ -6,5 +6,5 @@ object Severity extends Enumeration {
 }
 
 class RdbException(msg: String) extends Exception(msg)
-class RdbTypeNotFoundException(msg: String) extends RdbException(msg)
-class RdbIOException(msg: String, severity: Enumeration#Value = Severity.Continuable) extends RdbException(msg)
+case class RdbTypeNotFoundException(msg: String) extends RdbException(msg)
+case class RdbIOException(msg: String, severity: Enumeration#Value = Severity.Continuable) extends RdbException(msg)

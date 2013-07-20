@@ -19,19 +19,17 @@ class RdbDataIndexTableTest extends FunSuite with ShouldMatchers {
     indexTable.types should equal(Set(1000001, 1000005))
   }
 
-  test("should return entries for a RdbType id, grouped by filenum") {
+  test("should return entries for a RdbType id") {
     val indexTable = RdbDataIndexTable(testData)
 
     val entries = indexTable.entriesForType(1000001)
 
-    entries should (contain key(1) and contain key(2))
-    entries(1) should have size 1
-    entries(2) should have size 2
+    entries should have size(3)
   }
 
   private def testData = {
     val buf = ArrayBuffer[RdbIndexEntry]()
-    val DummyHash: Array[Byte] = Array.fill(16)(0)
+    val DummyHash: Array[Byte] = Array.fill(16)(0.toByte)
     buf += RdbIndexEntry(1000001, 1, 1, 0, 10, DummyHash)
     buf += RdbIndexEntry(1000001, 2, 2, 10, 10, DummyHash)
     buf += RdbIndexEntry(1000001, 3, 2, 20, 10, DummyHash)
