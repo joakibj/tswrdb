@@ -8,13 +8,15 @@ object RdbDataEntry {
   def apply(rdbType: Int, id: Int, length: Int) = new RdbDataEntry(rdbType, id, length)
 }
 
-class RdbDataEntry(val rdbType: Int, val id: Int, val length: Int) {
+class RdbDataEntry(val rdbType: Int,
+                   val id: Int,
+                   val length: Int) {
   val buf: Array[Byte] = Array()
 
   override def toString = {
-    "type: " + rdbType +
+    "(type: " + rdbType +
       ", id: " + id +
-      ", length: " + length
+      ", length: " + length + ")"
   }
 }
 
@@ -23,7 +25,9 @@ object RdbDataFileExporter {
     new RdbDataFileExporter(outputDirectory, rdbDataFile, indexEntries)
 }
 
-class RdbDataFileExporter(outputDirectory: File, rdbDataFile: File, ie: Array[RdbIndexEntry]) extends RdbFileReader {
+class RdbDataFileExporter(outputDirectory: File,
+                          rdbDataFile: File,
+                          ie: Array[RdbIndexEntry]) extends RdbFileReader {
   require(outputDirectory.isDirectory, "Output directory does not exist")
   require(rdbDataFile.isFile, "Datafile does not exist")
 
@@ -99,6 +103,4 @@ class RdbDataFileExporter(outputDirectory: File, rdbDataFile: File, ie: Array[Rd
       indexEntry.id == dataEntry.id &&
       indexEntry.length == dataEntry.length
   }
-
-  def toHex(buffer: Array[Byte]): String = buffer.map("%02x" format _).mkString
 }
