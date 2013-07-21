@@ -59,6 +59,7 @@ object TswRdb extends App {
 
   def startExport(config: Config) {
     try {
+      println("Exporting RdbType: " + config.rdbType + " into export/" + config.rdbType + " ...")
       RdbExporter(config.rdbDataDirectory).exportAll(config.rdbType)
     } catch {
       case ex: RuntimeException => {
