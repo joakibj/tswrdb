@@ -6,6 +6,7 @@ import com.joakibj.tswrdb.rdb.{Severity, RdbIOException}
 
 object RdbExporter {
   def apply(rdbFilename: String) = new RdbExporter(new File(rdbFilename))
+
   def apply(rdbDataDirectory: File) = new RdbExporter(rdbDataDirectory)
 }
 
@@ -26,10 +27,10 @@ class RdbExporter(val rdbDataDirectory: File) {
           exportEntriesFromFileNum(outputDirectory, fileNum, groupedIndexEntries(fileNum))
         } catch {
           case ex: RdbIOException => ex match {
-            case RdbIOException(msg @ _, Severity.Continuable) => {
+            case RdbIOException(msg@_, Severity.Continuable) => {
               println("Recoverable exception occured: " + msg + ". Continuing...")
             }
-            case RdbIOException(msg @ _, Severity.Mayan) => {
+            case RdbIOException(msg@_, Severity.Mayan) => {
               throw new RuntimeException("Unrecoverable exception occured: " + msg)
             }
           }
@@ -40,15 +41,13 @@ class RdbExporter(val rdbDataDirectory: File) {
 
   private def createOutputDirectory(entries: Int, rdbType: Int): Option[File] = {
     val outputDirectory = new File("./export/" + rdbType)
-    val created = if(!outputDirectory.isDirectory) outputDirectory.mkdirs() else true
-    if(created)
-      Some(outputDirectory)
-    else
-       None
+    val created = if (!outputDirectory.isDirectory) outputDirectory.mkdirs() else true
+
+    if (created) Some(outputDirectory) else None
   }
 
   private def exportEntriesFromFileNum(outputDirectory: File, fileNum: Int, indexEntries: Array[RdbIndexEntry]) {
-    if(!validRdbFileNums.contains(fileNum)) throw new RdbIOException("Filenum: " + fileNum + " does not exist")
+    if (!validRdbFileNums.contains(fileNum)) throw new RdbIOException("Filenum: " + fileNum + " does not exist")
 
     val rdbDataFile = new File(rdbDataDirectory, "%02d.rdbdata" format fileNum)
     val dataExporter = RdbDataFileExporter(outputDirectory, rdbDataFile, indexEntries)
