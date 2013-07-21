@@ -5,7 +5,8 @@ import com.joakibj.tswrdb.rdb.index.RdbIndexEntry
 import com.joakibj.tswrdb.rdb.{RdbIOException, RdbTypes, RdbFileReader}
 
 object RdbDataEntry {
-  def apply(rdbType: Int, id: Int, length: Int) = new RdbDataEntry(rdbType, id, length)
+  def apply(rdbType: Int, id: Int, length: Int) =
+    new RdbDataEntry(rdbType, id, length)
 }
 
 class RdbDataEntry(val rdbType: Int,
