@@ -21,6 +21,9 @@ class RdbType(val id: Int,
     case that: RdbType => this.id == that.id
     case _ => false 
   }
+
+  override def toString =
+    "(" + id + "," + name + ")"
 }
 
 object RdbTypes {
