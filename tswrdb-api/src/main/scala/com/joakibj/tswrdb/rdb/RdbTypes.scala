@@ -5,13 +5,17 @@ case class FileType(val extension: String) {
 }
 
 object RdbType {
-  def apply(id: Int, name: String, skipBytes: Int, fileType: FileType) = new RdbType(id, name, skipBytes, fileType)
+  def apply(id: Int, name: String, skipBytes: Int, fileType: FileType) =
+    new RdbType(id, name, skipBytes, fileType)
+  def apply(id: Int, name: String, skipBytes: Int, fileType: FileType, understood: Boolean) =
+    new RdbType(id, name, skipBytes, fileType, understood)
 }
 
 class RdbType(val id: Int,
               val name: String,
               val skipBytes: Int,
-              val fileType: FileType) {
+              val fileType: FileType,
+              val understood: Boolean = false) {
 
   override def equals(other: Any) = other match { 
     case that: RdbType => this.id == that.id
@@ -22,6 +26,7 @@ class RdbType(val id: Int,
 object RdbTypes {
   private val types = new RdbTypes
 
+  def values: List[RdbType] = types.data
   def find(id: Int): Option[RdbType] = types.data find (_.id == id)
   def exists(id: Int): Boolean = find(id) != None
 }
@@ -111,7 +116,7 @@ class RdbTypes {
     RdbType(1000625, "Token State Data", 12, FileType("dat")),
     RdbType(1000626, "Chat Filter", 0, FileType("dat")),
     RdbType(1000635, "Media - Video", 0, FileType("dat")),
-    RdbType(1000636, "Media - Images", 12, FileType("png")),
+    RdbType(1000636, "Media - Images", 12, FileType("png"), true),
     RdbType(1000637, "", 0, FileType("dat")),
     RdbType(1000638, "Footsteps", 0, FileType("dat")),
 
@@ -122,7 +127,7 @@ class RdbTypes {
 
     RdbType(1010006, "FCTX Textures", 0, FileType("dat")),
     RdbType(1010007, "Morph", 0, FileType("morph")),
-    RdbType(1010008, "Icons - PNG", 12, FileType("png")),
+    RdbType(1010008, "Icons - PNG", 12, FileType("png"), true),
 
     RdbType(1010012, "Materials MTI", 0, FileType("dat")),
     RdbType(1010013, "Maps Merged", 0, FileType("jpg")),
@@ -135,7 +140,7 @@ class RdbTypes {
     RdbType(1010036, "", 12, FileType("enl")),
     RdbType(1010039, "", 0, FileType("dat")),
     RdbType(1010040, "", 0, FileType("dat")),
-    RdbType(1010042, "Loading Screen Images", 0, FileType("jpg")),
+    RdbType(1010042, "Loading Screen Images", 0, FileType("jpg"), true),
     RdbType(1010043, "", 0, FileType("dat")),
     RdbType(1010060, "", 0, FileType("dat")),
 
@@ -186,7 +191,7 @@ class RdbTypes {
     RdbType(1020002, "Sound Effects", 0, FileType("dat")),
     RdbType(1020003, "Lip Sync Voices", 0, FileType("dat")),
     RdbType(1020004, "Patricia Data?", 0, FileType("dat")),
-    RdbType(1020005, "Music", 0, FileType("ogg")),
+    RdbType(1020005, "Music", 0, FileType("ogg"), true),
     RdbType(1020006, "Sound Files - Wave", 0, FileType("dat")),
     RdbType(1020001, "Audio", 0, FileType("dat")),
 
@@ -209,7 +214,7 @@ class RdbTypes {
 
     RdbType(1066601, "GRND", 0, FileType("dat")),
     RdbType(1066602, "Ground Chunk", 0, FileType("dat")),
-    RdbType(1066603, "Weird Textures", 12, FileType("png")),
+    RdbType(1066603, "Weird Textures", 12, FileType("png"), true),
     RdbType(1066604, "GHM1", 0, FileType("dat")),
     RdbType(1066606, "Ground Textures", 0, FileType("dds")),
     RdbType(1066609, "Collision Tag Map", 0, FileType("ctm")),
