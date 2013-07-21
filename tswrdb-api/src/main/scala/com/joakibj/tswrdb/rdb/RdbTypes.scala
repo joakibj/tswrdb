@@ -130,7 +130,7 @@ class RdbTypes {
     RdbType(1010008, "Icons - PNG", 12, FileType("png"), true),
 
     RdbType(1010012, "Materials MTI", 0, FileType("dat")),
-    RdbType(1010013, "Maps Merged", 0, FileType("jpg")),
+    RdbType(1010013, "Maps Merged", 0, FileType("jpg"), true),
 
     RdbType(1010028, "XML - Sound Scripts", 12, FileType("xml")),
     RdbType(1010030, "XML - Mesh Index", 12, FileType("xml")),
@@ -188,11 +188,11 @@ class RdbTypes {
 
     RdbType(1010700, "XML - Char Creation", 12, FileType("xml")),
 
-    RdbType(1020002, "Sound Effects", 0, FileType("dat")),
+    RdbType(1020002, "Sound Effects", 0, FileType("ogg"), true),
     RdbType(1020003, "Lip Sync Voices", 0, FileType("dat")),
     RdbType(1020004, "Patricia Data?", 0, FileType("dat")),
     RdbType(1020005, "Music", 0, FileType("ogg"), true),
-    RdbType(1020006, "Sound Files - Wave", 0, FileType("dat")),
+    RdbType(1020006, "Sound Files - Tones", 12, FileType("wav")),
     RdbType(1020001, "Audio", 0, FileType("dat")),
 
     RdbType(1030001, "Language Index", 0, FileType("dat")),
@@ -223,7 +223,7 @@ class RdbTypes {
 
     RdbType(1070003, "XML - Playfield", 12, FileType("xml")),
     RdbType(1070010, "XML - DataFilterInstanceInfo", 0, FileType("xml")),
-    RdbType(1070014, "Unknown", 0, FileType("xml")), //new
-    RdbType(1070020, "Unknown", 0, FileType("xml"))  //new
+    RdbType(1070014, "Unknown", 0, FileType("dat")), //new
+    RdbType(1070020, "Unknown", 0, FileType("dat"))  //new
     )
 }
