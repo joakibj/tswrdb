@@ -23,7 +23,7 @@ class RdbIndexFileReaderTest extends FunSuite with BeforeAndAfterAll with Should
   }
 
   test("should create object and validate magic word") {
-  	val reader = RdbIndexFileReader(tmpFile)
+  	RdbIndexFileReader(tmpFile)
   }
 
   test("should have read number of index entries in the header") {
