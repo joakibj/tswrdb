@@ -23,7 +23,7 @@ class RdbIndexFileReader(file: File) extends RdbFileReader {
   
   private def readIndexEntries(): ArrayBuffer[RdbIndexEntry] = {
     val indexTable = ArrayBuffer[(Int, Int)]()
-    (0 until numEntries).foreach {
+    for (i <- 0 until numEntries) {
       val indexEntry = readNextIndexEntry()
       indexTable += indexEntry
     }
@@ -40,7 +40,7 @@ class RdbIndexFileReader(file: File) extends RdbFileReader {
   }
 
   private def readNextIndexEntry(): (Int, Int) = {
-    var buf: Array[Byte] = new Array(8)
+    val buf: Array[Byte] = new Array(8)
     if (fileInputStream.read(buf, 0, 8) != -1) {
       val splitBuf = buf.splitAt(4)
       val rdbType = littleEndianInt(splitBuf._1)
@@ -53,7 +53,7 @@ class RdbIndexFileReader(file: File) extends RdbFileReader {
   }
 
   private def readNextIndexEntryDetail(): (Byte, Int, Int, Array[Byte]) = {
-    var buf: Array[Byte] = new Array(28)
+    val buf: Array[Byte] = new Array(28)
     if (fileInputStream.read(buf, 0, 28) != -1) {
       val fileNum = littleEndianByte(buf.slice(0, 1))
       val offset = littleEndianInt(buf.slice(4, 8))
