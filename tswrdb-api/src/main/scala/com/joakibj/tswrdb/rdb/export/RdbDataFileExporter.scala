@@ -19,32 +19,33 @@ class RdbDataEntry(val rdbType: Int, val id: Int, val length: Int) {
 }
 
 object RdbDataFileExporter {
-  def apply(file: File, indexEntries: Array[RdbIndexEntry]) = new RdbDataFileExporter(file, indexEntries)
+  def apply(outputDirectory: File, rdbDataFile: File, indexEntries: Array[RdbIndexEntry]) =
+    new RdbDataFileExporter(outputDirectory, rdbDataFile, indexEntries)
 }
 
-class RdbDataFileExporter(file: File, ie: Array[RdbIndexEntry]) extends RdbFileReader {
-  require(file.isFile, "Datafile does not exist")
+class RdbDataFileExporter(outputDirectory: File, rdbDataFile: File, ie: Array[RdbIndexEntry]) extends RdbFileReader {
+  require(outputDirectory.isDirectory, "Output directory does not exist")
+  require(rdbDataFile.isFile, "Datafile does not exist")
 
   val MagicNumber: String = "RDB0"
-  val fileInputStream = new FileInputStream(file)
-  val dir = "D:\\Joakim\\dev\\tswrdb\\output\\"
+  val fileInputStream = new FileInputStream(rdbDataFile)
 
   require(hasMagicNumber(), "Datafile does not have the magic number")
-  require(validIndexEntries(ie), "All index entries must be in file: " + file.getName)
+  require(validIndexEntries(ie), "All index entries must be in file: " + rdbDataFile.getName)
 
   private val indexEntries = sortedEntries(ie)
 
   private def sortedEntries(indexEntries: Array[RdbIndexEntry]): Array[RdbIndexEntry] = indexEntries.sortBy(_.dataOffset)
 
   private def validIndexEntries(indexEntries: Array[RdbIndexEntry]): Boolean =
-    indexEntries.count((indexEntry: RdbIndexEntry) => indexEntry.fileName == file.getName) == indexEntries.size
+    indexEntries.count((indexEntry: RdbIndexEntry) => indexEntry.fileName == rdbDataFile.getName) == indexEntries.size
 
   def exportDataEntries() {
 
     val firstIndexEntry = indexEntries(0)
     processEntry(firstIndexEntry, 4)
 
-    if(indexEntries.size == 1) return
+    if (indexEntries.size == 1) return
 
     indexEntries.sliding(2).foreach {
       it =>
@@ -60,8 +61,8 @@ class RdbDataFileExporter(file: File, ie: Array[RdbIndexEntry]) extends RdbFileR
     if (isCorrectDataEntry(indexEntry, dataEntry)) {
       val rdbType = RdbTypes.find(indexEntry.rdbType).get
       val buf = readData(indexEntry.length)
-      val fileName = dir + indexEntry.id + "." + rdbType.fileType.extension
-      writeData(new File(fileName), buf.drop(rdbType.skipBytes))
+      val filename = indexEntry.id + "." + rdbType.fileType.extension
+      writeData(new File(outputDirectory, filename), buf.drop(rdbType.skipBytes))
     } else {
       throw new RdbIOException("A mismatching data entry was read")
     }

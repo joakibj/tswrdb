@@ -16,10 +16,14 @@ class RdbExporter(val rdbDataDirectory: File) {
 
   def exportAll(rdbType: Int) {
     val groupedIndexEntries = grouped(indexTable.entriesForType(rdbType))
+    val outputDirectory = createOutputDirectory(groupedIndexEntries.size, rdbType).getOrElse {
+      throw new RuntimeException("Unable to create export directory.")
+    }
+
     groupedIndexEntries.keys.foreach {
       (fileNum) =>
         try {
-          exportEntriesFromFileNum(fileNum, groupedIndexEntries(fileNum))
+          exportEntriesFromFileNum(outputDirectory, fileNum, groupedIndexEntries(fileNum))
         } catch {
           case ex: RdbIOException => ex match {
             case RdbIOException(msg @ _, Severity.Continuable) => {
@@ -34,11 +38,20 @@ class RdbExporter(val rdbDataDirectory: File) {
     }
   }
 
-  private def exportEntriesFromFileNum(fileNum: Int, indexEntries: Array[RdbIndexEntry]) {
+  private def createOutputDirectory(entries: Int, rdbType: Int): Option[File] = {
+    val outputDirectory = new File("./export/" + rdbType)
+    val created = outputDirectory.mkdirs()
+    if(created)
+      Some(outputDirectory)
+    else
+       None
+  }
+
+  private def exportEntriesFromFileNum(outputDirectory: File, fileNum: Int, indexEntries: Array[RdbIndexEntry]) {
     if(!validRdbFileNums.contains(fileNum)) throw new RdbIOException("Filenum: " + fileNum + " does not exist")
 
     val rdbDataFile = new File(rdbDataDirectory, "%02d.rdbdata" format fileNum)
-    val dataExporter = RdbDataFileExporter(rdbDataFile, indexEntries)
+    val dataExporter = RdbDataFileExporter(outputDirectory, rdbDataFile, indexEntries)
     println("Exporting entries from: " + rdbDataFile.getName)
     dataExporter.exportDataEntries()
   }
