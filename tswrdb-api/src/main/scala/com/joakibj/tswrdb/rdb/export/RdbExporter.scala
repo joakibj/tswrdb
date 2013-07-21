@@ -40,7 +40,7 @@ class RdbExporter(val rdbDataDirectory: File) {
   }
 
   private def createOutputDirectory(entries: Int, rdbType: Int): Option[File] = {
-    val outputDirectory = new File("./export/" + rdbType)
+    val outputDirectory = new File("./exported/" + rdbType)
     val created = if (!outputDirectory.isDirectory) outputDirectory.mkdirs() else true
 
     if (created) Some(outputDirectory) else None
