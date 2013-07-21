@@ -23,7 +23,7 @@ class RdbIndexFileReader(file: File) extends RdbFileReader {
   
   private def readIndexEntries(): ArrayBuffer[RdbIndexEntry] = {
     val indexTable = ArrayBuffer[(Int, Int)]()
-    for (i <- 0 until numEntries) {
+    (0 until numEntries).foreach {
       val indexEntry = readNextIndexEntry()
       indexTable += indexEntry
     }
