@@ -59,7 +59,9 @@ object TswRdb extends App {
 
   def startExport(config: Config) {
     try {
-      val rdbType = RdbTypes.find(config.rdbType).get
+      val rdbType = RdbTypes.find(config.rdbType).getOrElse {
+        throw new RdbTypeNotFoundException("RdbType: " + config.rdbType + " was not found")
+      }
       println("Exporting RdbType: " + rdbType + " into export/" + rdbType.id + " ...")
       RdbExporter(config.rdbDataDirectory).exportAll(config.rdbType)
     } catch {
