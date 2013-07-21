@@ -1,7 +1,13 @@
 tswrdb
 ======
 
-tswrdb is a program for extracting contents in *.rdbdata files. It is written in Scala.
+tswrdb is a project that aims to document and extract the contents of rdb data files (.rdbdata), for *fun* and *curiosity*. It is written in Scala.
+
+The project consists of three components:
+
+* The documentation of the file formats
+* `tswrdb-api`: the Scala API to extract and post-process rdb data
+* `tswrdb-cmdui`: the Scala program that enables users to extract rdb data. It uses `tswrdb-api` client code.
 
 Note: all active development takes place in the `develop` branch. Stable releases are merged into `master`.
 
@@ -16,12 +22,14 @@ TODO
 
 Documentation
 =============
-TODO (documentation on Wiki)
+TODO (documentation on Wiki or in a .md file here)
 
 Usage
 =====
 
 To use tswrdb you need the following:
+
+TODO: how to package this is unknown
 
 * A shell
 * Java 6 runtime
@@ -31,4 +39,3 @@ License
 =======
 
 Please refer to the LICENSE file.
-
