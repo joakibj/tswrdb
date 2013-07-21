@@ -56,7 +56,9 @@ class RdbIndexFileReaderTest extends FunSuite with BeforeAndAfterAll with Should
 
   test("should read all index entries and return an array with each consolidated entry") {
     val reader = RdbIndexFileReader(tmpFile)
-    val result = reader.readIndexEntries()
+
+    val readIndexEntries = PrivateMethod[ArrayBuffer[RdbIndexEntry]]('readIndexEntries)
+    val result = reader invokePrivate readIndexEntries()
 
     result(0) should equal(RdbIndexEntry(100000, 1, 1, 0, 15, DummyHash))
     result(1) should equal(RdbIndexEntry(100000, 2, 1, 15, 15, DummyHash))
@@ -68,6 +70,14 @@ class RdbIndexFileReaderTest extends FunSuite with BeforeAndAfterAll with Should
     result(7) should equal(RdbIndexEntry(100001, 8, 2, 95, 10, DummyHash))
     result(8) should equal(RdbIndexEntry(100001, 9, 2, 105, 10, DummyHash))
     result(9) should equal(RdbIndexEntry(100001, 10, 2, 115, 10, DummyHash))
+  }
+
+  test("should return a RdbDataIndexTable as part of the public API") {
+    val reader = RdbIndexFileReader(tmpFile)
+
+    val table: RdbDataIndexTable = reader.getIndexTable
+
+    table.length should be(10)
   }
 
   override def afterAll {
