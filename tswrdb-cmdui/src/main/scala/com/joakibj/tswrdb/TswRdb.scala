@@ -2,7 +2,7 @@ package com.joakibj.tswrdb
 
 import rdb.export.RdbExporter
 import java.io.File
-import rdb.{RdbType, RdbTypes}
+import rdb.{RdbTypeNotFoundException, RdbType, RdbTypes}
 
 case class Config(rdbDataDirectory: File = new File("."), rdbType: Int = 0)
 
@@ -59,13 +59,18 @@ object TswRdb extends App {
 
   def startExport(config: Config) {
     try {
-      println("Exporting RdbType: " + config.rdbType + " into export/" + config.rdbType + " ...")
+      val rdbType = RdbTypes.find(config.rdbType).get
+      println("Exporting RdbType: " + rdbType + " into export/" + rdbType.id + " ...")
       RdbExporter(config.rdbDataDirectory).exportAll(config.rdbType)
     } catch {
-      case ex: RuntimeException => {
-        println(ex.getMessage)
-        System.exit(1)
-      }
+      case ex: RdbTypeNotFoundException => exit(ex.getMessage)
+      case ex: RuntimeException => exit(ex.getMessage)
     }
+  }
+
+  def exit(msg: String) {
+    println(msg)
+    println("Exiting...")
+    System.exit(1)
   }
 }
