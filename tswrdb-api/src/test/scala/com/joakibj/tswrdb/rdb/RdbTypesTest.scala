@@ -6,6 +6,14 @@ import org.scalatest._
 
 @RunWith(classOf[JUnitRunner])
 class RdbTypesTest extends FunSuite with ShouldMatchers {
+  test("RdbType with the same id should be equal") {
+    RdbType(1, "1", 0, FileType("dat")) should equal(RdbType(1, "2", 1, FileType("png")))
+  }
+
+  test("RdbType with different id should not be equal") {
+    RdbType(1, "1", 0, FileType("dat")) should not equal(RdbType(2, "2", 1, FileType("png")))
+  }
+
   test("should find RdbType by id") {
     val rdbType = RdbTypes.find(1000001)
 
@@ -28,5 +36,11 @@ class RdbTypesTest extends FunSuite with ShouldMatchers {
     val result = RdbTypes.exists(9999999)
 
     result should be(false)
+  }
+
+  test("should return list of RdbTypes") {
+    val result = RdbTypes.values
+
+    result.size should be(169)
   }
 }
