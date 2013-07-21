@@ -1,15 +1,10 @@
 package com.joakibj.tswrdb.rdb.data
 
-import java.nio.{ByteOrder, ByteBuffer}
 import collection.mutable.ArrayBuffer
+import com.joakibj.tswrdb.rdb.util.ByteUtils
 
-object RdbDataFixture {
+object RdbTestIndexDataFixture extends ByteUtils {
   val DummyHash = Array.fill(16)(0.toByte)
-
-  def intToBytes(i: Int): Array[Byte] = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(i).array
-  def byteToBytes(b: Byte): Array[Byte] = Array(b)
-  def padding(num: Int): Array[Byte] = Array.fill(num)(0.toByte)
-  def toHex(buffer: Array[Byte]): String = buffer.map("%02X" format _).mkString
 
   def generateTestData: Array[Byte] = {
     val MagicNumber: Array[Byte] = "IBDR" map(_.toByte) toArray

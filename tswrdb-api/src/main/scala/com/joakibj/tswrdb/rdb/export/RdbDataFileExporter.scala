@@ -2,17 +2,35 @@ package com.joakibj.tswrdb.rdb.export
 
 import java.io.{FileOutputStream, FileInputStream, File}
 import com.joakibj.tswrdb.rdb.index.RdbIndexEntry
-import com.joakibj.tswrdb.rdb.{RdbIOException, RdbTypes, RdbFileReader}
+import com.joakibj.tswrdb.rdb.{RdbTypeNotFoundException, RdbIOException, RdbTypes, RdbFileReader}
+import com.joakibj.tswrdb.rdb.util.ByteUtils
 
 object RdbDataEntry {
   def apply(rdbType: Int, id: Int, length: Int) =
     new RdbDataEntry(rdbType, id, length)
+  def apply(rdbType: Int, id: Int, length: Int, buf: Array[Byte]) =
+    new RdbDataEntry(rdbType, id, length, buf)
 }
 
 class RdbDataEntry(val rdbType: Int,
                    val id: Int,
-                   val length: Int) {
-  val buf: Array[Byte] = Array()
+                   val length: Int,
+                   val buf: Array[Byte]) extends ByteUtils {
+  def this(rdbType: Int,
+           id: Int,
+           length: Int) = this(rdbType, id, length, new Array[Byte](0))
+
+  def toArray: Array[Byte] =
+    intToBytes(rdbType) ++ intToBytes(id) ++ intToBytes(length) ++ padding(4) ++ buf
+
+  override def equals(other: Any) = other match {
+    case that: RdbDataEntry => {
+      this.rdbType == that.rdbType &&
+        this.id == that.id &&
+        this.length == that.length
+    }
+    case _ => false
+  }
 
   override def toString = {
     "(type: " + rdbType +
@@ -64,12 +82,14 @@ class RdbDataFileExporter(outputDirectory: File,
   private def processEntry(indexEntry: RdbIndexEntry, skipBytes: Int) {
     val dataEntry = readNextDataEntryHeader((indexEntry.dataOffset - 16) - skipBytes)
     if (isCorrectDataEntry(indexEntry, dataEntry)) {
-      val rdbType = RdbTypes.find(indexEntry.rdbType).get
+      val rdbType = RdbTypes.find(indexEntry.rdbType).getOrElse {
+        throw new RdbTypeNotFoundException("RdbType: " + indexEntry.rdbType + " was not found")
+      }
       val buf = readData(indexEntry.length)
       val filename = indexEntry.id + "." + rdbType.fileType.extension
       writeData(new File(outputDirectory, filename), buf.drop(rdbType.skipBytes))
     } else {
-      throw new RdbIOException("A mismatching data entry was read")
+      throw new RdbIOException("A mismatching data entry was read: " + indexEntry + " vs " + dataEntry)
     }
   }
 

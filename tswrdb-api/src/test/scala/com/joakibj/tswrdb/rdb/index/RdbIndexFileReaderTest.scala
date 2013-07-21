@@ -9,12 +9,12 @@ import org.scalatest.BeforeAndAfterAll
 import org.scalatest.PrivateMethodTester._
 import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
-import com.joakibj.tswrdb.rdb.data.RdbDataFixture
+import com.joakibj.tswrdb.rdb.data.RdbTestIndexDataFixture
 
 @RunWith(classOf[JUnitRunner])
 class RdbIndexFileReaderTest extends FunSuite with BeforeAndAfterAll with ShouldMatchers {
 
-  val DummyHash = RdbDataFixture.DummyHash
+  val DummyHash = RdbTestIndexDataFixture.DummyHash
   val tmpFile: File = File.createTempFile("test", "idx")
 
   override def beforeAll {
@@ -91,7 +91,7 @@ class RdbIndexFileReaderTest extends FunSuite with BeforeAndAfterAll with Should
 
   def setupData() {
   	val fos = new FileOutputStream(tmpFile)
-  	fos.write(RdbDataFixture.generateTestData)
+  	fos.write(RdbTestIndexDataFixture.generateTestData)
   	fos.close()
   }
 }
