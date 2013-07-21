@@ -40,10 +40,6 @@ To compile, type in sbt:
 To run tests, type in sbt:
     test
 
-Documentation
-=============
-TODO (documentation on Wiki or in a .md file here)
-
 Usage
 =====
 
@@ -95,6 +91,10 @@ Export entries belonging to this rdbtype
         rdbType of the data that is going to be exported.
 Exiting...
 ```
+
+Documentation
+=============
+TODO
 
 License
 =======
