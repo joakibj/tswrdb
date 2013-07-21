@@ -26,6 +26,12 @@ class RdbIndexFileReaderTest extends FunSuite with BeforeAndAfterAll with Should
   	RdbIndexFileReader(tmpFile)
   }
 
+  test("should fail to create object if it is not a file") {
+    intercept[IllegalArgumentException] {
+      RdbIndexFileReader(new File(System.getProperty("java.io.tmpdir")))
+    }
+  }
+
   test("should have read number of index entries in the header") {
   	val reader = RdbIndexFileReader(tmpFile)
   	assert(reader.numEntries === 10)
