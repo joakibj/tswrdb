@@ -1,14 +1,14 @@
 tswrdb
 ======
 
-tswrdb is a project that aims to document and extract the contents of rdb data files (.rdbdata) from The Secret World, a MMORPG by Funcom. This project is for *fun*, *curiosity* and for the community to create useful tools and fansites.
+tswrdb is a project that aims to document and export the contents of rdb data files (.rdbdata) from The Secret World, a MMORPG by Funcom. This project is for *fun*, *curiosity* and for the community to create useful tools and fansites that benefit other TSW fans.
 
 tswrdb is written in Scala.
 
 The project consists of two components:
 
-* `tswrdb-api`: the Scala API to extract and post-process rdb data.
-* `tswrdb-cmdui`: the Scala program that enables users to extract rdb data. It uses `tswrdb-api` client code.
+* `tswrdb-api`: the Scala API for exporting rdb data.
+* `tswrdb-cmdui`: the Scala program that enables *users* to export rdb data. It uses `tswrdb-api` client code.
 
 Note: all active development takes place in the `develop` branch. Stable releases are merged into `master`.
 
@@ -34,10 +34,10 @@ In the tswrdb project directory, run sbt by typing:
 
 It will fetch sbt itself, in addition to scala 2.10.0 and all dependencies.
 
-To compile, type in sbt:
+To compile:
     compile
 
-To run tests, type in sbt:
+To run tests:
     test
 
 Usage
@@ -54,13 +54,13 @@ To use tswrdb you need the following:
 * A legal copy of The Secret World by Funcom
 ** A set of .rdbdata files with the associated le.idx file. (TestLive is good for this)
 
-In the tswrdb project directory, type:
+When in the tswrdb project directory:
     sbt
 
-To change to the tswrdb program, type:
+Change to the tswrdb program:
     project tswrdb-cmdui
 
-Run the program with:
+Run the program (prints usage):
     run
 
 Example of usage:
@@ -96,7 +96,8 @@ Documentation
 =============
 TODO
 
+
 License
 =======
 
-Please refer to the LICENSE file.
+Please refer to the LICENSE file for the license text in verbatim.
