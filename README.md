@@ -53,10 +53,10 @@ Currently there is no elegant packaging for tswrdb. It uses the sbt to manage th
 
 To use tswrdb you need the following:
 
-* A shell (cmd.exe or any *nix shell)
-* Java 6 runtime
-* A legal copy of The Secret World by Funcom
-  ** A set of .rdbdata files with the associated le.idx file. (TestLive is good for this)
+1. A shell (cmd.exe or any *nix shell)
+2. Java 6 runtime
+3. A legal copy of The Secret World by Funcom
+    * A set of .rdbdata files with the associated le.idx file. (TestLive is good for this)
 
 When in the tswrdb project directory:
 
