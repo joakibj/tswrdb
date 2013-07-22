@@ -27,17 +27,21 @@ Building
 ========
 
 Fetch the source code:
+
     git clone git@github.com:joakibj/tswrdb.git
 
 In the tswrdb project directory, run sbt by typing:
+
     sbt
 
 It will fetch sbt itself, in addition to scala 2.10.0 and all dependencies.
 
 To compile:
+
     compile
 
 To run tests:
+
     test
 
 Usage
@@ -52,18 +56,22 @@ To use tswrdb you need the following:
 * A shell (cmd.exe or any *nix shell)
 * Java 6 runtime
 * A legal copy of The Secret World by Funcom
-** A set of .rdbdata files with the associated le.idx file. (TestLive is good for this)
+  ** A set of .rdbdata files with the associated le.idx file. (TestLive is good for this)
 
 When in the tswrdb project directory:
+
     sbt
 
 Change to the tswrdb program:
+
     project tswrdb-cmdui
 
 Run the program (prints usage):
+
     run
 
 Example of usage:
+
     run export --rdb """D:\Programs\TSW TestLive\RDB""" 1010042
 
 The last command exports all Loading Screen Images to <tswrdb project folder>/exported/1010042.
