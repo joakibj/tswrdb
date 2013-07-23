@@ -46,7 +46,7 @@ object RdbDataFileExporter {
 
 class RdbDataFileExporter(outputDirectory: File,
                           rdbDataFile: File,
-                          ie: Array[RdbIndexEntry]) extends RdbFileReader with ByteUtils {
+                          ie: Array[RdbIndexEntry]) extends RdbFileReader {
   require(outputDirectory.isDirectory, "Output directory does not exist")
   require(rdbDataFile.isFile, "Datafile does not exist")
 

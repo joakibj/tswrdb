@@ -2,8 +2,9 @@ package com.joakibj.tswrdb.rdb
 
 import java.io.FileInputStream
 import java.nio.{ByteOrder, ByteBuffer}
+import util.ByteUtils
 
-abstract class RdbFileReader {
+abstract class RdbFileReader extends ByteUtils {
   protected val MagicNumber: String
   protected val fileInputStream: FileInputStream
 

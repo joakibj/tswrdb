@@ -10,7 +10,7 @@ object RdbIndexFileReader {
   def apply(file: File) = new RdbIndexFileReader(file)
 }
 
-class RdbIndexFileReader(file: File) extends RdbFileReader with ByteUtils {
+class RdbIndexFileReader(file: File) extends RdbFileReader {
   require(file.isFile, "Must be a file")
 
   val MagicNumber: String = "IBDR"
