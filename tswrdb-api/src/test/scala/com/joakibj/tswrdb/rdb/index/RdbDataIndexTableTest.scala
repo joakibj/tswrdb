@@ -16,7 +16,7 @@ class RdbDataIndexTableTest extends FunSuite with ShouldMatchers {
     indexTable.length should be(5)
   }
 
-  test("should return set with unique ") {
+  test("should return set with unique RdbTypes") {
     val indexTable = RdbDataIndexTable(testHeader, testData)
 
     indexTable.types should equal(Set(1000001, 1000005))
