@@ -80,7 +80,7 @@ See the usage below for all available commands.
 
 ```
 tswrdb 0.1
-Usage: tswrdb [list|export] [options] <args>...
+Usage: tswrdb [list|export|index] [options] <args>...
 
   --help
         prints this usage text.
@@ -90,13 +90,20 @@ Data is exported to the export folder.
 Command: list [options]
 Lists the valid rdb types available. Per default and to keep the user sane, only well understood RdbTypes are listed.
   -a | --all
-        List all rdbtypes, regardless. Note that some are highly mysterious and/or esoteric. You will have to make sense of them yourself
+        List all rdbtypes, regardless. Note that some are highly mysterious and/or esoteric. You will have to make sense
+ of them yourself
 Command: export [options] <rdbType>
 Export entries belonging to this rdbtype
   -r <directory> | --rdb <directory>
         rdb points to the directory that has RDB files and is required.
   <rdbType>
         rdbType of the data that is going to be exported.
+Command: index [info]
+
+Command: index info [options]
+Show information about index file: version, hash, entries
+  -r <directory> | --rdb <directory>
+        rdb points to the directory that has RDB files and is required.
 Exiting...
 ```
 
