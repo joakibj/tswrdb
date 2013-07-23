@@ -36,13 +36,13 @@ object RdbTypes {
 
 class RdbTypes {
   final val data: List[RdbType] = List(
-    RdbType(1000001, "Map Info", 0, FileType("dat")),
+    RdbType(1000001, "Map Info - Old", 0, FileType("dat"), false), // Old Age of Conan mapdata
 
     RdbType(1000005, "PC64", 0, FileType("dat")),
-    RdbType(1000006, "Unknown", 0, FileType("dat")), //new
+    RdbType(1000006, "Unknown", 0, FileType("dat"), false), //Data does not exist
     RdbType(1000007, "XML - PhysX", 0, FileType("xml")),
     RdbType(1000010, "File Names", 12, FileType("dat")),
-    RdbType(1000012, "Unknown", 0, FileType("dat")), //new
+    RdbType(1000012, "Unknown", 0, FileType("dat"), false), //Data does not exist
     RdbType(1000013, "K-D Tree KDv2", 0, FileType("dat")),
     RdbType(1000015, "K-D Tree KDv2", 0, FileType("dat")),
     RdbType(1000016, "K-D Tree KDv3", 0, FileType("dat")),
