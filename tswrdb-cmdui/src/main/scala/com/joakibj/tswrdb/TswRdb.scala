@@ -121,6 +121,7 @@ object TswRdb extends App with ByteUtils {
   def showIndexInfo(config: Config) {
     val reader = RdbIndexFileReader(new File(config.rdbDataDirectory, "le.idx"))
     val header = reader.indexHeader
+    reader.closeFile()
 
     println("Version: " + header.version)
     println("Hash: " + toHex(header.hash))
