@@ -4,12 +4,13 @@ import java.io.{FileInputStream, File}
 import scala.collection.mutable.ArrayBuffer
 import com.joakibj.tswrdb.rdb._
 import com.joakibj.tswrdb.rdb.RdbIOException
+import util.ByteUtils
 
 object RdbIndexFileReader {
   def apply(file: File) = new RdbIndexFileReader(file)
 }
 
-class RdbIndexFileReader(file: File) extends RdbFileReader {
+class RdbIndexFileReader(file: File) extends RdbFileReader with ByteUtils {
   require(file.isFile, "Must be a file")
 
   val MagicNumber: String = "IBDR"
@@ -65,8 +66,6 @@ class RdbIndexFileReader(file: File) extends RdbFileReader {
       throw new RdbIOException("Prematurely got to end of file", Severity.Mayan)
     }
   }
-
-  def toHex(buffer: Array[Byte]): String = buffer.map("%02X" format _).mkString
 
   private def readNumIndexEntries: Int = {
     var buf: Array[Byte] = new Array(4)
