@@ -8,6 +8,7 @@ import com.joakibj.tswrdb.rdb.util.ByteUtils
 object RdbDataEntry {
   def apply(rdbType: Int, id: Int, length: Int) =
     new RdbDataEntry(rdbType, id, length)
+
   def apply(rdbType: Int, id: Int, length: Int, buf: Array[Byte]) =
     new RdbDataEntry(rdbType, id, length, buf)
 }
@@ -28,6 +29,11 @@ class RdbDataEntry(val rdbType: Int,
       this.rdbType == that.rdbType &&
         this.id == that.id &&
         this.length == that.length
+    }
+    case that: RdbIndexEntry => {
+      this.rdbType == that.rdbType &&
+      this.id == that.id &&
+      this.length == that.length
     }
     case _ => false
   }
@@ -120,8 +126,6 @@ class RdbDataFileExporter(outputDirectory: File,
   }
 
   private def isCorrectDataEntry(indexEntry: RdbIndexEntry, dataEntry: RdbDataEntry): Boolean = {
-    indexEntry.rdbType == dataEntry.rdbType &&
-      indexEntry.id == dataEntry.id &&
-      indexEntry.length == dataEntry.length
+    dataEntry == indexEntry
   }
 }
