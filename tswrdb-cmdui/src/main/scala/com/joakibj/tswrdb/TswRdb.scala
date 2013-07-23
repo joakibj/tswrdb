@@ -2,6 +2,8 @@ package com.joakibj.tswrdb
 
 import rdb.export.RdbExporter
 import java.io.File
+import rdb.index.RdbIndexFileReader
+import rdb.util.ByteUtils
 import rdb.{RdbTypeNotFoundException, RdbType, RdbTypes}
 
 object ListRdbTypesMode extends Enumeration {
@@ -11,9 +13,10 @@ object ListRdbTypesMode extends Enumeration {
 case class Config(rdbDataDirectory: File = new File("."),
                   rdbType: Int = 0,
                   command: String = "",
+                  subCommand: String = "",
                   listMode: Enumeration#Value = ListRdbTypesMode.None)
 
-object TswRdb extends App {
+object TswRdb extends App with ByteUtils {
   val parser = new scopt.OptionParser[Config]("tswrdb") {
     head("tswrdb", "0.1")
     help("help") text ("prints this usage text.")
@@ -41,6 +44,20 @@ object TswRdb extends App {
           config.copy(rdbType = rdbType)
       } text ("rdbType of the data that is going to be exported.")
       )
+    cmd("index") action {
+      (_, config) =>
+        config.copy(command = "index")
+    } children(
+      cmd("info") action {
+        (_, config) =>
+          config.copy(subCommand = "info")
+      } text("Show information about index file: version, hash, entries") children(
+        opt[File]('r', "rdb") required() valueName ("<directory>") action {
+          (file, config) =>
+            config.copy(rdbDataDirectory = file)
+        } text ("rdb points to the directory that has RDB files and is required.")
+        )
+      )
   }
 
   parser.parse(args, Config()) map {
@@ -54,12 +71,20 @@ object TswRdb extends App {
           }
         case "export" =>
           startExport(config)
-        case _ =>
-          parser.showUsage
-          exit()
+        case "index" =>
+          config.subCommand match {
+            case "info" => showIndexInfo(config)
+            case _ => usageAndExit()
+          }
+        case _ => usageAndExit()
       }
   } getOrElse {
 
+  }
+
+  def usageAndExit() {
+    parser.showUsage
+    exit()
   }
 
   def listAllRdbTypes() {
@@ -91,6 +116,15 @@ object TswRdb extends App {
       case ex: RdbTypeNotFoundException => exit(ex.getMessage, 1)
       case ex: RuntimeException => exit(ex.getMessage, 1)
     }
+  }
+
+  def showIndexInfo(config: Config) {
+    val reader = RdbIndexFileReader(new File(config.rdbDataDirectory, "le.idx"))
+    val header = reader.indexHeader
+
+    println("Version: " + header.version)
+    println("Hash: " + toHex(header.hash))
+    println("Number of entries: " + header.numEntries)
   }
 
   def exit(msg: String = "", exitCode: Int = 0) {
