@@ -18,11 +18,13 @@ class RdbIndexFileReader(file: File) extends RdbFileReader with ByteUtils {
 
   require(hasMagicNumber(), "File does not have the required MagicNumber and is not the index file")
 
-  val numEntries = readNumIndexEntries
+  val indexHeader = readIndexHeader
 
-  def getIndexTable: RdbDataIndexTable = new RdbDataIndexTable(readIndexEntries())
+  def getIndexTable: RdbDataIndexTable = new RdbDataIndexTable(indexHeader, readIndexEntries())
   
   private def readIndexEntries(): ArrayBuffer[RdbIndexEntry] = {
+
+    val numEntries = indexHeader.numEntries
     val indexTable = ArrayBuffer[(Int, Int)]()
     for (i <- 0 until numEntries) {
       val indexEntry = readNextIndexEntry()
@@ -67,10 +69,13 @@ class RdbIndexFileReader(file: File) extends RdbFileReader with ByteUtils {
     }
   }
 
-  private def readNumIndexEntries: Int = {
-    var buf: Array[Byte] = new Array(4)
-    fileInputStream.skip(20)
-    fileInputStream.read(buf, 0, 4)
-    littleEndianInt(buf)
+  private def readIndexHeader(): RdbIndexHeader = {
+    var buf: Array[Byte] = new Array(24)
+    fileInputStream.read(buf, 0, 24)
+    val version = littleEndianInt(buf.slice(0, 4))
+    val hash = littleEndianArray(buf.slice(4, 20))
+    val numEntries = littleEndianInt(buf.slice(20, 24))
+
+    RdbIndexHeader(version, hash, numEntries)
   }
 }

@@ -31,9 +31,13 @@ class RdbIndexFileReaderTest extends FunSuite with BeforeAndAfterAll with Should
     }
   }
 
-  test("should have read number of index entries in the header") {
+  test("should have read index header") {
   	val reader = RdbIndexFileReader(tmpFile)
-  	assert(reader.numEntries === 10)
+  	val header = reader.indexHeader
+
+    header.version should equal(7)
+    header.hash should equal(DummyHash)
+    header.numEntries should equal(10)
   }
 
   test("should read next index table entry") {

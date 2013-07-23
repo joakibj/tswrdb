@@ -2,6 +2,21 @@ package com.joakibj.tswrdb.rdb.index
 
 import collection.mutable.ArrayBuffer
 import com.joakibj.tswrdb.rdb.{RdbTypeNotFoundException, RdbTypes}
+import com.joakibj.tswrdb.rdb.util.ByteUtils
+
+object RdbIndexHeader {
+  def apply(version: Int, hash: Array[Byte], numEntries: Int) =
+    new RdbIndexHeader(version, hash, numEntries)
+}
+
+class RdbIndexHeader(val version: Int,
+                     val hash: Array[Byte],
+                     val numEntries: Int) extends ByteUtils {
+
+  def toArray: Array[Byte] = intToBytes(version) ++ hash ++ intToBytes(numEntries)
+
+  override def toString = "(" + version + "," + toHex(hash) + "," + numEntries + ")"
+}
 
 object RdbIndexEntry {
   def apply(rdbType: Int, id: Int, fileNum: Byte, dataOffset: Int, length: Int, hash: Array[Byte]) =
@@ -19,15 +34,15 @@ class RdbIndexEntry(val rdbType: Int,
                     val hash: Array[Byte]) {
   val fileName = "%02d.rdbdata" format fileNum
 
-  override def equals(other: Any) = other match { 
+  override def equals(other: Any) = other match {
     case that: RdbIndexEntry => {
       this.rdbType == that.rdbType &&
-      this.id == that.id &&
-      this.fileNum == that.fileNum &&
-      this.dataOffset == that.dataOffset &&
-      this.length == that.length
+        this.id == that.id &&
+        this.fileNum == that.fileNum &&
+        this.dataOffset == that.dataOffset &&
+        this.length == that.length
     }
-    case _ => false 
+    case _ => false
   }
 
   override def toString = {
@@ -41,12 +56,12 @@ class RdbIndexEntry(val rdbType: Int,
 }
 
 object RdbDataIndexTable {
-  def apply(tbl: ArrayBuffer[RdbIndexEntry]) = new RdbDataIndexTable(tbl)
+  def apply(header: RdbIndexHeader, table: ArrayBuffer[RdbIndexEntry]) =
+    new RdbDataIndexTable(header, table)
 }
 
-class RdbDataIndexTable(tbl: ArrayBuffer[RdbIndexEntry]) {
-  private val table = tbl
-
+class RdbDataIndexTable(private val header: RdbIndexHeader,
+                        private val table: ArrayBuffer[RdbIndexEntry]) {
   def length = table.size
 
   def types = table.map(_.rdbType).toSet
