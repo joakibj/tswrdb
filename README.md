@@ -74,7 +74,7 @@ Example of usage:
 
     run export --rdb """D:\Programs\TSW TestLive\RDB""" 1010042
 
-The last command exports all Loading Screen Images to ``<tswrdb project folder>/exported/1010042``.
+The last command exports all Loading Screen Images to ``<tswrdb project folder>/tswrdb-cmdui/exported/1010042``.
 
 See the usage below for all available commands.
 
