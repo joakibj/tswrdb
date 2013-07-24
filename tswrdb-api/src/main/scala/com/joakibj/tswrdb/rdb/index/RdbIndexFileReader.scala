@@ -13,7 +13,6 @@ import java.io.{FileInputStream, File}
 import scala.collection.mutable.ArrayBuffer
 import com.joakibj.tswrdb.rdb._
 import com.joakibj.tswrdb.rdb.RdbIOException
-import util.ByteUtils
 
 object RdbIndexFileReader {
   def apply(file: File) = new RdbIndexFileReader(file)
