@@ -110,7 +110,7 @@ object TswRdb extends App with ByteUtils {
         throw new RdbTypeNotFoundException("RdbType: " + config.rdbType + " was not found")
       }
       println("RDB data directory set to: " + config.rdbDataDirectory.getCanonicalPath)
-      println("Exporting RdbType: " + rdbType + " into export/" + rdbType.id + " ...")
+      println("Exporting RdbType: " + rdbType + " into exported/" + rdbType.id + " ...")
       RdbExporter(config.rdbDataDirectory).exportAll(config.rdbType)
     } catch {
       case ex: RdbTypeNotFoundException => exit(ex.getMessage, 1)
