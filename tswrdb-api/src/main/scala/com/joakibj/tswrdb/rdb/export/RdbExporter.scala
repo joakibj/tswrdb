@@ -34,7 +34,8 @@ class RdbExporter(val rdbDataDirectory: File) {
               throw new RuntimeException("Unrecoverable exception occured: " + msg)
             }
           }
-          case _: Throwable => throw new RuntimeException("Unknown unrecoverable exception occured")
+          case ex: Throwable => throw new RuntimeException("Unknown unrecoverable exception occured: "
+            + ex.getClass.getName + ": " + ex.getMessage)
         }
     }
   }
