@@ -27,7 +27,7 @@ class RdbIndexFileReader(file: File) extends RdbFileReader {
 
   require(hasMagicNumber(), "File does not have the required MagicNumber and is not the index file")
 
-  val indexHeader = readIndexHeader
+  val indexHeader = readIndexHeader()
 
   def getIndexTable: RdbDataIndexTable = new RdbDataIndexTable(indexHeader, readIndexEntries())
 
