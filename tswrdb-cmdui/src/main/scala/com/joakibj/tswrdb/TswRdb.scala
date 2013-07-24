@@ -9,11 +9,8 @@
 
 package com.joakibj.tswrdb
 
-import rdb.export.RdbExporter
 import java.io.File
-import rdb.index.RdbIndexFileReader
 import rdb.util.ByteUtils
-import rdb.{RdbTypeNotFoundException, RdbType, RdbTypes}
 
 object ListRdbTypesMode extends Enumeration {
   val None, All, Understood = Value
@@ -56,11 +53,11 @@ object TswRdb extends App with ByteUtils {
     cmd("index") action {
       (_, config) =>
         config.copy(command = "index")
-    } children(
+    } children (
       cmd("info") action {
         (_, config) =>
           config.copy(subCommand = "info")
-      } text("Show information about index file: version, hash, entries") children(
+      } text ("Show information about index file: version, hash, entries") children (
         opt[File]('r', "rdb") required() valueName ("<directory>") action {
           (file, config) =>
             config.copy(rdbDataDirectory = file)
@@ -71,75 +68,8 @@ object TswRdb extends App with ByteUtils {
 
   parser.parse(args, Config()) map {
     config =>
-      config.command match {
-        case "list" =>
-          config.listMode match {
-            case ListRdbTypesMode.All => listAllRdbTypes()
-            case ListRdbTypesMode.Understood => listWellUnderstoodRbTypes()
-            case _ => exit()
-          }
-        case "export" =>
-          startExport(config)
-        case "index" =>
-          config.subCommand match {
-            case "info" => showIndexInfo(config)
-            case _ => usageAndExit()
-          }
-        case _ => usageAndExit()
-      }
+      CommandDispatcher(config).dispatch()
   } getOrElse {
 
-  }
-
-  def usageAndExit() {
-    parser.showUsage
-    exit()
-  }
-
-  def listAllRdbTypes() {
-    listRdbTypes(RdbTypes.values)
-  }
-
-  def listWellUnderstoodRbTypes() {
-    listRdbTypes(RdbTypes.values.filter(_.understood))
-  }
-
-  def listRdbTypes(rdbTypes: List[RdbType]) {
-    println("RdbType list:")
-    rdbTypes foreach {
-      (rdbType) =>
-        println("\t" + rdbType.id + "\t" + rdbType.name)
-    }
-    exit()
-  }
-
-  def startExport(config: Config) {
-    try {
-      val rdbType = RdbTypes.find(config.rdbType).getOrElse {
-        throw new RdbTypeNotFoundException("RdbType: " + config.rdbType + " was not found")
-      }
-      println("RDB data directory set to: " + config.rdbDataDirectory.getCanonicalPath)
-      println("Exporting RdbType: " + rdbType + " into exported/" + rdbType.id + " ...")
-      RdbExporter(config.rdbDataDirectory).exportAll(config.rdbType)
-    } catch {
-      case ex: RdbTypeNotFoundException => exit(ex.getMessage, 1)
-      case ex: RuntimeException => exit(ex.getMessage, 1)
-    }
-  }
-
-  def showIndexInfo(config: Config) {
-    val reader = RdbIndexFileReader(new File(config.rdbDataDirectory, "le.idx"))
-    val header = reader.indexHeader
-    reader.closeFile()
-
-    println("Version: " + header.version)
-    println("Hash: " + toHex(header.hash))
-    println("Number of entries: " + header.numEntries)
-  }
-
-  def exit(msg: String = "", exitCode: Int = 0) {
-    if (msg.length > 0) println(msg)
-    println("Exiting...")
-    System.exit(exitCode)
   }
 }
