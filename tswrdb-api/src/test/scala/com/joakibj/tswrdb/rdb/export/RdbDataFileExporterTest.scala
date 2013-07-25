@@ -43,31 +43,21 @@ class RdbDataFileExporterTest extends FunSuite with BeforeAndAfterAll with Shoul
     new String(result) should equal("IHateMayansSoBd")
   }
 
-  test("should export data entry to file: outputDir/exported/ID") {
+  test("should read data entry") {
     val exporter = RdbDataFileExporter(tmpOutputDirectory, tmpRdbDataFile1, indexEntries)
 
-    val processEntry = PrivateMethod[Unit]('processEntry)
-    exporter invokePrivate processEntry(RdbIndexEntry(1000001, 1, 1, 20, 15, DummyHash), 4)
+    val (dataEntry, buf) = exporter.readDataEntry(RdbIndexEntry(1000001, 1, 1, 20, 15, DummyHash), 4)
 
-    val result = new File(tmpOutputDirectory, "1.dat")
-    result should be a ('file)
-
-    val bufis = new BufferedInputStream(new FileInputStream(result))
-    val buf = new Array[Byte](15)
-    bufis.read(buf, 0, 15)
-    bufis.close()
-
+    dataEntry should equal(RdbDataEntry(1000001, 1, 15, DummyHash))
     buf should equal(new String("IHateMayansSoBd").toArray.map(_ toByte))
   }
 
   test("should fail if a mismatching data entry was read") {
     val exporter = RdbDataFileExporter(tmpOutputDirectory, tmpRdbDataFile1, indexEntries)
 
-    val processEntry = PrivateMethod[Unit]('processEntry)
     val thrown = intercept[RdbIOException] {
-      exporter invokePrivate processEntry(RdbIndexEntry(1000000, 1, 1, 20, 15, DummyHash), 4)
+      exporter.readDataEntry(RdbIndexEntry(1000000, 1, 1, 20, 15, DummyHash), 4)
     }
-
     thrown.getMessage should equal("A mismatching data entry was read: " +
       RdbIndexEntry(1000000, 1, 1, 20, 15, DummyHash) + " vs " + RdbDataEntry(1000001, 1, 15))
   }

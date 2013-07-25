@@ -82,7 +82,7 @@ class RdbDataFileExporter(outputDirectory: File,
   def exportDataEntries() {
 
     val firstIndexEntry = indexEntries(0)
-    processEntry(firstIndexEntry, 4)
+    readDataEntry(firstIndexEntry, 4)
 
     if (indexEntries.size == 1) return
 
@@ -90,20 +90,23 @@ class RdbDataFileExporter(outputDirectory: File,
       it =>
         val indexEntry1 = it.head
         val indexEntry2 = it.last
-        processEntry(indexEntry2, indexEntry1.dataOffset + indexEntry1.length)
+        val (_, buf) = readDataEntry(indexEntry2, indexEntry1.dataOffset + indexEntry1.length)
+
+        val rdbType = RdbTypes.find(indexEntry2.rdbType).getOrElse {
+          throw new RdbTypeNotFoundException("RdbType: " + indexEntry2.rdbType + " was not found")
+        }
+        val filename = indexEntry2.id + "." + rdbType.fileType.extension
+        writeData(new File(outputDirectory, filename), buf.drop(rdbType.skipBytes))
     }
     inputStream.close()
   }
 
-  private def processEntry(indexEntry: RdbIndexEntry, skipBytes: Int) {
+  def readDataEntry(indexEntry: RdbIndexEntry, skipBytes: Int): (RdbDataEntry, Array[Byte]) = {
     val dataEntry = readNextDataEntryHeader((indexEntry.dataOffset - 16) - skipBytes)
     if (isCorrectDataEntry(indexEntry, dataEntry)) {
-      val rdbType = RdbTypes.find(indexEntry.rdbType).getOrElse {
-        throw new RdbTypeNotFoundException("RdbType: " + indexEntry.rdbType + " was not found")
-      }
       val buf = readData(indexEntry.length)
-      val filename = indexEntry.id + "." + rdbType.fileType.extension
-      writeData(new File(outputDirectory, filename), buf.drop(rdbType.skipBytes))
+
+      (dataEntry, buf)
     } else {
       throw new RdbIOException("A mismatching data entry was read: " + indexEntry + " vs " + dataEntry)
     }
