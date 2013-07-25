@@ -36,7 +36,7 @@ class RdbDataFileExporterTest extends FunSuite with BeforeAndAfterAll with Shoul
 
   test("should be able to read data, after reading the data header") {
     val exporter = RdbDataFileExporter(tmpOutputDirectory, tmpRdbDataFile1, indexEntries)
-    exporter.fileInputStream.skip(16)
+    exporter.inputStream.skip(16)
     val readData = PrivateMethod[Array[Byte]]('readData)
     val result = exporter invokePrivate readData(15)
 

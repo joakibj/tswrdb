@@ -9,16 +9,16 @@
 
 package com.joakibj.tswrdb.rdb
 
-import java.io.FileInputStream
+import java.io.InputStream
 import util.ByteUtils
 
 abstract class RdbFileReader extends ByteUtils {
   protected val MagicNumber: String
-  protected val fileInputStream: FileInputStream
+  protected val inputStream: InputStream
 
   def hasMagicNumber(): Boolean = {
     val buf: Array[Byte] = new Array(MagicNumber.size)
-    fileInputStream.read(buf, 0, MagicNumber.length)
+    inputStream.read(buf, 0, MagicNumber.length)
 
     new String(buf) == MagicNumber
   }

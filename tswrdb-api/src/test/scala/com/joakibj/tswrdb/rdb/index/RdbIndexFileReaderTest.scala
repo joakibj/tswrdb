@@ -52,7 +52,7 @@ class RdbIndexFileReaderTest extends FunSuite with BeforeAndAfterAll with Should
 
   test("should read next index entry details") {
     val reader = RdbIndexFileReader(tmpFile)
-    reader.fileInputStream.skip(10 * 8)
+    reader.inputStream.skip(10 * 8)
 
     val readNextIndexEntryDetail = PrivateMethod[(Int, Int, Int, Array[Byte])]('readNextIndexEntryDetail)
     val result = reader invokePrivate readNextIndexEntryDetail()

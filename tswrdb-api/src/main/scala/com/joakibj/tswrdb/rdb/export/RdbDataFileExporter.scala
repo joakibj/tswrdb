@@ -66,14 +66,15 @@ class RdbDataFileExporter(outputDirectory: File,
   require(rdbDataFile.isFile, "Datafile does not exist")
 
   val MagicNumber: String = "RDB0"
-  val fileInputStream = new FileInputStream(rdbDataFile)
+  val inputStream = new FileInputStream(rdbDataFile)
 
   require(hasMagicNumber(), "Datafile does not have the magic number")
   require(validIndexEntries(ie), "All index entries must be in file: " + rdbDataFile.getName)
 
   private val indexEntries = sortedEntries(ie)
 
-  private def sortedEntries(indexEntries: Array[RdbIndexEntry]): Array[RdbIndexEntry] = indexEntries.sortBy(_.dataOffset)
+  private def sortedEntries(indexEntries: Array[RdbIndexEntry]): Array[RdbIndexEntry] =
+    indexEntries.sortBy(_.dataOffset)
 
   private def validIndexEntries(indexEntries: Array[RdbIndexEntry]): Boolean =
     indexEntries.count((indexEntry: RdbIndexEntry) => indexEntry.fileName == rdbDataFile.getName) == indexEntries.size
@@ -91,7 +92,7 @@ class RdbDataFileExporter(outputDirectory: File,
         val indexEntry2 = it.last
         processEntry(indexEntry2, indexEntry1.dataOffset + indexEntry1.length)
     }
-    fileInputStream.close()
+    inputStream.close()
   }
 
   private def processEntry(indexEntry: RdbIndexEntry, skipBytes: Int) {
@@ -109,10 +110,10 @@ class RdbDataFileExporter(outputDirectory: File,
   }
 
   private def readNextDataEntryHeader(skipBytes: Int): RdbDataEntry = {
-    fileInputStream.skip(skipBytes)
+    inputStream.skip(skipBytes)
 
     val buf: Array[Byte] = new Array(16)
-    fileInputStream.read(buf, 0, 16)
+    inputStream.read(buf, 0, 16)
 
     val dataType = littleEndianInt(buf.slice(0, 4))
     val dataId = littleEndianInt(buf.slice(4, 8))
@@ -123,7 +124,7 @@ class RdbDataFileExporter(outputDirectory: File,
 
   private def readData(len: Int): Array[Byte] = {
     val buf: Array[Byte] = new Array(len)
-    fileInputStream.read(buf, 0, len)
+    inputStream.read(buf, 0, len)
     buf
   }
 
