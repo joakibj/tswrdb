@@ -109,10 +109,21 @@ Exiting...
 
 Documentation
 =============
-TODO
+**Note: Work in progress!**
 
+Please see the [DOCUMENTATION](docs/DOCUMENTATION.md) file.
+
+Acknowledgements
+================
+
+Thanks to:
+
+* Jacob Seidelin for compiling the RDB documentation and software for extracting TSW rdbdata.
+* The [scopt](https://github.com/scopt/scopt) project for command line parsing.
+
+Please see [ACKNOWLEDGEMENTS](docs/ACKNOWLEDGEMENTS.md) file for license and copyright notices in verbatim.
 
 License
 =======
 
-Licensed under GPLv2. Please refer to the LICENSE file for the license text in verbatim.
+The source code is licensed under GPLv2. Please refer to the LICENSE file for the license text in verbatim.
