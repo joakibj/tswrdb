@@ -126,4 +126,4 @@ Please see [ACKNOWLEDGEMENTS](docs/ACKNOWLEDGEMENTS.md) file for license and cop
 License
 =======
 
-The source code is licensed under GPLv2. Please refer to the LICENSE file for the license text in verbatim.
+The source code is licensed under GPLv2. Please refer to the [LICENSE](LICENSE) file for the license text in verbatim.
