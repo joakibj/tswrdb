@@ -14,7 +14,7 @@ This documentation consists most of his notes, in addition to some corrections/l
 
 ###<a id="rdbdata"></a> Introduction to RDB data
 
-The RDB data files can be found in the <TSW game>/RDB folder. It typically looks like this:
+The RDB data files can be found in the <TSW game>/RDB folder. The folder structure typically looks like this:
 
 ```
 <TSW root>/RDB/
@@ -27,9 +27,11 @@ The RDB data files can be found in the <TSW game>/RDB folder. It typically looks
 +---------- RDBHashIndex.bin
 ```
 
-The ``.rdbdata`` files contain all game assets such as art, sound, textures and item data.
-The ``le.idx`` file is the index file.
-The ``RDBHashIndex`` is presumed to contain the valid files for the current patch version.
+The RDB folder contains three interesting types of files:
+
+* ``NN.rdbdata``: Contains all game assets such as art, sound, textures and item data.
+* ``le.idx``: The index file. Contains data about how data is arranged in the NN.rdbdata files.
+* ``RDBHashIndex``: Presumed to contain the valid files for the current patch version.
 
 The ``.rdbdata`` files are organized like a large disk image, with ``le.idx`` as the index file.
 It stores index entries, with a reference to a data entry, grouped by RdbType.
