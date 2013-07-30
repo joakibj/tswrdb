@@ -1,6 +1,8 @@
 Documentation
 =============
 
+This document contains the currently known crowdsourced documentation for RDB files.
+
 # Overview
 
 1. [Preface](#preface)
