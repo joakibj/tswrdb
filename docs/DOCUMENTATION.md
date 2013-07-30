@@ -159,6 +159,7 @@ The hash index isn't that interesting unless you need to grab individual files o
 | 8      | NumEntries * 47 | Hash Entries |
  
 **Hash Entry**
+
 | Offset | Length | Contents                         |
 |--------|--------|----------------------------------|
 | 0      | 4      | RDB Id                           |
