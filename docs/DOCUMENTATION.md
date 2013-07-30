@@ -130,7 +130,38 @@ The format of the data files is simpler. A small 4-byte header with a file signa
 
 The hash index isn't that interesting unless you need to grab individual files on the server that aren't in the index.
 
-Table TODO
+**File Structure (RDBHashIndex.bin)**
+
+| File part | Length        |
+|-----------|---------------|
+| Header    | 4             |
+| Hash Data | NumTypes * x  |
+ 
+**Header**
+
+| Offset | Length | Contents                           |
+|--------|--------|------------------------------------|
+| 0      | 4      | Magic (0x52 0x44 0x48 0x49 = RDHI) |
+| 4      | 4      | Version (7)                        |
+| 8      | 4      | NumEntries                         |
+| 12     | 4      | NumTypes                           |
+ 
+**Hash Data**
+
+| Offset | Length          | Contents     |
+|--------|-----------------|--------------|
+| 0      | 4               | RDB Type     |
+| 4      | 4               | NumEntries   |
+| 8      | NumEntries * 47 | Hash Entries |
+ 
+**Hash Entry**
+| Offset | Length | Contents                         |
+|--------|--------|----------------------------------|
+| 0      | 4      | RDB Id                           |
+| 4      | 4      | File size on server (compressed) |
+| 8      | 4      | ???                              |
+| 12     | 16     | MD5 Hash                         |
+| 28     | 19     | ???                              |
 
 ###<a id="filenames"></a> Filenames
 
