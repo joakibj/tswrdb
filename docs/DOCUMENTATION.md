@@ -171,7 +171,33 @@ The RDB data files doesn't store the original names of the content files so they
 
 However, RDB type 1000010 contains a single file which is a table of filenames for, among other things, the 3D model files and the textures. The format of this file is really simple, just a list of file id / filename pairs, grouped by RDB type.
 
-Table TODO
+**File Structure (1000010)**
+
+| File part | Length       |
+|-----------|--------------|
+| Header    | 4            |
+| Types     | NumTypes * x |
+
+**Header**
+
+| Offset | Length | Contents |
+| 0      | 4      | NumTypes |
+
+**Types**
+
+| Offset | Length         | Contents          |
+|--------|----------------|-------------------|
+| 0      | 4              | RDB Type          |
+| 4      | 4              | NumEntries        |
+| 8      | NumEntries * x | Filename entries  |
+
+**Filename Entry**
+
+| Offset | Length         | Contents                        |
+|--------|----------------|---------------------------------|
+| 0      | 4              | RDB Id                          |
+| 4      | 4              | FilenameLength                  |
+| 8      | FilenameLength | Null-terminated filename string |
 
 ###<a id="xmldata"></a> XML data
 
