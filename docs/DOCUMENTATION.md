@@ -103,7 +103,28 @@ The index entries belonging to an RdbType can be spread out on any of the ``.rdb
 
 The format of the data files is simpler. A small 4-byte header with a file signature followed by data and more data. As mentioned earlier, you need to know the start offset of the content file you're after (which you find in the index). Each file entry has a 16 header before the actual data. This header contains some of the same information as what you find in the index, i.e. RDB type, file id, data length.
 
-Table TODO
+**File Structure (NN.rdbdata)**
+
+| File part | Length |
+|-----------|--------|
+| Header    | 4      |
+| Data      | ---    |
+ 
+**Header**
+
+| Offset | Length | Contents                           |
+|--------|--------|------------------------------------|
+| 0      | 4      | Magic (0x52 0x44 0x42 0x30 = RDB0) |
+ 
+**Data Entry**
+
+| Offset | Length     | Contents    |
+|--------|------------|-------------|
+| 0      | 4          | Data type   |
+| 4      | 4          | RDB Id      |
+| 8      | 4          | Data length |
+| 12     | 4          | ???         |
+| 16     | DataLength | File data   |
 
 ###<a id="rdbhashindex"></a> Hash index (RDBHashIndex.bin)
 
