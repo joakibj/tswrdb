@@ -211,7 +211,33 @@ Each file contains a string collection belonging to a certain category. For exam
 
 The language of the text collection isn't stored in the files, but in "/data/text/" you'll find a *.tdbl file for each language. These files are basically lists of which entries in 1030002 belong to each language.
 
-Table TODO
+**File Structure (RDB Type 1030002)**
+
+| File part | Length           | Note                    |
+|-----------|------------------|-------------------------|
+| Header    | 36               |                         |
+| Strings   | StringDataLength | Null-terminated strings |
+| Index     | 16 * NumStrings  |                         |
+
+**Header**
+
+| Offset | Length | Contents         |
+|--------|--------|------------------|
+| 0      | 4      | Magic "TDC2"     |
+| 4      | 4      | Category         |
+| 8      | 4      | Flags            |
+| 12     | 4      | StringDataLength |
+| 16     | 4      | NumStrings       |
+| 20     | 16     | MD5Hash          |
+
+**Index**
+
+| Offset | Length | Contents    |
+|--------|--------|-------------|
+| 0      | 4      | StringIndex |
+| 4      | 4      | ???         |
+| 8      | 4      | Offset      |
+| 12     | 4      | Length      |
 
 ###<a id="3dmodels"></a> 3D models
 
