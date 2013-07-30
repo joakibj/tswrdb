@@ -6,6 +6,10 @@ Documentation
 1. [Preface](#preface)
 2. [Introduction to RDB data](#rdbdata)
 3. [RDB Index file (le.idx)](#rdbindex)
+4. [Hash index (RDBHashIndex.bin)](#rdbhashindex)
+5. Specific RdbTypes
+    1. [Filenames (RdbType 1000010)](#filenames)
+    2. [Text data (RdbType 1030002)](#textdata)
 
 ##<a id="preface"></a>Preface
 
@@ -165,7 +169,7 @@ The hash index isn't that interesting unless you need to grab individual files o
 | 12     | 16     | MD5 Hash                         |
 | 28     | 19     | ???                              |
 
-###<a id="filenames"></a> Filenames
+###<a id="filenames"></a> Filenames (RdbType 1000010)
 
 The RDB data files doesn't store the original names of the content files so they're only identifiable by their type and id. 
 
@@ -203,7 +207,7 @@ However, RDB type 1000010 contains a single file which is a table of filenames f
 
 Several of the data types are stored as XML data. Most of the XML types have a corresponding BXML type which is a binary representation of the XML data. You'll also find such ascii/binary XML pairs in "/data/gui/" in the TSW folder. It appears that the game automatically generates the BXML files from the ASCII versions (in the /data/ folder, that is.)
 
-###<a id="textdata"></a> Text data
+###<a id="textdata"></a> Text data (RdbType 1030002)
 
 RDB type 1030002 contains text data collections. Among other things, this is where you'll find all the dialogue text, mission reports, lore, etc. in all the supported languages.
 
