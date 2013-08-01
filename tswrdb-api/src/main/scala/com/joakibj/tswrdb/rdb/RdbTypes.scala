@@ -32,7 +32,7 @@ class RdbType(val id: Int,
   }
 
   override def toString =
-    "(" + id + "," + name + ")"
+    id + " (" + name + ")"
 }
 
 object RdbTypes {

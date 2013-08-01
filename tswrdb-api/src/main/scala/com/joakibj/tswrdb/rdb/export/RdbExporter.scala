@@ -11,7 +11,7 @@ package com.joakibj.tswrdb.rdb.export
 
 import java.io.File
 import com.joakibj.tswrdb.rdb.index.{RdbIndexEntry, RdbIndexFileReader}
-import com.joakibj.tswrdb.rdb.{Severity, RdbIOException}
+import com.joakibj.tswrdb.rdb.{RdbType, Severity, RdbIOException}
 
 object RdbExporter {
   def apply(rdbFilename: String) = new RdbExporter(new File(rdbFilename))
@@ -24,8 +24,8 @@ class RdbExporter(val rdbDataDirectory: File) {
   val validRdbFileNums = rdbDataDirectory.listFiles.filter(_.getName.endsWith(".rdbdata")).map(_.getName.split("\\.").head.toInt)
   val indexTable = RdbIndexFileReader(new File(rdbDataDirectory, IndexFilename)).getIndexTable
 
-  def exportAll(rdbType: Int) {
-    val groupedIndexEntries = grouped(indexTable.entriesForType(rdbType))
+  def exportAll(rdbType: RdbType) {
+    val groupedIndexEntries = grouped(indexTable.entriesForType(rdbType.id))
     val outputDirectory = createOutputDirectory(groupedIndexEntries.size, rdbType).getOrElse {
       throw new RuntimeException("Unable to create export directory.")
     }
@@ -49,7 +49,7 @@ class RdbExporter(val rdbDataDirectory: File) {
     }
   }
 
-  private def createOutputDirectory(entries: Int, rdbType: Int): Option[File] = {
+  private def createOutputDirectory(entries: Int, rdbType: RdbType): Option[File] = {
     val outputDirectory = new File("./exported/" + rdbType)
     val created = if (!outputDirectory.isDirectory) outputDirectory.mkdirs() else true
 

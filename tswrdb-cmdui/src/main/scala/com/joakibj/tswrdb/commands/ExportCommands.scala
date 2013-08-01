@@ -23,8 +23,8 @@ object ExportCommands {
           throw new RdbTypeNotFoundException("RdbType: " + config.rdbType + " was not found")
         }
         println("RDB data directory set to: " + config.rdbDataDirectory.getCanonicalPath)
-        println("Exporting RdbType: " + rdbType + " into exported/" + rdbType.id + " ...")
-        RdbExporter(config.rdbDataDirectory).exportAll(config.rdbType)
+        println("Exporting RdbType: " + rdbType + " into exported/" + rdbType + " ...")
+        RdbExporter(config.rdbDataDirectory).exportAll(rdbType)
       } catch {
         case ex: RdbTypeNotFoundException => exit(ex.getMessage, 1)
         case ex: RuntimeException => exit(ex.getMessage, 1)
