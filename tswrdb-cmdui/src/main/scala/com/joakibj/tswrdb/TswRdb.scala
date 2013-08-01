@@ -9,7 +9,7 @@
 
 package com.joakibj.tswrdb
 
-import java.io.File
+import java.io.{PrintStream, File}
 import rdb.util.ByteUtils
 
 object ListRdbTypesMode extends Enumeration {
@@ -23,6 +23,8 @@ case class Config(rdbDataDirectory: File = new File("."),
                   listMode: Enumeration#Value = ListRdbTypesMode.None)
 
 object TswRdb extends App with ByteUtils {
+  Console.setErr(Console.out)
+
   val parser = new scopt.OptionParser[Config]("tswrdb") {
     head("tswrdb", "0.1")
     help("help") text ("prints this usage text.")
