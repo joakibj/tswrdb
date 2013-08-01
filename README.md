@@ -26,21 +26,25 @@ Unless wanted for development, there should be no need to fetch Scala aswell. Du
 Building
 ========
 
-Fetch the source code:
+Fetch the source code (if you have added a [SSH key to github](https://help.github.com/articles/generating-ssh-keys)):
 
     git clone git@github.com:joakibj/tswrdb.git
 
-In the tswrdb project directory, run sbt by typing:
+Alternatively:
+
+    git clone https://github.com/joakibj/tswrdb.git
+
+In the tswrdb root directory (e.g. ``~/dev/tswrdb``), run sbt by typing:
 
     sbt
 
 It will fetch sbt itself, in addition to scala 2.10.0 and all dependencies.
 
-To compile:
+When in the sbt command shell, to compile:
 
     compile
 
-To run tests:
+And to run tests:
 
     test
 
@@ -58,9 +62,11 @@ To use tswrdb you need the following:
 3. A legal copy of The Secret World by Funcom
     * A set of .rdbdata files with the associated le.idx file. (TestLive is good for this)
 
-When in the tswrdb project directory:
+When in the tswrdb root directory (e.g. ``~/dev/tswrdb``):
 
     sbt
+
+*The following commands are all done in the sbt command shell.*
 
 Change to the tswrdb program:
 
