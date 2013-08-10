@@ -15,6 +15,7 @@ import com.joakibj.tswrdb.rdb.{RdbTypeNotFoundException, RdbIOException, RdbType
 import com.joakibj.tswrdb.rdb.util.ByteUtils
 
 object RdbDataEntry {
+  val HeaderSize = 16
   def apply(rdbType: Int, id: Int, length: Int) =
     new RdbDataEntry(rdbType, id, length)
 
@@ -41,8 +42,8 @@ class RdbDataEntry(val rdbType: Int,
     }
     case that: RdbIndexEntry => {
       this.rdbType == that.rdbType &&
-      this.id == that.id &&
-      this.length == that.length
+        this.id == that.id &&
+        this.length == that.length
     }
     case _ => false
   }
@@ -54,12 +55,12 @@ class RdbDataEntry(val rdbType: Int,
   }
 }
 
-object RdbDataFileExporter {
+object RdbDataFileReader {
   def apply(outputDirectory: File, rdbDataFile: File, indexEntries: Array[RdbIndexEntry]) =
-    new RdbDataFileExporter(outputDirectory, rdbDataFile, indexEntries)
+    new RdbDataFileReader(outputDirectory, rdbDataFile, indexEntries)
 }
 
-class RdbDataFileExporter(outputDirectory: File,
+class RdbDataFileReader(outputDirectory: File,
                           rdbDataFile: File,
                           ie: Array[RdbIndexEntry]) extends RdbFileReader {
   require(outputDirectory.isDirectory, "Output directory does not exist")
@@ -79,30 +80,29 @@ class RdbDataFileExporter(outputDirectory: File,
   private def validIndexEntries(indexEntries: Array[RdbIndexEntry]): Boolean =
     indexEntries.count((indexEntry: RdbIndexEntry) => indexEntry.fileName == rdbDataFile.getName) == indexEntries.size
 
-  def exportDataEntries() {
+  def readDataEntries() = {
+    if (indexEntries.length == 0) Vector()
 
     val firstIndexEntry = indexEntries(0)
-    readDataEntry(firstIndexEntry, 4)
 
-    if (indexEntries.size == 1) return
+    val (dataEntry1, buf1) = readDataEntry(firstIndexEntry, 4)
+    val rdbType1 = findRdbType(firstIndexEntry.rdbType)
 
-    indexEntries.sliding(2).foreach {
-      it =>
-        val indexEntry1 = it.head
-        val indexEntry2 = it.last
-        val (_, buf) = readDataEntry(indexEntry2, indexEntry1.dataOffset + indexEntry1.length)
+    val entries = for {
+      ie <- indexEntries.sliding(2)
+      indexEntry1 = ie.head
+      indexEntry2 = ie.last
+      (dataEntry2, buf2) = readDataEntry(indexEntry2, indexEntry1.dataOffset + indexEntry1.length)
+      rdbType = findRdbType(indexEntry2.rdbType)
+    } yield (dataEntry2, buf2.drop(rdbType.skipBytes))
 
-        val rdbType = RdbTypes.find(indexEntry2.rdbType).getOrElse {
-          throw new RdbTypeNotFoundException("RdbType: " + indexEntry2.rdbType + " was not found")
-        }
-        val filename = indexEntry2.id + "." + rdbType.fileType.extension
-        writeData(new File(outputDirectory, filename), buf.drop(rdbType.skipBytes))
-    }
     inputStream.close()
+
+    Vector((dataEntry1, buf1.drop(rdbType1.skipBytes))) ++ entries.toVector
   }
 
   def readDataEntry(indexEntry: RdbIndexEntry, skipBytes: Int): (RdbDataEntry, Array[Byte]) = {
-    val dataEntry = readNextDataEntryHeader((indexEntry.dataOffset - 16) - skipBytes)
+    val dataEntry = readNextDataEntryHeader(indexEntry.dataOffset - skipBytes)
     if (isCorrectDataEntry(indexEntry, dataEntry)) {
       val buf = readData(indexEntry.length)
 
@@ -112,11 +112,11 @@ class RdbDataFileExporter(outputDirectory: File,
     }
   }
 
-  private def readNextDataEntryHeader(skipBytes: Int): RdbDataEntry = {
-    inputStream.skip(skipBytes)
+  private def readNextDataEntryHeader(skipToNextOffset: Int): RdbDataEntry = {
+    inputStream.skip(skipToNextOffset - RdbDataEntry.HeaderSize)
 
     val buf: Array[Byte] = new Array(16)
-    inputStream.read(buf, 0, 16)
+    inputStream.read(buf)
 
     val dataType = littleEndianInt(buf.slice(0, 4))
     val dataId = littleEndianInt(buf.slice(4, 8))
@@ -127,18 +127,17 @@ class RdbDataFileExporter(outputDirectory: File,
 
   private def readData(len: Int): Array[Byte] = {
     val buf: Array[Byte] = new Array(len)
-    inputStream.read(buf, 0, len)
+    inputStream.read(buf)
     buf
-  }
-
-  private def writeData(file: File, buf: Array[Byte]) {
-    val fos = new FileOutputStream(file)
-    fos.write(buf)
-    fos.close()
-    println("Written: " + file.getName)
   }
 
   private def isCorrectDataEntry(indexEntry: RdbIndexEntry, dataEntry: RdbDataEntry): Boolean = {
     dataEntry == indexEntry
+  }
+
+  private def findRdbType(rdbType: Int) = {
+    RdbTypes.find(rdbType).getOrElse {
+      throw new RdbTypeNotFoundException("RdbType: " + rdbType + " was not found")
+    }
   }
 }

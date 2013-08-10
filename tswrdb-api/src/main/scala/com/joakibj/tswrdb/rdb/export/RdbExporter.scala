@@ -27,13 +27,13 @@ class RdbExporter(val rdbDataDirectory: File) {
   def exportAll(rdbType: RdbType) {
     val groupedIndexEntries = grouped(indexTable.entriesForType(rdbType.id))
     val outputDirectory = createOutputDirectory(groupedIndexEntries.size, rdbType).getOrElse {
-      throw new RuntimeException("Unable to create export directory.")
+      throw new RuntimeException("Unable to create exported directory.")
     }
 
     groupedIndexEntries.keys.foreach {
       (fileNum) =>
         try {
-          exportEntriesFromFileNum(outputDirectory, fileNum, groupedIndexEntries(fileNum))
+          exportEntriesFromFileNum(rdbType, outputDirectory, fileNum, groupedIndexEntries(fileNum))
         } catch {
           case ex: RdbIOException => ex match {
             case RdbIOException(msg@_, Severity.Continuable) => {
@@ -56,13 +56,26 @@ class RdbExporter(val rdbDataDirectory: File) {
     if (created) Some(outputDirectory) else None
   }
 
-  private def exportEntriesFromFileNum(outputDirectory: File, fileNum: Int, indexEntries: Array[RdbIndexEntry]) {
+  private def exportEntriesFromFileNum(rdbType: RdbType, outputDirectory: File, fileNum: Int, indexEntries: Array[RdbIndexEntry]) {
     if (!validRdbFileNums.contains(fileNum)) throw new RdbIOException("Filenum: " + fileNum + " does not exist")
 
     val rdbDataFile = new File(rdbDataDirectory, "%02d.rdbdata" format fileNum)
-    val dataExporter = RdbDataFileExporter(outputDirectory, rdbDataFile, indexEntries)
+    val rdbDataFileReader = RdbDataFileReader(outputDirectory, rdbDataFile, indexEntries)
+    val rdbData = rdbDataFileReader.readDataEntries()
+    exportData(rdbType, outputDirectory, rdbData)
+
     println("Exporting entries from: " + rdbDataFile.getName)
-    dataExporter.exportDataEntries()
+  }
+
+  private def exportData(rdbType: RdbType, outputDirectory: File, rdbData: Vector[(RdbDataEntry, Array[Byte])]) {
+    rdbData.foreach {
+     (data) =>
+        val entry = data._1
+        val buf = data._2
+        val filename = entry.id + "." + rdbType.fileType.extension
+        val fileWriter = DataFileWriter(new File(outputDirectory, filename))
+        fileWriter.writeData(buf)
+    }
   }
 
   private def grouped(arr: Array[RdbIndexEntry]): Map[Int, Array[RdbIndexEntry]] =

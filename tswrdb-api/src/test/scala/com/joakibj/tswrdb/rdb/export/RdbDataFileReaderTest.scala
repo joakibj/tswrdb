@@ -12,7 +12,7 @@ import org.scalatest.PrivateMethodTester._
 import com.joakibj.tswrdb.rdb.RdbIOException
 
 @RunWith(classOf[JUnitRunner])
-class RdbDataFileExporterTest extends FunSuite with BeforeAndAfterAll with ShouldMatchers {
+class RdbDataFileReaderTest extends FunSuite with BeforeAndAfterAll with ShouldMatchers {
 
   val DummyHash = RdbTestIndexDataFixture.DummyHash
   val tmpOutputDirectory: File = createTmpOutputDirectory
@@ -22,20 +22,20 @@ class RdbDataFileExporterTest extends FunSuite with BeforeAndAfterAll with Shoul
     setupRdbDataFile()
   }
 
-  test("should create RdbDataFileExporter object") {
-    RdbDataFileExporter(tmpOutputDirectory, tmpRdbDataFile1, indexEntries)
+  test("should create RdbDataFileReader object") {
+    RdbDataFileReader(tmpOutputDirectory, tmpRdbDataFile1, indexEntries)
   }
 
   test("should be able to read data entry header") {
-    val exporter = RdbDataFileExporter(tmpOutputDirectory, tmpRdbDataFile1, indexEntries)
+    val exporter = RdbDataFileReader(tmpOutputDirectory, tmpRdbDataFile1, indexEntries)
     val readNextDataEntryHeader = PrivateMethod[RdbDataEntry]('readNextDataEntryHeader)
-    val result = exporter invokePrivate readNextDataEntryHeader(0)
+    val result = exporter invokePrivate readNextDataEntryHeader(16)
 
     result should equal(RdbDataEntry(1000001, 1, 15))
   }
 
   test("should be able to read data, after reading the data header") {
-    val exporter = RdbDataFileExporter(tmpOutputDirectory, tmpRdbDataFile1, indexEntries)
+    val exporter = RdbDataFileReader(tmpOutputDirectory, tmpRdbDataFile1, indexEntries)
     exporter.inputStream.skip(16)
     val readData = PrivateMethod[Array[Byte]]('readData)
     val result = exporter invokePrivate readData(15)
@@ -44,7 +44,7 @@ class RdbDataFileExporterTest extends FunSuite with BeforeAndAfterAll with Shoul
   }
 
   test("should read data entry") {
-    val exporter = RdbDataFileExporter(tmpOutputDirectory, tmpRdbDataFile1, indexEntries)
+    val exporter = RdbDataFileReader(tmpOutputDirectory, tmpRdbDataFile1, indexEntries)
 
     val (dataEntry, buf) = exporter.readDataEntry(RdbIndexEntry(1000001, 1, 1, 20, 15, DummyHash), 4)
 
@@ -53,7 +53,7 @@ class RdbDataFileExporterTest extends FunSuite with BeforeAndAfterAll with Shoul
   }
 
   test("should fail if a mismatching data entry was read") {
-    val exporter = RdbDataFileExporter(tmpOutputDirectory, tmpRdbDataFile1, indexEntries)
+    val exporter = RdbDataFileReader(tmpOutputDirectory, tmpRdbDataFile1, indexEntries)
 
     val thrown = intercept[RdbIOException] {
       exporter.readDataEntry(RdbIndexEntry(1000000, 1, 1, 20, 15, DummyHash), 4)
@@ -63,10 +63,15 @@ class RdbDataFileExporterTest extends FunSuite with BeforeAndAfterAll with Shoul
   }
 
   test("should export all entries") {
-    val exporter = RdbDataFileExporter(tmpOutputDirectory, tmpRdbDataFile1, indexEntries)
+    val exporter = RdbDataFileReader(tmpOutputDirectory, tmpRdbDataFile1, indexEntries)
     exporter.exportDataEntries()
 
     tmpOutputDirectory.listFiles().filter(_.getName.endsWith(".dat")) should have size (5)
+  }
+
+  test("test") {
+    val exporter = RdbDataFileReader(tmpOutputDirectory, tmpRdbDataFile1, indexEntries)
+    println(exporter.readDataEntries().foreach(println))
   }
 
   def createTmpOutputDirectory: File = {
