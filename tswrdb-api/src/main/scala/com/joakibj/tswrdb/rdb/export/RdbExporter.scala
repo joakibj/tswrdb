@@ -11,15 +11,20 @@ package com.joakibj.tswrdb.rdb.export
 
 import java.io.File
 import com.joakibj.tswrdb.rdb.index.{RdbIndexEntry, RdbIndexFileReader}
-import com.joakibj.tswrdb.rdb.{RdbType, Severity, RdbIOException}
+import com.joakibj.tswrdb.rdb._
+import com.joakibj.tswrdb.rdb.RdbIOException
+import scala.Some
 
 object RdbExporter {
   def apply(rdbFilename: String) = new RdbExporter(new File(rdbFilename))
 
   def apply(rdbDataDirectory: File) = new RdbExporter(rdbDataDirectory)
+
+  def apply(rdbDataDirectory: File, postDataTransformer: RdbDataTransformer) = new RdbExporter(rdbDataDirectory, postDataTransformer)
 }
 
-class RdbExporter(val rdbDataDirectory: File) {
+class RdbExporter(val rdbDataDirectory: File,
+                  postDataTransformer: RdbDataTransformer = new NoRdbDataTransformer) {
   val IndexFilename = "le.idx"
   val validRdbFileNums = rdbDataDirectory.listFiles.filter(_.getName.endsWith(".rdbdata")).map(_.getName.split("\\.").head.toInt)
   val indexTable = RdbIndexFileReader(new File(rdbDataDirectory, IndexFilename)).getIndexTable
@@ -69,12 +74,13 @@ class RdbExporter(val rdbDataDirectory: File) {
 
   private def exportData(rdbType: RdbType, outputDirectory: File, rdbData: Vector[(RdbDataEntry, Array[Byte])]) {
     rdbData.foreach {
-     (data) =>
-        val entry = data._1
-        val buf = data._2
-        val filename = entry.id + "." + rdbType.fileType.extension
-        val fileWriter = DataFileWriter(new File(outputDirectory, filename))
-        fileWriter.writeData(buf)
+      case (entry, buf) =>
+        val transformedBuf = postDataTransformer.transform(buf)
+        if(transformedBuf.size > 0) {
+          val filename = entry.id + "." + rdbType.fileType.extension
+          val fileWriter = DataFileWriter(new File(outputDirectory, filename))
+          fileWriter.writeData(transformedBuf)
+        } else throw new RdbIOException("Entry " + entry.id + " was empty. Skipped write.")
     }
   }
 

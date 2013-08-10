@@ -38,6 +38,8 @@ class RdbType(val id: Int,
 object RdbTypes {
   private val types = new RdbTypes
 
+  val strings = find(1030002).get
+
   def values: List[RdbType] = types.data
   def find(id: Int): Option[RdbType] = types.data find (_.id == id)
   def exists(id: Int): Boolean = find(id) != None

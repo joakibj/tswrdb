@@ -11,21 +11,16 @@ package com.joakibj.tswrdb.commands
 
 import com.joakibj.tswrdb.Config
 import java.io.{FileInputStream, File}
-import com.joakibj.tswrdb.rdb.strings.RdbStringFileReader
+import com.joakibj.tswrdb.rdb.strings.{StringRdbDataTransformer, RdbStringFileReader}
+import com.joakibj.tswrdb.rdb.export.RdbExporter
+import com.joakibj.tswrdb.rdb.RdbTypes
 
 object StringCommands {
   val default = new StringExportCommand
 
   class StringExportCommand extends Command with ExitCommands {
     def execute(config: Config) {
-      val buf = new Array[Byte](479790)
-      val f = new File("exported\\1030002 (Strings)\\295807.dat")
-      val in = new FileInputStream(f)
-      in.read(buf)
-      in.close()
-
-      val strr = new RdbStringFileReader(buf)
-      strr.getStrings()
+      RdbExporter(new File(config.tswDirectory, "RDB"), new StringRdbDataTransformer).exportAll(RdbTypes.strings)
     }
   }
 }

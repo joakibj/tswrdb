@@ -39,19 +39,16 @@ class RdbStringFileReader(buf: Array[Byte]) extends RdbFileReader {
   val header = readHeader()
 
   def getStrings() = {
-    val strings = ArrayBuffer[(Int, String)]()
     val stringbuf: Array[Byte] = new Array(header.stringDataLength)
     inputStream.read(stringbuf)
     val indexTable = readIndexTable()
 
-    indexTable.table.foreach {
-      (ie: RdbStringIndexEntry) => {
-        val buf = stringbuf.slice(ie.offset, ie.offset + ie.length)
-        strings += Tuple2(ie.index, new String(buf))
-      }
-    }
+    val strings = for {
+      ie <- indexTable.table
+      buf = stringbuf.slice(ie.offset, ie.offset + ie.length)
+    } yield (ie.index, buf)
 
-    strings
+    strings.toVector
   }
 
   private def readIndexTable() = {

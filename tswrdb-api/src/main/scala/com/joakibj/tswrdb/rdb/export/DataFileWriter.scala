@@ -21,6 +21,5 @@ class DataFileWriter(outputFile: File) {
     val fos = new FileOutputStream(outputFile)
     fos.write(buf)
     fos.close()
-    //println("Written: " + outputFile.getName)
   }
 }
