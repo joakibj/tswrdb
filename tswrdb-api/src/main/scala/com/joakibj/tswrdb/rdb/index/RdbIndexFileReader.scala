@@ -80,7 +80,7 @@ class RdbIndexFileReader(file: File) extends RdbFileReader {
   }
 
   private def readIndexHeader(): RdbIndexHeader = {
-    var buf: Array[Byte] = new Array(24)
+    val buf: Array[Byte] = new Array(24)
     inputStream.read(buf, 0, 24)
     val version = littleEndianInt(buf.slice(0, 4))
     val hash = littleEndianArray(buf.slice(4, 20))

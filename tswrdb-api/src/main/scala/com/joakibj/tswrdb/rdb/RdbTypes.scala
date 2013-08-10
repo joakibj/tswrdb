@@ -210,7 +210,7 @@ class RdbTypes {
     RdbType(1020001, "Audio", 0, FileType("dat")),
 
     RdbType(1030001, "Language Index", 0, FileType("dat")),
-    RdbType(1030002, "Strings", 12, FileType("dat")),
+    RdbType(1030002, "Strings", 12, FileType("xml")),
 
     RdbType(1040005, "Feats", 0, FileType("dat")),
     RdbType(1040007, "Unknown", 12, FileType("dat")),
