@@ -16,6 +16,7 @@ import com.joakibj.tswrdb.rdb.util.ByteUtils
 
 object RdbDataEntry {
   val HeaderSize = 16
+
   def apply(rdbType: Int, id: Int, length: Int) =
     new RdbDataEntry(rdbType, id, length)
 
@@ -56,14 +57,12 @@ class RdbDataEntry(val rdbType: Int,
 }
 
 object RdbDataFileReader {
-  def apply(outputDirectory: File, rdbDataFile: File, indexEntries: Array[RdbIndexEntry]) =
-    new RdbDataFileReader(outputDirectory, rdbDataFile, indexEntries)
+  def apply(rdbDataFile: File, indexEntries: Array[RdbIndexEntry]) =
+    new RdbDataFileReader(rdbDataFile, indexEntries)
 }
 
-class RdbDataFileReader(outputDirectory: File,
-                          rdbDataFile: File,
-                          ie: Array[RdbIndexEntry]) extends RdbFileReader {
-  require(outputDirectory.isDirectory, "Output directory does not exist")
+class RdbDataFileReader(rdbDataFile: File,
+                        ie: Array[RdbIndexEntry]) extends RdbFileReader {
   require(rdbDataFile.isFile, "Datafile does not exist")
 
   val MagicNumber: String = "RDB0"
@@ -96,9 +95,11 @@ class RdbDataFileReader(outputDirectory: File,
       rdbType = findRdbType(indexEntry2.rdbType)
     } yield (dataEntry2, buf2.drop(rdbType.skipBytes))
 
+    val allEntries = Vector((dataEntry1, buf1.drop(rdbType1.skipBytes))) ++ entries.toVector
+
     inputStream.close()
 
-    Vector((dataEntry1, buf1.drop(rdbType1.skipBytes))) ++ entries.toVector
+    allEntries
   }
 
   def readDataEntry(indexEntry: RdbIndexEntry, skipBytes: Int): (RdbDataEntry, Array[Byte]) = {

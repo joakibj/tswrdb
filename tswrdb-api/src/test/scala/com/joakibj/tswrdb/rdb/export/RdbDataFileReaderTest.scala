@@ -23,55 +23,50 @@ class RdbDataFileReaderTest extends FunSuite with BeforeAndAfterAll with ShouldM
   }
 
   test("should create RdbDataFileReader object") {
-    RdbDataFileReader(tmpOutputDirectory, tmpRdbDataFile1, indexEntries)
+    RdbDataFileReader(tmpRdbDataFile1, indexEntries)
   }
 
   test("should be able to read data entry header") {
-    val exporter = RdbDataFileReader(tmpOutputDirectory, tmpRdbDataFile1, indexEntries)
+    val reader = RdbDataFileReader(tmpRdbDataFile1, indexEntries)
     val readNextDataEntryHeader = PrivateMethod[RdbDataEntry]('readNextDataEntryHeader)
-    val result = exporter invokePrivate readNextDataEntryHeader(16)
+    val result = reader invokePrivate readNextDataEntryHeader(16)
 
     result should equal(RdbDataEntry(1000001, 1, 15))
   }
 
   test("should be able to read data, after reading the data header") {
-    val exporter = RdbDataFileReader(tmpOutputDirectory, tmpRdbDataFile1, indexEntries)
-    exporter.inputStream.skip(16)
+    val reader = RdbDataFileReader(tmpRdbDataFile1, indexEntries)
+    reader.inputStream.skip(16)
     val readData = PrivateMethod[Array[Byte]]('readData)
-    val result = exporter invokePrivate readData(15)
+    val result = reader invokePrivate readData(15)
 
     new String(result) should equal("IHateMayansSoBd")
   }
 
   test("should read data entry") {
-    val exporter = RdbDataFileReader(tmpOutputDirectory, tmpRdbDataFile1, indexEntries)
+    val reader = RdbDataFileReader(tmpRdbDataFile1, indexEntries)
 
-    val (dataEntry, buf) = exporter.readDataEntry(RdbIndexEntry(1000001, 1, 1, 20, 15, DummyHash), 4)
+    val (dataEntry, buf) = reader.readDataEntry(RdbIndexEntry(1000001, 1, 1, 20, 15, DummyHash), 4)
 
     dataEntry should equal(RdbDataEntry(1000001, 1, 15, DummyHash))
     buf should equal(new String("IHateMayansSoBd").toArray.map(_ toByte))
   }
 
   test("should fail if a mismatching data entry was read") {
-    val exporter = RdbDataFileReader(tmpOutputDirectory, tmpRdbDataFile1, indexEntries)
+    val reader = RdbDataFileReader(tmpRdbDataFile1, indexEntries)
 
     val thrown = intercept[RdbIOException] {
-      exporter.readDataEntry(RdbIndexEntry(1000000, 1, 1, 20, 15, DummyHash), 4)
+      reader.readDataEntry(RdbIndexEntry(1000000, 1, 1, 20, 15, DummyHash), 4)
     }
     thrown.getMessage should equal("A mismatching data entry was read: " +
       RdbIndexEntry(1000000, 1, 1, 20, 15, DummyHash) + " vs " + RdbDataEntry(1000001, 1, 15))
   }
 
-  test("should export all entries") {
-    val exporter = RdbDataFileReader(tmpOutputDirectory, tmpRdbDataFile1, indexEntries)
-    exporter.exportDataEntries()
+  test("should read all entries") {
+    val reader = RdbDataFileReader(tmpRdbDataFile1, indexEntries)
+    val result = reader.readDataEntries()
 
-    tmpOutputDirectory.listFiles().filter(_.getName.endsWith(".dat")) should have size (5)
-  }
-
-  test("test") {
-    val exporter = RdbDataFileReader(tmpOutputDirectory, tmpRdbDataFile1, indexEntries)
-    println(exporter.readDataEntries().foreach(println))
+    result should have size (5)
   }
 
   def createTmpOutputDirectory: File = {

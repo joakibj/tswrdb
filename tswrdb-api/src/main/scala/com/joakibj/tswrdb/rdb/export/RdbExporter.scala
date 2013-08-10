@@ -60,7 +60,7 @@ class RdbExporter(val rdbDataDirectory: File) {
     if (!validRdbFileNums.contains(fileNum)) throw new RdbIOException("Filenum: " + fileNum + " does not exist")
 
     val rdbDataFile = new File(rdbDataDirectory, "%02d.rdbdata" format fileNum)
-    val rdbDataFileReader = RdbDataFileReader(outputDirectory, rdbDataFile, indexEntries)
+    val rdbDataFileReader = RdbDataFileReader(rdbDataFile, indexEntries)
     val rdbData = rdbDataFileReader.readDataEntries()
     exportData(rdbType, outputDirectory, rdbData)
 
