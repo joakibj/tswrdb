@@ -12,7 +12,8 @@ package com.joakibj.tswrdb.commands
 import com.joakibj.tswrdb.Config
 import com.joakibj.tswrdb.rdb.{RdbTypeNotFoundException, RdbTypes}
 import com.joakibj.tswrdb.rdb.export.RdbExporter
-import java.io.File
+import java.io.{FileInputStream, File}
+import com.joakibj.tswrdb.rdb.strings.RdbStringFileReader
 
 object ExportCommands {
   val default = new DefaultExportCommand
@@ -32,6 +33,5 @@ object ExportCommands {
       }
     }
   }
-
 }
 

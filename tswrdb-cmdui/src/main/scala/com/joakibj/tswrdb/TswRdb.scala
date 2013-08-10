@@ -52,6 +52,11 @@ object TswRdb extends App with ByteUtils {
       } text ("rdbType of the data that is going to be exported.")
       )
     note("")
+    cmd("strings") action {
+      (_, config) =>
+        config.copy(command = "strings")
+    }
+    note("")
     cmd("index") action {
       (_, config) =>
         config.copy(command = "index")

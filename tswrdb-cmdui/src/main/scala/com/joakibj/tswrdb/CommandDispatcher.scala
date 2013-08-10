@@ -25,6 +25,7 @@ class CommandDispatcher(config: Config) extends ExitCommands {
           case _ => exit()
         }
       case "export" => execute(ExportCommands.default)
+      case "strings" => execute(StringCommands.default)
       case "index" =>
         config.subCommand match {
           case "info" => execute(IndexCommands.indexInfo)
