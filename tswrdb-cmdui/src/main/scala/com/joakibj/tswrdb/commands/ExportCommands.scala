@@ -12,6 +12,7 @@ package com.joakibj.tswrdb.commands
 import com.joakibj.tswrdb.Config
 import com.joakibj.tswrdb.rdb.{RdbTypeNotFoundException, RdbTypes}
 import com.joakibj.tswrdb.rdb.export.RdbExporter
+import java.io.File
 
 object ExportCommands {
   val default = new DefaultExportCommand
@@ -22,9 +23,9 @@ object ExportCommands {
         val rdbType = RdbTypes.find(config.rdbType).getOrElse {
           throw new RdbTypeNotFoundException("RdbType: " + config.rdbType + " was not found")
         }
-        println("RDB data directory set to: " + config.rdbDataDirectory.getCanonicalPath)
+        println("TSW directory set to: " + config.tswDirectory.getCanonicalPath)
         println("Exporting RdbType: " + rdbType + " into exported/" + rdbType + " ...")
-        RdbExporter(config.rdbDataDirectory).exportAll(rdbType)
+        RdbExporter(new File(config.tswDirectory, "RDB")).exportAll(rdbType)
       } catch {
         case ex: RdbTypeNotFoundException => exit(ex.getMessage, 1)
         case ex: RuntimeException => exit(ex.getMessage, 1)

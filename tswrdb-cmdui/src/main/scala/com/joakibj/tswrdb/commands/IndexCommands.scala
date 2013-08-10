@@ -21,7 +21,7 @@ object IndexCommands {
 
   class ShowIndexInfoCommand extends Command with ByteUtils {
     def execute(config: Config) {
-      val reader = RdbIndexFileReader(new File(config.rdbDataDirectory, "le.idx"))
+      val reader = RdbIndexFileReader(new File(config.tswDirectory, "RDB/le.idx"))
       val header = reader.indexHeader
       reader.closeFile()
 
@@ -33,7 +33,7 @@ object IndexCommands {
 
   class ShowIndexSizeCommand extends Command {
     def execute(config: Config) {
-      val reader = RdbIndexFileReader(new File(config.rdbDataDirectory, "le.idx"))
+      val reader = RdbIndexFileReader(new File(config.tswDirectory, "RDB/le.idx"))
       val tbl = reader.getIndexTable
       tbl.types.foreach {
         x =>

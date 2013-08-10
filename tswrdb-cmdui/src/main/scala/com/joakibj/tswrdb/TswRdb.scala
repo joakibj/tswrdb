@@ -9,14 +9,14 @@
 
 package com.joakibj.tswrdb
 
-import java.io.{PrintStream, File}
+import java.io.File
 import rdb.util.ByteUtils
 
 object ListRdbTypesMode extends Enumeration {
   val None, All, Understood = Value
 }
 
-case class Config(rdbDataDirectory: File = new File("."),
+case class Config(tswDirectory: File = new File("."),
                   rdbType: Int = 0,
                   command: String = "",
                   subCommand: String = "",
@@ -27,9 +27,11 @@ object TswRdb extends App with ByteUtils {
 
   val parser = new scopt.OptionParser[Config]("tswrdb") {
     head("tswrdb", "0.1")
-    help("help") text ("prints this usage text.")
-    version("version")
-    note("Data is exported to the export folder.")
+    opt[File]("tsw") required() valueName ("<directory>") action {
+      (file, config) =>
+        config.copy(tswDirectory = file)
+    } text ("tsw points to the TSW install directory and is required.")
+    note("")
     cmd("list") action {
       (_, config) =>
         config.copy(command = "list", listMode = ListRdbTypesMode.Understood)
@@ -39,19 +41,17 @@ object TswRdb extends App with ByteUtils {
           config.copy(listMode = ListRdbTypesMode.All)
       } text ("List all rdbtypes, regardless. Note that some are highly mysterious and/or esoteric. You will have to make sense of them yourself")
       )
+    note("")
     cmd("export") action {
       (_, config) =>
         config.copy(command = "export")
-    } text ("Export entries belonging to this rdbtype") children(
-      opt[File]('r', "rdb") required() valueName ("<directory>") action {
-        (file, config) =>
-          config.copy(rdbDataDirectory = file)
-      } text ("rdb points to the directory that has RDB files and is required."),
+    } text ("Export entries belonging to this rdbtype") children (
       arg[Int]("<rdbType>") required() action {
         (rdbType, config) =>
           config.copy(rdbType = rdbType)
       } text ("rdbType of the data that is going to be exported.")
       )
+    note("")
     cmd("index") action {
       (_, config) =>
         config.copy(command = "index")
@@ -59,13 +59,11 @@ object TswRdb extends App with ByteUtils {
       cmd("info") action {
         (_, config) =>
           config.copy(subCommand = "info")
-      } text ("Show information about index file: version, hash, entries") children (
-        opt[File]('r', "rdb") required() valueName ("<directory>") action {
-          (file, config) =>
-            config.copy(rdbDataDirectory = file)
-        } text ("rdb points to the directory that has RDB files and is required.")
-        )
+      } text ("Show information about index file: version, hash, number of entries")
       )
+    note("")
+    help("help") text ("prints this usage text.")
+    version("version") text("prints the version")
   }
 
   parser.parse(args, Config()) map {
