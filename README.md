@@ -85,6 +85,7 @@ The previous command exports all Loading Screen Images to ``<tswrdb folder>/tswr
     run strings --tsw """D:\Programs\TSW TestLive""" --lang de
 
 The previous command exports all german strings to XML files in ``<tswrdb folder>/tswrdb-cmdui/exported/1030002 (Strings)``.
+**Note** see Known Issues for issues regarding german and french characters.
 
 See the usage below for all available commands.
 
@@ -106,9 +107,9 @@ Export entries belonging to this rdbtype
         rdbType of the data that is going to be exported.
 
 Command: strings [options]
-Export strings (RdbType 1030002) as XML. Default is all strings, but can be overriden with the --lang option.
+Export strings (RdbType 1030002) as XML.
   -l <value> | --lang <value>
-        Exports all strings for the language. Valid options are en, fr, de or all
+        Exports all strings for the language. Valid options are en, fr or de. Required.
 
 Command: index [info]
 
@@ -126,6 +127,11 @@ Documentation
 **Note: Work in progress!**
 
 Please see the [DOCUMENTATION](docs/DOCUMENTATION.md) file.
+
+Known Issues
+============
+
+* Some french and german characters don't seem to be UTF-8 or are somehow read wrongly
 
 Acknowledgements
 ================
