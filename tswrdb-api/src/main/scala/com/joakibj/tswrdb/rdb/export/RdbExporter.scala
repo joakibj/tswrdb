@@ -16,11 +16,14 @@ import com.joakibj.tswrdb.rdb.RdbIOException
 import scala.Some
 
 object RdbExporter {
-  def apply(rdbFilename: String) = new RdbExporter(new File(rdbFilename))
+  def apply(rdbFilename: String) =
+    new RdbExporter(new File(rdbFilename))
 
-  def apply(rdbDataDirectory: File) = new RdbExporter(rdbDataDirectory)
+  def apply(rdbDataDirectory: File) =
+    new RdbExporter(rdbDataDirectory)
 
-  def apply(rdbDataDirectory: File, postDataTransformer: RdbDataTransformer) = new RdbExporter(rdbDataDirectory, postDataTransformer)
+  def apply(rdbDataDirectory: File, postDataTransformer: RdbDataTransformer) =
+    new RdbExporter(rdbDataDirectory, postDataTransformer)
 }
 
 class RdbExporter(val rdbDataDirectory: File,
