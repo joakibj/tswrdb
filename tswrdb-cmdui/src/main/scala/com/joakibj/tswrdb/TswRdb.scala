@@ -22,7 +22,7 @@ case class Config(tswDirectory: File = new File("."),
                   command: String = "",
                   subCommand: String = "",
                   listMode: Enumeration#Value = ListRdbTypesMode.None,
-                  language: StringLanguage.Value = StringLanguage.All)
+                  language: StringLanguage.Value = StringLanguage.English)
 
 object TswRdb extends App with ByteUtils {
   Console.setErr(Console.out)
@@ -58,13 +58,13 @@ object TswRdb extends App with ByteUtils {
       (_, config) =>
         config.copy(command = "strings")
     } children (
-      opt[String]("lang") abbr ("l") action {
+      opt[String]("lang") abbr ("l") required() action {
         (lang, config) =>
           config.copy(language = StringLanguage.values.find(_.toString == lang).get)
       } validate {
-        lang => if (StringLanguage.values.map(_.toString).contains(lang)) success else failure("Option --lang must be en, fr, de or all")
-      } text ("Exports all strings for the language. Valid options are en, fr, de or all")
-      ) text("Export strings (RdbType 1030002) as XML. Default is all strings, but can be overriden with the --lang option.")
+        lang => if (StringLanguage.values.map(_.toString).contains(lang)) success else failure("Option --lang must be en, fr or de")
+      } text ("Exports all strings for the language. Valid options are en, fr or de. Required.")
+      ) text("Export strings (RdbType 1030002) as XML.")
     note("")
     cmd("index") action {
       (_, config) =>

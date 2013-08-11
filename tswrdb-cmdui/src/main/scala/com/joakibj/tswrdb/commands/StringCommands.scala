@@ -11,8 +11,7 @@ package com.joakibj.tswrdb.commands
 
 import com.joakibj.tswrdb.Config
 import java.io.File
-import com.joakibj.tswrdb.rdb.strings.{RdbStringDataExporter, StringLanguage, RdbStringLanguageIndexReader, StringRdbDataXmlTransformer}
-import com.joakibj.tswrdb.rdb.export.RdbGenericDataExporter
+import com.joakibj.tswrdb.rdb.strings.{RdbStringDataExporter, RdbStringLanguageIndexReader}
 import com.joakibj.tswrdb.rdb.RdbTypes
 import com.joakibj.tswrdb.rdb.index.RdbIndexEntry
 
@@ -24,20 +23,13 @@ object StringCommands {
       val stringRdbType = RdbTypes.strings
       println("Exporting RdbType: " + stringRdbType + " into exported/" + stringRdbType + " ...")
 
-      config.language match {
-        case StringLanguage.All =>
-          println("Exporting ALL languages.")
-          val stringDataExporter = RdbStringDataExporter(new File(config.tswDirectory, "RDB"), List())
-          stringDataExporter.exportAll(stringRdbType)
-        case _ => {
-          println("Exporting language: " + config.language)
-          val languageTableFileName = "Data/text/" + config.language + ".tdbl"
-          val stringLanguageReader = new RdbStringLanguageIndexReader(new File(config.tswDirectory, languageTableFileName), config.language)
-          val languageTable = stringLanguageReader.readEntries()
-          val stringDataExporter = RdbStringDataExporter(new File(config.tswDirectory, "RDB"), languageTable)
-          stringDataExporter.exportFiltered(stringRdbType, (ie: RdbIndexEntry) => languageTable.map(_.rdbId).contains(ie.id))
-        }
-      }
+      println("Exporting language: " + config.language)
+      val languageTableFileName = "Data/text/" + config.language + ".tdbl"
+      val stringLanguageReader = new RdbStringLanguageIndexReader(new File(config.tswDirectory, languageTableFileName), config.language)
+      val languageTable = stringLanguageReader.readEntries()
+      val stringDataExporter = RdbStringDataExporter(new File(config.tswDirectory, "RDB"), languageTable)
+      stringDataExporter.exportFiltered(stringRdbType, (ie: RdbIndexEntry) => languageTable.map(_.rdbId).contains(ie.id))
     }
   }
+
 }

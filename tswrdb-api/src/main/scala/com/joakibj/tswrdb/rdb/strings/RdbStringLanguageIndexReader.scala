@@ -17,7 +17,6 @@ case class RdbStringCategory(rdbId: Int,
                              categoryNamePair: (String, String))
 
 object StringLanguage extends Enumeration {
-  val All = LangVal("all", 0)
   val English = LangVal("en", 55)
   val French = LangVal("fr", 56)
   val German = LangVal("de", 54)
