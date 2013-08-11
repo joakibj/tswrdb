@@ -15,18 +15,18 @@ import com.joakibj.tswrdb.rdb._
 import com.joakibj.tswrdb.rdb.RdbIOException
 import scala.Some
 
-object RdbExporter {
+object RdbGenericDataExporter {
   def apply(rdbFilename: String) =
-    new RdbExporter(new File(rdbFilename))
+    new RdbGenericDataExporter(new File(rdbFilename))
 
   def apply(rdbDataDirectory: File) =
-    new RdbExporter(rdbDataDirectory)
+    new RdbGenericDataExporter(rdbDataDirectory)
 
   def apply(rdbDataDirectory: File, postDataTransformer: RdbDataTransformer) =
-    new RdbExporter(rdbDataDirectory, postDataTransformer)
+    new RdbGenericDataExporter(rdbDataDirectory, postDataTransformer)
 }
 
-class RdbExporter(val rdbDataDirectory: File,
+class RdbGenericDataExporter(val rdbDataDirectory: File,
                   postDataTransformer: RdbDataTransformer = new NoRdbDataTransformer) {
   val IndexFilename = "le.idx"
   val validRdbFileNums = rdbDataDirectory.listFiles.filter(_.getName.endsWith(".rdbdata")).map(_.getName.split("\\.").head.toInt)

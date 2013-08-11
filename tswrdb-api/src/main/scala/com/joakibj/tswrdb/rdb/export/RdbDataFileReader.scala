@@ -116,7 +116,7 @@ class RdbDataFileReader(rdbDataFile: File,
   private def readNextDataEntryHeader(skipToNextOffset: Int): RdbDataEntry = {
     inputStream.skip(skipToNextOffset - RdbDataEntry.HeaderSize)
 
-    val buf: Array[Byte] = new Array(16)
+    val buf: Array[Byte] = new Array(RdbDataEntry.HeaderSize)
     inputStream.read(buf)
 
     val dataType = littleEndianInt(buf.slice(0, 4))
