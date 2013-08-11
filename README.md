@@ -96,11 +96,9 @@ Usage: tswrdb [list|export|strings|index] [options] <args>...
         tsw points to the TSW install directory and is required.
 
 Command: list [options]
-Lists the valid rdb types available. Per default and to keep the user sane, only well understood RdbTypes are lis
-ted.
+Lists the valid rdb types available. Per default and to keep the user sane, only well understood RdbTypes are listed.
   -a | --all
-        List all rdbtypes, regardless. Note that some are highly mysterious and/or esoteric. You will have to mak
-e sense of them yourself
+        List all rdbtypes, regardless. Note that some are highly mysterious and/or esoteric. You will have to make sense of them yourself
 
 Command: export <rdbType>
 Export entries belonging to this rdbtype
