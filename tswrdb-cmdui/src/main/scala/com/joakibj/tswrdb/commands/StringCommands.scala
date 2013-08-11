@@ -24,20 +24,20 @@ object StringCommands {
       val stringRdbType = RdbTypes.strings
       println("Exporting RdbType: " + stringRdbType + " into exported/" + stringRdbType + " ...")
 
-      val stringDataExporter = RdbStringDataExporter(new File(config.tswDirectory, "RDB"))
-
       config.language match {
         case StringLanguage.All =>
           println("Exporting ALL languages.")
+          val stringDataExporter = RdbStringDataExporter(new File(config.tswDirectory, "RDB"), List())
           stringDataExporter.exportAll(stringRdbType)
         case _ => {
           println("Exporting language: " + config.language)
-          val stringLanguageReader = new RdbStringLanguageIndexReader(new File(config.tswDirectory, "Data/text/" + config.language + ".tdbl"), config.language)
-          val languageTable = stringLanguageReader.readEntries
+          val languageTableFileName = "Data/text/" + config.language + ".tdbl"
+          val stringLanguageReader = new RdbStringLanguageIndexReader(new File(config.tswDirectory, languageTableFileName), config.language)
+          val languageTable = stringLanguageReader.readEntries()
+          val stringDataExporter = RdbStringDataExporter(new File(config.tswDirectory, "RDB"), languageTable)
           stringDataExporter.exportFiltered(stringRdbType, (ie: RdbIndexEntry) => languageTable.map(_.rdbId).contains(ie.id))
         }
       }
     }
   }
-
 }
