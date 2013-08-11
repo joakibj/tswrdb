@@ -76,41 +76,51 @@ Run the program (prints usage):
 
     run
 
-Example of usage:
+A few examples of usage:
 
-    run export --rdb """D:\Programs\TSW TestLive\RDB""" 1010042
+    run export --tsw """D:\Programs\TSW TestLive\RDB""" 1010042
 
-The last command exports all Loading Screen Images to ``<tswrdb project folder>/tswrdb-cmdui/exported/1010042``.
+The previous command exports all Loading Screen Images to ``<tswrdb folder>/tswrdb-cmdui/exported/1010042 (Loading Screen Images)``.
+
+    run strings --tsw """D:\Programs\TSW TestLive""" --lang de
+
+The previous command exports all german strings to XML files in ``<tswrdb folder>/tswrdb-cmdui/exported/1030002 (Strings)``.
 
 See the usage below for all available commands.
 
 ```
 tswrdb 0.1
-Usage: tswrdb [list|export|index] [options] <args>...
+Usage: tswrdb [list|export|strings|index] [options] <args>...
+
+  --tsw <directory>
+        tsw points to the TSW install directory and is required.
+
+Command: list [options]
+Lists the valid rdb types available. Per default and to keep the user sane, only well understood RdbTypes are lis
+ted.
+  -a | --all
+        List all rdbtypes, regardless. Note that some are highly mysterious and/or esoteric. You will have to mak
+e sense of them yourself
+
+Command: export <rdbType>
+Export entries belonging to this rdbtype
+  <rdbType>
+        rdbType of the data that is going to be exported.
+
+Command: strings [options]
+Export strings (RdbType 1030002) as XML. Default is all strings, but can be overriden with the --lang option.
+  -l <value> | --lang <value>
+        Exports all strings for the language. Valid options are en, fr, de or all
+
+Command: index [info]
+
+Command: index info
+Show information about index file: version, hash, number of entries
 
   --help
         prints this usage text.
   --version
-
-Data is exported to the export folder.
-Command: list [options]
-Lists the valid rdb types available. Per default and to keep the user sane, only well understood RdbTypes are listed.
-  -a | --all
-        List all rdbtypes, regardless. Note that some are highly mysterious and/or esoteric. You will have to make sense
- of them yourself
-Command: export [options] <rdbType>
-Export entries belonging to this rdbtype
-  -r <directory> | --rdb <directory>
-        rdb points to the directory that has RDB files and is required.
-  <rdbType>
-        rdbType of the data that is going to be exported.
-Command: index [info]
-
-Command: index info [options]
-Show information about index file: version, hash, entries
-  -r <directory> | --rdb <directory>
-        rdb points to the directory that has RDB files and is required.
-Exiting...
+        prints the version
 ```
 
 Documentation
