@@ -64,7 +64,7 @@ object TswRdb extends App with ByteUtils {
       } validate {
         lang => if (StringLanguage.values.map(_.toString).contains(lang)) success else failure("Option --lang must be en, fr, de or all")
       } text ("Exports all strings for the language. Valid options are en, fr, de or all")
-      )
+      ) text("Export strings (RdbType 1030002) as XML. Default is all strings, but can be overriden with the --lang option.")
     note("")
     cmd("index") action {
       (_, config) =>
