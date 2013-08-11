@@ -24,7 +24,7 @@ abstract class RdbString {
   }
 }
 
-class StringRdbDataTransformer extends RdbDataTransformer {
+class StringRdbDataXmlTransformer extends RdbDataTransformer {
   def transform(buf: Array[Byte]): Array[Byte] = {
     val stringRdbReader = new RdbStringFileReader(buf)
     val strings = stringRdbReader.getStrings()

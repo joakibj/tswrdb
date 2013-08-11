@@ -11,7 +11,7 @@ package com.joakibj.tswrdb.commands
 
 import com.joakibj.tswrdb.Config
 import java.io.File
-import com.joakibj.tswrdb.rdb.strings.{StringLanguage, RdbStringLanguageIndexReader, StringRdbDataTransformer}
+import com.joakibj.tswrdb.rdb.strings.{StringLanguage, RdbStringLanguageIndexReader, StringRdbDataXmlTransformer}
 import com.joakibj.tswrdb.rdb.export.RdbExporter
 import com.joakibj.tswrdb.rdb.RdbTypes
 
@@ -28,12 +28,12 @@ object StringCommands {
       config.language match {
         case StringLanguage.All =>
           println("Exporting ALL languages.")
-          RdbExporter(new File(config.tswDirectory, "RDB"), new StringRdbDataTransformer).exportAll(stringRdbType)
+          RdbExporter(new File(config.tswDirectory, "RDB"), new StringRdbDataXmlTransformer).exportAll(stringRdbType)
         case _ => {
           println("Exporting language: " + config.language)
           val stringLanguageReader = new RdbStringLanguageIndexReader(new File(config.tswDirectory, "Data/text/" + config.language + ".tdbl"), config.language)
           val languageTable = stringLanguageReader.readEntries
-          RdbExporter(new File(config.tswDirectory, "RDB"), new StringRdbDataTransformer).exportFiltered(stringRdbType, languageTable.map((category) => category.rdbId))
+          RdbExporter(new File(config.tswDirectory, "RDB"), new StringRdbDataXmlTransformer).exportFiltered(stringRdbType, languageTable.map((category) => category.rdbId))
         }
       }
     }
