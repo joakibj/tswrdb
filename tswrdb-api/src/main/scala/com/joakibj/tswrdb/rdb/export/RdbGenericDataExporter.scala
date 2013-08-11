@@ -10,10 +10,7 @@
 package com.joakibj.tswrdb.rdb.export
 
 import java.io.File
-import com.joakibj.tswrdb.rdb.index.{RdbIndexEntry, RdbIndexFileReader}
 import com.joakibj.tswrdb.rdb._
-import com.joakibj.tswrdb.rdb.RdbIOException
-import scala.Some
 
 object RdbGenericDataExporter {
   def apply(rdbFilename: String) =
