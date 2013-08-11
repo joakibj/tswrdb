@@ -9,18 +9,17 @@
 
 package com.joakibj.tswrdb.rdb.export
 
-import java.io.{FileOutputStream, File}
 import com.joakibj.tswrdb.rdb.DataWriter
+import java.io.{File, OutputStreamWriter, FileOutputStream}
 
-object DataFileWriter {
-  def apply(outputFile: File) = new DataFileWriter(outputFile)
+object EncodedDataFileWriter {
+  def apply(outputFile: File) = new EncodedDataFileWriter(outputFile)
 }
 
-class DataFileWriter(outputFile: File) extends DataWriter {
-
+class EncodedDataFileWriter(outputFile: File) extends DataWriter {
   def writeData(buf: Array[Byte]) {
-    val fos = new FileOutputStream(outputFile)
-    fos.write(buf)
-    fos.close()
+    val ousw = new OutputStreamWriter(new FileOutputStream(outputFile), "UTF-8")
+    ousw.write(buf.map(_.toChar), 0, buf.length)
+    ousw.close()
   }
 }

@@ -25,4 +25,10 @@ object RdbGenericDataExporter {
 
 class RdbGenericDataExporter(rdbDataDirectory: File) extends RdbDataExporter(rdbDataDirectory) {
   val postDataTransformer = new NoRdbDataTransformer
+
+  protected def exportDataToFile(rdbType: RdbType, outputDirectory: File, dataEntry: RdbDataEntry, buf: Array[Byte]) {
+    val filename = dataEntry.id + "." + rdbType.fileType.extension
+    val fileWriter = DataFileWriter(new File(outputDirectory, filename))
+    fileWriter.writeData(buf)
+  }
 }

@@ -11,7 +11,9 @@ package com.joakibj.tswrdb.rdb.export
 
 import java.io.File
 import com.joakibj.tswrdb.rdb.index.{RdbIndexEntry, RdbIndexFileReader}
-import com.joakibj.tswrdb.rdb.{Severity, RdbIOException, RdbType, RdbDataTransformer}
+import com.joakibj.tswrdb.rdb._
+import com.joakibj.tswrdb.rdb.RdbIOException
+import scala.Some
 
 abstract class RdbDataExporter(val rdbDataDirectory: File) {
   protected val IndexFilename = "le.idx"
@@ -61,7 +63,7 @@ abstract class RdbDataExporter(val rdbDataDirectory: File) {
     if (created) Some(outputDirectory) else None
   }
 
-  protected def exportEntriesFromFileNum(rdbType: RdbType, outputDirectory: File, fileNum: Int, indexEntries: Array[RdbIndexEntry]) {
+  private def exportEntriesFromFileNum(rdbType: RdbType, outputDirectory: File, fileNum: Int, indexEntries: Array[RdbIndexEntry]) {
     if (!validRdbFileNums.contains(fileNum)) throw new RdbIOException("Filenum: " + fileNum + " does not exist")
 
     val rdbDataFile = new File(rdbDataDirectory, "%02d.rdbdata" format fileNum)
@@ -72,17 +74,17 @@ abstract class RdbDataExporter(val rdbDataDirectory: File) {
     println("Exporting entries from: " + rdbDataFile.getName)
   }
 
-  protected def exportData(rdbType: RdbType, outputDirectory: File, rdbData: Vector[(RdbDataEntry, Array[Byte])]) {
+  private def exportData(rdbType: RdbType, outputDirectory: File, rdbData: Vector[(RdbDataEntry, Array[Byte])]) {
     rdbData.foreach {
       case (entry, buf) =>
         val transformedBuf = postDataTransformer.transform(buf)
         if (transformedBuf.size > 0) {
-          val filename = entry.id + "." + rdbType.fileType.extension
-          val fileWriter = DataFileWriter(new File(outputDirectory, filename))
-          fileWriter.writeData(transformedBuf)
+          exportDataToFile(rdbType, outputDirectory, entry, transformedBuf)
         } else throw new RdbIOException("Entry " + entry.id + " was empty. Skipped write.")
     }
   }
+
+  protected def exportDataToFile(rdbType: RdbType, outputDirectory: File, dataEntry: RdbDataEntry, buf: Array[Byte])
 
   private def grouped(arr: Array[RdbIndexEntry]): Map[Int, Array[RdbIndexEntry]] =
     arr.groupBy((indexEntry: RdbIndexEntry) => indexEntry.fileNum.toInt)
