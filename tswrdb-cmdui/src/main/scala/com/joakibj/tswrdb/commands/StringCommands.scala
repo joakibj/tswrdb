@@ -21,8 +21,6 @@ object StringCommands {
   class StringExportCommand extends Command with ExitCommands {
     def execute(config: Config) {
       val stringRdbType = RdbTypes.strings
-
-      println("TSW directory set to: " + config.tswDirectory.getCanonicalPath)
       println("Exporting RdbType: " + stringRdbType + " into exported/" + stringRdbType + " ...")
 
       config.language match {

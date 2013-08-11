@@ -17,6 +17,8 @@ object CommandDispatcher {
 
 class CommandDispatcher(config: Config) extends ExitCommands {
   def dispatch() {
+    println("TSW directory set to: " + config.tswDirectory.getCanonicalPath)
+
     config.command match {
       case "list" =>
         config.listMode match {

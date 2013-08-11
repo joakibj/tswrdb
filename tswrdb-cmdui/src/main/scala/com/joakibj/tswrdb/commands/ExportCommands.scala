@@ -24,7 +24,6 @@ object ExportCommands {
         val rdbType = RdbTypes.find(config.rdbType).getOrElse {
           throw new RdbTypeNotFoundException("RdbType: " + config.rdbType + " was not found")
         }
-        println("TSW directory set to: " + config.tswDirectory.getCanonicalPath)
         println("Exporting RdbType: " + rdbType + " into exported/" + rdbType + " ...")
         RdbExporter(new File(config.tswDirectory, "RDB")).exportAll(rdbType)
       } catch {
