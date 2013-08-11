@@ -10,6 +10,7 @@
 package com.joakibj.tswrdb
 
 import java.io.File
+import rdb.strings.StringLanguage
 import rdb.util.ByteUtils
 
 object ListRdbTypesMode extends Enumeration {
@@ -20,7 +21,8 @@ case class Config(tswDirectory: File = new File("."),
                   rdbType: Int = 0,
                   command: String = "",
                   subCommand: String = "",
-                  listMode: Enumeration#Value = ListRdbTypesMode.None)
+                  listMode: Enumeration#Value = ListRdbTypesMode.None,
+                  language: StringLanguage.Value = StringLanguage.All)
 
 object TswRdb extends App with ByteUtils {
   Console.setErr(Console.out)
@@ -55,7 +57,14 @@ object TswRdb extends App with ByteUtils {
     cmd("strings") action {
       (_, config) =>
         config.copy(command = "strings")
-    }
+    } children (
+      opt[String]("lang") abbr ("l") action {
+        (lang, config) =>
+          config.copy(language = StringLanguage.values.find(_.toString == lang).get)
+      } validate {
+        lang => if (StringLanguage.values.map(_.toString).contains(lang)) success else failure("Option --lang must be en, fr, de or all")
+      } text ("Exports all strings for the language. Valid options are en, fr, de or all")
+      )
     note("")
     cmd("index") action {
       (_, config) =>
@@ -68,7 +77,7 @@ object TswRdb extends App with ByteUtils {
       )
     note("")
     help("help") text ("prints this usage text.")
-    version("version") text("prints the version")
+    version("version") text ("prints the version")
   }
 
   parser.parse(args, Config()) map {

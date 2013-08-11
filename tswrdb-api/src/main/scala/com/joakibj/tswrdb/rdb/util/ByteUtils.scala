@@ -12,6 +12,9 @@ package com.joakibj.tswrdb.rdb.util
 import java.nio.{ByteOrder, ByteBuffer}
 
 trait ByteUtils {
+  def littleEndianShort(buf: Array[Byte]): Short =
+    ByteBuffer.wrap(buf).order(ByteOrder.LITTLE_ENDIAN).getShort
+
   def littleEndianInt(buf: Array[Byte]): Int =
     ByteBuffer.wrap(buf).order(ByteOrder.LITTLE_ENDIAN).getInt
 

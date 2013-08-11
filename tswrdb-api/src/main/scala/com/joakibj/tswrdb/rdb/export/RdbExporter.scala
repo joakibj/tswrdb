@@ -30,7 +30,17 @@ class RdbExporter(val rdbDataDirectory: File,
   val indexTable = RdbIndexFileReader(new File(rdbDataDirectory, IndexFilename)).getIndexTable
 
   def exportAll(rdbType: RdbType) {
-    val groupedIndexEntries = grouped(indexTable.entriesForType(rdbType.id))
+    val indexEntries = indexTable.entriesForType(rdbType.id)
+    export(rdbType, indexEntries)
+  }
+
+  def exportFiltered(rdbType: RdbType, onlyInclude: List[Int]) {
+    val indexEntries = indexTable.entriesForType(rdbType.id).filter((entry) => onlyInclude.contains(entry.id))
+    export(rdbType, indexEntries)
+  }
+
+  private def export(rdbType: RdbType, indexEntries: Array[RdbIndexEntry]) {
+    val groupedIndexEntries = grouped(indexEntries)
     val outputDirectory = createOutputDirectory(groupedIndexEntries.size, rdbType).getOrElse {
       throw new RuntimeException("Unable to create exported directory.")
     }
@@ -76,7 +86,7 @@ class RdbExporter(val rdbDataDirectory: File,
     rdbData.foreach {
       case (entry, buf) =>
         val transformedBuf = postDataTransformer.transform(buf)
-        if(transformedBuf.size > 0) {
+        if (transformedBuf.size > 0) {
           val filename = entry.id + "." + rdbType.fileType.extension
           val fileWriter = DataFileWriter(new File(outputDirectory, filename))
           fileWriter.writeData(transformedBuf)

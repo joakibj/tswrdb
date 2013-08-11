@@ -28,6 +28,7 @@ class StringRdbDataTransformer extends RdbDataTransformer {
   def transform(buf: Array[Byte]): Array[Byte] = {
     val stringRdbReader = new RdbStringFileReader(buf)
     val strings = stringRdbReader.getStrings()
+    if (strings.length == 0) new Array[Byte](0)
 
     val xmlResult =
       <rdbStrings>
