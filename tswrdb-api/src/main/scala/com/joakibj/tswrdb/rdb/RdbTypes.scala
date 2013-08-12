@@ -38,7 +38,8 @@ class RdbType(val id: Int,
 object RdbTypes {
   private val types = new RdbTypes
 
-  val strings = find(1030002).get
+  val Strings = find(1030002).get
+  val Filenames = find(1000010).get
 
   def values: List[RdbType] = types.data
   def find(id: Int): Option[RdbType] = types.data find (_.id == id)
@@ -138,15 +139,18 @@ class RdbTypes {
     RdbType(1010002, "Skeleton Rigs", 0, FileType("cs")),
     RdbType(1010003, "Skeleton Rigs", 0, FileType("ca")),
     RdbType(1010004, "Textures", 0, FileType("dds")),
+    RdbType(1010005, "Unknown", 0, FileType("dat")),
 
     RdbType(1010006, "FCTX Textures", 0, FileType("dat")),
     RdbType(1010007, "Morph", 0, FileType("morph")),
     RdbType(1010008, "Icons - PNG", 12, FileType("png"), true),
 
+    RdbType(1010011, "Unknown", 0, FileType("dat")),
     RdbType(1010012, "Materials MTI", 0, FileType("dat")),
     RdbType(1010013, "Maps Merged", 0, FileType("jpg"), true),
 
     RdbType(1010028, "XML - Sound Scripts", 12, FileType("xml")),
+    RdbType(1010029, "Unknown", 0, FileType("dat")),
     RdbType(1010030, "XML - Mesh Index", 12, FileType("xml")),
     RdbType(1010031, "Attractor", 0, FileType("attr")),
     RdbType(1010034, "Unknown", 0, FileType("dat")),
@@ -163,6 +167,7 @@ class RdbTypes {
     RdbType(1010201, "XML - Monsters", 12, FileType("xml")),
     RdbType(1010202, "XML - BCT Group", 12, FileType("xml")),
     RdbType(1010203, "XML - BCT Mesh", 12, FileType("xml")),
+    RdbType(1010204, "Unknown", 0, FileType("dat")),
     RdbType(1010205, "XML - Movement Set", 12, FileType("xml")),
 
     RdbType(1010207, "Particle Effects", 12, FileType("particleeffect")),
@@ -218,6 +223,8 @@ class RdbTypes {
     RdbType(1040009, "Unknown", 12, FileType("dat")),
     RdbType(1040010, "XML - Bounded Area", 12, FileType("xml")),
 
+    RdbType(1050002, "Unknown", 0, FileType("dat")),
+
     RdbType(1060667, "XML - Env Settings", 12, FileType("xml")),
     RdbType(1060668, "Sky Dome", 0, FileType("dat")),
 
@@ -235,6 +242,7 @@ class RdbTypes {
     RdbType(1066610, "Textures - FCTX", 0, FileType("dat")),
     RdbType(1066611, "Unknown", 0, FileType("dat")),
 
+    RdbType(1070001, "Unknown", 0, FileType("dat")),
     RdbType(1070003, "XML - Playfield", 12, FileType("xml")),
     RdbType(1070010, "XML - DataFilterInstanceInfo", 0, FileType("xml")),
     RdbType(1070014, "Unknown", 0, FileType("dat")), //new
