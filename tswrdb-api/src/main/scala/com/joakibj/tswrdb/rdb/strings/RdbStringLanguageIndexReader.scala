@@ -60,7 +60,7 @@ class RdbStringLanguageIndexReader(languageFile: File,
     seq.toList
   }
 
-  def readTextEntry = {
+  private def readTextEntry = {
     val len = readInt
 
     val buf = new Array[Byte](len)
@@ -70,11 +70,11 @@ class RdbStringLanguageIndexReader(languageFile: File,
     str
   }
 
-  def skipLanguageDependentHeader() {
+  private def skipLanguageDependentHeader() {
     inputStream.skip(lang.headerLen)
   }
 
-  def readInt = {
+  private def readInt = {
     val buf = new Array[Byte](4)
     inputStream.read(buf)
     val intVal = littleEndianInt(buf)
