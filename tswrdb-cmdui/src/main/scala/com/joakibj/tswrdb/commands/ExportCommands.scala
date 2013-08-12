@@ -29,7 +29,7 @@ object ExportCommands {
         dataExporter.exportAll(rdbType)
       } catch {
         case ex: RdbTypeNotFoundException => exit(ex.getMessage, 1)
-        case ex: RuntimeException => exit(ex.getMessage, 1)
+        case ex: RuntimeException => ex.printStackTrace(); exit(ex.getMessage, 1)
       }
     }
   }

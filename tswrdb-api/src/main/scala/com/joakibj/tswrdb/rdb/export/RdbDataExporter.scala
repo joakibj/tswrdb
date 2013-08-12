@@ -14,11 +14,13 @@ import com.joakibj.tswrdb.rdb.index.{RdbIndexEntry, RdbIndexFileReader}
 import com.joakibj.tswrdb.rdb._
 import com.joakibj.tswrdb.rdb.RdbIOException
 import scala.Some
+import strings.RdbFilenameReader
 
 abstract class RdbDataExporter(val rdbDataDirectory: File) {
   protected val IndexFilename = "le.idx"
   protected val validRdbFileNums = rdbDataDirectory.listFiles.filter(_.getName.endsWith(".rdbdata")).map(_.getName.split("\\.").head.toInt)
   protected val indexTable = RdbIndexFileReader(new File(rdbDataDirectory, IndexFilename)).getIndexTable
+  protected val fileNameTable = getFilenameTable()
   protected val postDataTransformer: RdbDataTransformer
 
   def exportAll(rdbType: RdbType) {
@@ -88,4 +90,17 @@ abstract class RdbDataExporter(val rdbDataDirectory: File) {
 
   private def grouped(arr: Array[RdbIndexEntry]): Map[Int, Array[RdbIndexEntry]] =
     arr.groupBy((indexEntry: RdbIndexEntry) => indexEntry.fileNum.toInt)
+
+  private def getFilenameTable() = {
+    val filenameEntries = indexTable.entriesForType(RdbTypes.Filenames.id)
+    if (filenameEntries.size == 1) {
+      val rdbDataFile = new File(rdbDataDirectory, "%02d.rdbdata" format filenameEntries(0).fileNum)
+      val rdbDataFileReader = RdbDataFileReader(rdbDataFile, filenameEntries)
+      val rdbData = rdbDataFileReader.readDataEntries()
+      val rdbFilenameReader = RdbFilenameReader(rdbData(0)._2)
+
+      rdbFilenameReader.getFileNames()
+    } else
+      throw new RdbIOException("Filename entries had 0 or more than 1 entries")
+  }
 }

@@ -11,6 +11,7 @@ package com.joakibj.tswrdb.rdb.export
 
 import java.io.File
 import com.joakibj.tswrdb.rdb._
+import strings.RdbFilename
 
 object RdbGenericDataExporter {
   def apply(rdbFilename: String) =
@@ -24,8 +25,17 @@ class RdbGenericDataExporter(rdbDataDirectory: File) extends RdbDataExporter(rdb
   val postDataTransformer = new NoRdbDataTransformer
 
   protected def exportDataToFile(rdbType: RdbType, outputDirectory: File, dataEntry: RdbDataEntry, buf: Array[Byte]) {
-    val filename = dataEntry.id + "." + rdbType.fileType.extension
-    val fileWriter = DataFileWriter(new File(outputDirectory, filename))
+    val canonicalFilename = fileNameTable.get(rdbType) match {
+      case Some(filename) => {
+        val rdbFilename = filename.find((fname: RdbFilename) => dataEntry.id == fname.rdbId).get
+
+        rdbFilename.rdbId + "_" + rdbFilename.fileName
+      }
+      case None => dataEntry.id + "." + rdbType.fileType.extension
+    }
+
+    val fileWriter = DataFileWriter(new File(outputDirectory, canonicalFilename))
     fileWriter.writeData(buf)
   }
+
 }

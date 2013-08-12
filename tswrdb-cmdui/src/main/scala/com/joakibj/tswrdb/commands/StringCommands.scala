@@ -20,7 +20,7 @@ object StringCommands {
 
   class StringExportCommand extends Command with ExitCommands {
     def execute(config: Config) {
-      val stringRdbType = RdbTypes.strings
+      val stringRdbType = RdbTypes.Strings
       println("Exporting RdbType: " + stringRdbType + " into exported/" + stringRdbType + " ...")
 
       println("Exporting language: " + config.language)
