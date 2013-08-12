@@ -22,4 +22,22 @@ abstract class RdbFileReader extends ByteUtils {
 
     new String(buf) == MagicNumber
   }
+
+  final def readInt(): Int = {
+    val buf = new Array[Byte](4)
+    inputStream.read(buf)
+    val intVal = littleEndianInt(buf)
+
+    intVal
+  }
+
+  final def readString() = {
+    val len = readInt()
+
+    val buf = new Array[Byte](len)
+    inputStream.read(buf)
+    val str = new String(buf)
+
+    str
+  }
 }

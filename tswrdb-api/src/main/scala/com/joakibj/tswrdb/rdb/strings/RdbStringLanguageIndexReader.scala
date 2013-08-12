@@ -36,17 +36,17 @@ class RdbStringLanguageIndexReader(languageFile: File,
   def readEntries() = {
     skipLanguageDependentHeader()
 
-    val numEntries = readInt
+    val numEntries = readInt()
 
     val rdbIdCategoryPairs =
-      for {i <- 0 until numEntries} yield (readInt, readInt)
+      for {i <- 0 until numEntries} yield (readInt(), readInt())
 
     inputStream.skip(2)
 
-    val numCategoryPairs = readInt
+    val numCategoryPairs = readInt()
 
     val categoryNamesTriplet =
-      for {i <- 0 until numCategoryPairs} yield (readInt, readTextEntry, readTextEntry)
+      for {i <- 0 until numCategoryPairs} yield (readInt(), readString(), readString())
 
     inputStream.close()
 
@@ -60,25 +60,7 @@ class RdbStringLanguageIndexReader(languageFile: File,
     seq.toList
   }
 
-  private def readTextEntry = {
-    val len = readInt
-
-    val buf = new Array[Byte](len)
-    inputStream.read(buf)
-    val str = new String(buf)
-
-    str
-  }
-
   private def skipLanguageDependentHeader() {
     inputStream.skip(lang.headerLen)
-  }
-
-  private def readInt = {
-    val buf = new Array[Byte](4)
-    inputStream.read(buf)
-    val intVal = littleEndianInt(buf)
-
-    intVal
   }
 }

@@ -18,11 +18,11 @@ class RdbFilenameReader(buf: Array[Byte]) extends RdbFileReader {
   def getFileNames() = {
     val filenames = mutable.Map.empty[RdbType, Vector[RdbFilename]]
 
-    val numTypes = readInt
+    val numTypes = readInt()
 
     for (rdbTypeNum <- 0 until numTypes) {
-      val rdbTypez = readInt
-      val numEntries = readInt
+      val rdbTypez = readInt()
+      val numEntries = readInt()
 
       if (numEntries != 0) {
         val rdbType = RdbTypes.find(rdbTypez).getOrElse {
@@ -31,30 +31,12 @@ class RdbFilenameReader(buf: Array[Byte]) extends RdbFileReader {
         val filenameEntries =
           for {
             entryNum <- 0 until numEntries
-            rdbId = readInt
-            filename = readString
+            rdbId = readInt()
+            filename = readString()
           } yield RdbFilename(rdbId, filename)
         filenames += (rdbType -> filenameEntries.toVector)
       }
     }
     filenames
-  }
-
-  private def readString = {
-    val len = readInt
-
-    val buf = new Array[Byte](len)
-    inputStream.read(buf)
-    val str = new String(buf)
-
-    str
-  }
-
-  private def readInt = {
-    val buf = new Array[Byte](4)
-    inputStream.read(buf)
-    val intVal = littleEndianInt(buf)
-
-    intVal
   }
 }
