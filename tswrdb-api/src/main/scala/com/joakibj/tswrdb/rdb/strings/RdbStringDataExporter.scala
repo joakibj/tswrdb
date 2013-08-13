@@ -25,7 +25,7 @@ class RdbStringDataExporter(rdbDataDirectory: File, languageTable: List[RdbStrin
   val postDataTransformer = new StringRdbDataXmlTransformer
 
   protected def exportDataToFile(rdbType: RdbType, outputDirectory: File, dataEntry: RdbDataEntry, buf: Array[Byte]) {
-    val filename = mapToCanonicalName(dataEntry.id) + "." + rdbType.fileType.extension
+    val filename = mapToCanonicalName(dataEntry.id) + ".xml"
     val fileWriter = EncodedDataFileWriter(new File(outputDirectory, filename))
     fileWriter.writeData(buf)
   }
