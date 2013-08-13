@@ -10,7 +10,7 @@
 package com.joakibj.tswrdb.rdb.strings
 
 import com.joakibj.tswrdb.rdb.{Severity, RdbIOException, RdbFileReader}
-import java.io.{File, FileOutputStream, ByteArrayInputStream, InputStream}
+import java.io.{ByteArrayInputStream, InputStream}
 import com.joakibj.tswrdb.rdb.util.ByteUtils
 import collection.mutable.ArrayBuffer
 
