@@ -153,7 +153,7 @@ object RdbStringCategories {
     RdbStringCategory(51100, "folder_hashes"),
     RdbStringCategory(51200, "goal_districts"),
     RdbStringCategory(52000, "regions_region"),
-    RdbStringCategory(52001, "unknown_5"),
+    RdbStringCategory(52001, "dimension_names"),
     RdbStringCategory(53000, "feat_specialized_trees_name"),
     RdbStringCategory(54000, "breedenum_breed"),
     RdbStringCategory(55000, "simpledynels_name"),
