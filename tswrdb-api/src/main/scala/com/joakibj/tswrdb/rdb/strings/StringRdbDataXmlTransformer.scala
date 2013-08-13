@@ -33,10 +33,10 @@ class StringRdbDataXmlTransformer extends RdbDataTransformer {
     val xmlResult =
       <rdbStrings>
         {strings.map {
-        case (id, arr) =>
+        case (id, str) =>
           new RdbString {
             val stringId = id
-            val content = new String(arr)
+            val content = str
           }.toXml
       }}
       </rdbStrings>

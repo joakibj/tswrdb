@@ -46,9 +46,11 @@ class RdbStringFileReader(buf: Array[Byte]) extends RdbFileReader {
     val strings = for {
       ie <- indexTable.table
       buf = stringbuf.slice(ie.offset, ie.offset + ie.length)
-    } yield (ie.index, buf)
+    } yield (ie.index, new String(buf))
 
-    strings.toVector
+    strings.filter {
+      case (index, str) => str.length > 0
+    }.toVector
   }
 
   private def readIndexTable() = {
