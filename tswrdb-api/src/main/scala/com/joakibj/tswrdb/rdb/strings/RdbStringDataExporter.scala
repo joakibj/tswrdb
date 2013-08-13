@@ -14,14 +14,14 @@ import com.joakibj.tswrdb.rdb.export.{RdbDataEntry, EncodedDataFileWriter, RdbDa
 import com.joakibj.tswrdb.rdb.{RdbIOException, RdbType}
 
 object RdbStringDataExporter {
-  def apply(rdbFilename: String, languageTable: List[RdbStringCategory]) =
-    new RdbStringDataExporter(new File(rdbFilename), languageTable)
+  def apply(rdbFilename: String, stringIndexTable: List[RdbStringLangIndexEntry]) =
+    new RdbStringDataExporter(new File(rdbFilename), stringIndexTable)
 
-  def apply(rdbDataDirectory: File, languageTable: List[RdbStringCategory]) =
-    new RdbStringDataExporter(rdbDataDirectory, languageTable)
+  def apply(rdbDataDirectory: File, stringIndexTable: List[RdbStringLangIndexEntry]) =
+    new RdbStringDataExporter(rdbDataDirectory, stringIndexTable)
 }
 
-class RdbStringDataExporter(rdbDataDirectory: File, languageTable: List[RdbStringCategory]) extends RdbDataExporter(rdbDataDirectory) {
+class RdbStringDataExporter(rdbDataDirectory: File, stringIndexTable: List[RdbStringLangIndexEntry]) extends RdbDataExporter(rdbDataDirectory) {
   val postDataTransformer = new StringRdbDataXmlTransformer
 
   protected def exportDataToFile(rdbType: RdbType, outputDirectory: File, dataEntry: RdbDataEntry, buf: Array[Byte]) {
@@ -31,10 +31,8 @@ class RdbStringDataExporter(rdbDataDirectory: File, languageTable: List[RdbStrin
   }
 
   private def mapToCanonicalName(dataEntryId: Int) = {
-    val (catName1, catName2) = languageTable.find((stringCat) => stringCat.rdbId == dataEntryId).getOrElse {
+    stringIndexTable.find((stringLangIndexEntry) => stringLangIndexEntry.rdbId == dataEntryId).getOrElse {
       throw new RdbIOException("String DataEntry did not have a matching Category")
-    }.categoryNamePair
-
-    catName1 + "_" + catName2
+    }.category.name
   }
 }

@@ -162,8 +162,8 @@ object RdbStringCategories {
     RdbStringCategory(55300, "spelllines_linename"),
     RdbStringCategory(55500, "doorgroup_door_name"),
     RdbStringCategory(55600, "climbing_points"),
-    RdbStringCategory(55700, "character_tag_maintext"),
-    RdbStringCategory(55701, "character_tag_displayname"),
+    RdbStringCategory(55700, "achievement_and_lore_descriptions"),
+    RdbStringCategory(55701, "achievement_and_lore_names"),
     RdbStringCategory(56000, "unknown_6")
   )
 }

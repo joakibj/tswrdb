@@ -9,12 +9,9 @@
 
 package com.joakibj.tswrdb.rdb.strings
 
-import com.joakibj.tswrdb.rdb.RdbFileReader
+import com.joakibj.tswrdb.rdb.{RdbIOException, RdbFileReader}
 import java.io.{FileInputStream, File, InputStream}
-
-case class RdbStringCategory(rdbId: Int,
-                             categoryId: Int,
-                             categoryNamePair: (String, String))
+import scala.collection.mutable
 
 object StringLanguage extends Enumeration {
   val English = LangVal("en", 55)
@@ -41,23 +38,14 @@ class RdbStringLanguageIndexReader(languageFile: File,
     val rdbIdCategoryPairs =
       for {i <- 0 until numEntries} yield (readInt(), readInt())
 
-    inputStream.skip(2)
-
-    val numCategoryPairs = readInt()
-
-    val categoryNamesTriplet =
-      for {i <- 0 until numCategoryPairs} yield (readInt(), readString(), readString())
-
-    inputStream.close()
-
-    val seq =
-      for {
-        pair <- rdbIdCategoryPairs
-        triplet <- categoryNamesTriplet
-        if pair._1 == triplet._1
-      } yield new RdbStringCategory(pair._2, pair._1, (triplet._2, triplet._3))
-
-    seq.toList
+    val entries = mutable.ListBuffer[RdbStringLangIndexEntry]()
+    for (rdbCat <- rdbIdCategoryPairs) RdbStringCategories.find(rdbCat._1) match {
+      case Some(cat) =>
+        val entry = RdbStringLangIndexEntry(rdbCat._2, cat)
+        entries += entry
+      case None => throw new RdbIOException("category: " + rdbCat._1 + " was not found ")
+    }
+    entries.toList
   }
 
   private def skipLanguageDependentHeader() {
