@@ -12,7 +12,7 @@ package com.joakibj.tswrdb.rdb.strings
 import com.joakibj.tswrdb.rdb.RdbDataTransformer
 import xml.PrettyPrinter
 
-class StringRdbDataXmlTransformer extends RdbDataTransformer {
+class RdbStringDataXmlTransformer extends RdbDataTransformer {
   def transform(buf: Array[Byte]): Array[Byte] = {
     val stringRdbReader = new RdbStringFileReader(buf)
     val (_, strings) = stringRdbReader.getStrings()

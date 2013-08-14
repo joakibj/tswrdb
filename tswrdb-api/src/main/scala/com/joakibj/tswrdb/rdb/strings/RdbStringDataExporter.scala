@@ -22,7 +22,7 @@ object RdbStringDataExporter {
 }
 
 class RdbStringDataExporter(rdbDataDirectory: File, stringIndexTable: List[RdbStringLangIndexEntry]) extends RdbDataExporter(rdbDataDirectory) {
-  val postDataTransformer = new StringRdbDataXmlTransformer
+  val postDataTransformer = new RdbStringDataXmlTransformer
 
   protected def exportDataToFile(rdbType: RdbType, outputDirectory: File, dataEntry: RdbDataEntry, buf: Array[Byte]) {
     val filename = mapToCanonicalName(dataEntry.id) + ".xml"
