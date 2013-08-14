@@ -41,6 +41,6 @@ class RdbTypesTest extends FunSuite with ShouldMatchers {
   test("should return list of RdbTypes") {
     val result = RdbTypes.values
 
-    result.size should be(169)
+    result.size should be(175)
   }
 }
