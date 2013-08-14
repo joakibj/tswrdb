@@ -45,6 +45,9 @@ class RdbStringLanguageIndexReader(languageFile: File,
         entries += entry
       case None => throw new RdbIOException("category: " + rdbCat._1 + " was not found ")
     }
+
+    inputStream.close()
+
     entries.toList
   }
 
