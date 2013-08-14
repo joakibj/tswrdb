@@ -45,7 +45,7 @@ class RdbStringFileReader(buf: Array[Byte]) extends RdbFileReader {
     val strings = for {
       ie <- indexTable.table
       buf = stringBuf.slice(ie.offset, ie.offset + ie.length)
-    } yield (ie.index, new String(buf))
+    } yield (ie.index, new String(buf, "UTF-8"))
 
     strings.filter {
       case (index, str) => str.length > 0

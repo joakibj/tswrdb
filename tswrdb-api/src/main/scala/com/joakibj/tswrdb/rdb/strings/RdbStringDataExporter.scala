@@ -10,7 +10,7 @@
 package com.joakibj.tswrdb.rdb.strings
 
 import java.io.File
-import com.joakibj.tswrdb.rdb.export.{RdbDataEntry, EncodedDataFileWriter, RdbDataExporter}
+import com.joakibj.tswrdb.rdb.export.{DataFileWriter, RdbDataEntry, RdbDataExporter}
 import com.joakibj.tswrdb.rdb.{RdbIOException, RdbType}
 
 object RdbStringDataExporter {
@@ -26,7 +26,7 @@ class RdbStringDataExporter(rdbDataDirectory: File, stringIndexTable: List[RdbSt
 
   protected def exportDataToFile(rdbType: RdbType, outputDirectory: File, dataEntry: RdbDataEntry, buf: Array[Byte]) {
     val filename = mapToCanonicalName(dataEntry.id) + ".xml"
-    val fileWriter = EncodedDataFileWriter(new File(outputDirectory, filename))
+    val fileWriter = DataFileWriter(new File(outputDirectory, filename))
     fileWriter.writeData(buf)
   }
 

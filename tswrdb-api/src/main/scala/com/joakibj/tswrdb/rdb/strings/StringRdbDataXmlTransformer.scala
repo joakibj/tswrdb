@@ -28,6 +28,7 @@ class StringRdbDataXmlTransformer extends RdbDataTransformer {
   def transform(buf: Array[Byte]): Array[Byte] = {
     val stringRdbReader = new RdbStringFileReader(buf)
     val strings = stringRdbReader.getStrings()
+
     if (strings.length == 0) return new Array[Byte](0)
 
     val xmlResult =
@@ -41,6 +42,6 @@ class StringRdbDataXmlTransformer extends RdbDataTransformer {
       }}
       </rdbStrings>
     val printer = new PrettyPrinter(120, 2)
-    printer.format(xmlResult).map(_.toByte).toArray
+    printer.format(xmlResult).getBytes("UTF-8")
   }
 }
