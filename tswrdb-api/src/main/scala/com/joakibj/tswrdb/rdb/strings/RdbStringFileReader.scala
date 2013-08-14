@@ -39,13 +39,12 @@ class RdbStringFileReader(buf: Array[Byte]) extends RdbFileReader {
   val header = readHeader()
 
   def getStrings() = {
-    val stringbuf: Array[Byte] = new Array(header.stringDataLength)
-    inputStream.read(stringbuf)
+    val stringBuf: Array[Byte] = readLen(header.stringDataLength)
     val indexTable = readIndexTable()
 
     val strings = for {
       ie <- indexTable.table
-      buf = stringbuf.slice(ie.offset, ie.offset + ie.length)
+      buf = stringBuf.slice(ie.offset, ie.offset + ie.length)
     } yield (ie.index, new String(buf))
 
     strings.filter {
@@ -64,28 +63,20 @@ class RdbStringFileReader(buf: Array[Byte]) extends RdbFileReader {
   }
 
   private def readNextIndexEntry() = {
-    val buf: Array[Byte] = new Array(16)
+    val index = readInt()
+    val unknown = readInt()
+    val offset = readInt()
+    val length = readInt()
 
-    if (inputStream.read(buf, 0, 16) != -1) {
-      val index = littleEndianInt(buf.slice(0, 4))
-      val unknown = littleEndianInt(buf.slice(4, 8))
-      val offset = littleEndianInt(buf.slice(8, 12))
-      val length = littleEndianInt(buf.slice(12, 16))
-
-      new RdbStringIndexEntry(index, unknown, offset, length)
-    } else {
-      throw new RdbIOException("Prematurely got to end of file", Severity.Mayan)
-    }
+    new RdbStringIndexEntry(index, unknown, offset, length)
   }
 
   private def readHeader() = {
-    val buf: Array[Byte] = new Array(32)
-    inputStream.read(buf, 0, 32)
-    val category = littleEndianInt(buf.slice(0, 4))
-    val flags = littleEndianInt(buf.slice(4, 8))
-    val stringLength = littleEndianInt(buf.slice(8, 12))
-    val numStrings = littleEndianInt(buf.slice(12, 16))
-    val hash = littleEndianArray(buf.slice(16, 32))
+    val category = readInt()
+    val flags = readInt()
+    val stringLength = readInt()
+    val numStrings = readInt()
+    val hash = readLen(16)
 
     new RdbStringHeader(category, flags, stringLength, numStrings, hash)
   }

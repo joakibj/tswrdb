@@ -32,7 +32,8 @@ class RdbFilenameReader(buf: Array[Byte]) extends RdbFileReader {
           for {
             entryNum <- 0 until numEntries
             rdbId = readInt()
-            filename = readString()
+            filenameLen = readInt()
+            filename = readString(filenameLen)
           } yield RdbFilename(rdbId, filename)
         filenames += (rdbType -> filenameEntries.toVector)
       }

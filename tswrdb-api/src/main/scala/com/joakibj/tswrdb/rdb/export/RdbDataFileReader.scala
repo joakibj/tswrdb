@@ -103,7 +103,7 @@ class RdbDataFileReader(rdbDataFile: File,
   def readDataEntry(indexEntry: RdbIndexEntry, skipBytes: Int): (RdbDataEntry, Array[Byte]) = {
     val dataEntry = readNextDataEntryHeader(indexEntry.dataOffset - skipBytes)
     if (isCorrectDataEntry(indexEntry, dataEntry)) {
-      val buf = readData(indexEntry.length)
+      val buf = readLen(indexEntry.length)
 
       (dataEntry, buf)
     } else {
@@ -114,20 +114,12 @@ class RdbDataFileReader(rdbDataFile: File,
   private def readNextDataEntryHeader(skipToNextOffset: Int): RdbDataEntry = {
     inputStream.skip(skipToNextOffset - RdbDataEntry.HeaderSize)
 
-    val buf: Array[Byte] = new Array(RdbDataEntry.HeaderSize)
-    inputStream.read(buf)
-
-    val dataType = littleEndianInt(buf.slice(0, 4))
-    val dataId = littleEndianInt(buf.slice(4, 8))
-    val dataLength = littleEndianInt(buf.slice(8, 12))
+    val dataType = readInt()
+    val dataId = readInt()
+    val dataLength = readInt()
+    inputStream.skip(4) //unknown 4 bytes
 
     RdbDataEntry(dataType, dataId, dataLength)
-  }
-
-  private def readData(len: Int): Array[Byte] = {
-    val buf: Array[Byte] = new Array(len)
-    inputStream.read(buf)
-    buf
   }
 
   private def isCorrectDataEntry(indexEntry: RdbIndexEntry, dataEntry: RdbDataEntry): Boolean = {

@@ -27,21 +27,24 @@ abstract class RdbFileReader extends ByteUtils {
     new String(buf) == MagicNumber
   }
 
-  final def readInt(): Int = {
-    val buf = new Array[Byte](4)
-    inputStream.read(buf)
-    val intVal = littleEndianInt(buf)
-
-    intVal
+  protected final def readByte(): Byte = {
+    littleEndianByte(readLen(1))
   }
 
-  final def readString() = {
-    val len = readInt()
+  protected final def readInt(): Int = {
+    littleEndianInt(readLen(4))
+  }
 
+  protected final def readString(len: Int): String = {
+    new String(readLen(len))
+  }
+
+  protected final def readLen(len: Int): Array[Byte] = {
     val buf = new Array[Byte](len)
-    inputStream.read(buf)
-    val str = new String(buf)
-
-    str
+    if(inputStream.read(buf) != -1) {
+      buf
+    } else {
+      throw new RdbIOException("Prematurely got to end of file. No more data.", Severity.Mayan)
+    }
   }
 }
