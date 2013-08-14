@@ -11,7 +11,6 @@ package com.joakibj.tswrdb
 
 import java.io.File
 import rdb.strings.StringLanguage
-import rdb.util.ByteUtils
 
 object ListRdbTypesMode extends Enumeration {
   val None, All, Understood = Value
