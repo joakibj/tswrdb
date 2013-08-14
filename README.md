@@ -85,7 +85,6 @@ The previous command exports all Loading Screen Images to ``<tswrdb folder>/tswr
     run strings --tsw """D:\Programs\TSW TestLive""" --lang de
 
 The previous command exports all german strings to XML files in ``<tswrdb folder>/tswrdb-cmdui/exported/1030002 (Strings)``.
-**Note** see Known Issues for issues regarding german and french characters.
 
 See the usage below for all available commands.
 
@@ -131,7 +130,7 @@ Please see the [DOCUMENTATION](docs/DOCUMENTATION.md) file.
 Known Issues
 ============
 
-* Some french and german characters don't seem to be UTF-8 or are somehow read wrongly
+* Currently no known issues
 
 Acknowledgements
 ================
