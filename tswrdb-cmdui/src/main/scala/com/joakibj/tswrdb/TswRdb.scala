@@ -24,7 +24,7 @@ case class Config(tswDirectory: File = new File("."),
                   listMode: Enumeration#Value = ListRdbTypesMode.None,
                   language: StringLanguage.Value = StringLanguage.English)
 
-object TswRdb extends App with ByteUtils {
+object TswRdb extends App {
   Console.setErr(Console.out)
 
   val parser = new scopt.OptionParser[Config]("tswrdb") {
