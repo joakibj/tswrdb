@@ -15,17 +15,28 @@ import com.joakibj.tswrdb.rdb.util.ByteUtils
 import collection.mutable.ArrayBuffer
 
 class RdbStringIndexTable(val header: RdbStringHeader,
-                          val table: ArrayBuffer[RdbStringIndexEntry]) {
+                          val table: ArrayBuffer[RdbStringIndexEntry])
 
-}
+case class RdbStringIndexEntry(index: Int,
+                               unknown: Int,
+                               offset: Int,
+                               length: Int)
 
-class RdbStringIndexEntry(val index: Int, val unknown: Int, val offset: Int, val length: Int)
+case class RdbStringHeader(category: Int,
+                           flags: Int,
+                           stringDataLength: Int,
+                           numStrings: Int,
+                           hash: Array[Byte]) extends ByteUtils
 
-class RdbStringHeader(val category: Int,
-                      val flags: Int,
-                      val stringDataLength: Int,
-                      val numStrings: Int,
-                      val hash: Array[Byte]) extends ByteUtils {
+case class RdbString(stringId: Int,
+                     content: String) {
+  def toXml = {
+    <rdbString>
+      <stringId>{stringId}
+      </stringId>
+      <content>{content}</content>
+    </rdbString>
+  }
 }
 
 class RdbStringFileReader(buf: Array[Byte]) extends RdbFileReader {
@@ -45,11 +56,10 @@ class RdbStringFileReader(buf: Array[Byte]) extends RdbFileReader {
     val strings = for {
       ie <- indexTable.table
       buf = stringBuf.slice(ie.offset, ie.offset + ie.length)
-    } yield (ie.index, new String(buf, "UTF-8"))
+      if(buf.size > 0)
+    } yield RdbString(ie.index, new String(buf, "UTF-8"))
 
-    strings.filter {
-      case (index, str) => str.length > 0
-    }.toVector
+    (header, strings.toVector)
   }
 
   private def readIndexTable() = {
@@ -80,6 +90,5 @@ class RdbStringFileReader(buf: Array[Byte]) extends RdbFileReader {
 
     new RdbStringHeader(category, flags, stringLength, numStrings, hash)
   }
-
 
 }
