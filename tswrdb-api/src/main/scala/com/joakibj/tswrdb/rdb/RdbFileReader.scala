@@ -16,9 +16,13 @@ abstract class RdbFileReader extends ByteUtils {
   protected val MagicNumber: String
   protected val inputStream: InputStream
 
+  def close() {
+    inputStream.close()
+  }
+
   def hasMagicNumber(): Boolean = {
     val buf: Array[Byte] = new Array(MagicNumber.size)
-    inputStream.read(buf, 0, MagicNumber.length)
+    inputStream.read(buf)
 
     new String(buf) == MagicNumber
   }

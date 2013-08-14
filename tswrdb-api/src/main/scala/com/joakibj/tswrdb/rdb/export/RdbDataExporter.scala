@@ -19,7 +19,7 @@ import strings.RdbFilenameReader
 abstract class RdbDataExporter(val rdbDataDirectory: File) {
   protected val IndexFilename = "le.idx"
   protected val validRdbFileNums = rdbDataDirectory.listFiles.filter(_.getName.endsWith(".rdbdata")).map(_.getName.split("\\.").head.toInt)
-  protected val indexTable = RdbIndexFileReader(new File(rdbDataDirectory, IndexFilename)).getIndexTable
+  protected val indexTable = getIndexTable()
   protected val fileNameTable = getFilenameTable()
   protected val postDataTransformer: RdbDataTransformer
 
@@ -71,6 +71,7 @@ abstract class RdbDataExporter(val rdbDataDirectory: File) {
     val rdbDataFile = new File(rdbDataDirectory, "%02d.rdbdata" format fileNum)
     val rdbDataFileReader = RdbDataFileReader(rdbDataFile, indexEntries)
     val rdbData = rdbDataFileReader.readDataEntries()
+    rdbDataFileReader.close()
     exportData(rdbType, outputDirectory, rdbData)
 
     println("Exporting entries from: " + rdbDataFile.getName)
@@ -91,15 +92,26 @@ abstract class RdbDataExporter(val rdbDataDirectory: File) {
   private def grouped(arr: Array[RdbIndexEntry]): Map[Int, Array[RdbIndexEntry]] =
     arr.groupBy((indexEntry: RdbIndexEntry) => indexEntry.fileNum.toInt)
 
+  private def getIndexTable() = {
+    val rdbIndexFileReader = RdbIndexFileReader(new File(rdbDataDirectory, IndexFilename))
+    val indexTable = rdbIndexFileReader.getIndexTable
+    rdbIndexFileReader.close()
+
+    indexTable
+  }
+
   private def getFilenameTable() = {
     val filenameEntries = indexTable.entriesForType(RdbTypes.Filenames.id)
     if (filenameEntries.size == 1) {
       val rdbDataFile = new File(rdbDataDirectory, "%02d.rdbdata" format filenameEntries(0).fileNum)
       val rdbDataFileReader = RdbDataFileReader(rdbDataFile, filenameEntries)
       val rdbData = rdbDataFileReader.readDataEntries()
+      rdbDataFileReader.close()
       val rdbFilenameReader = RdbFilenameReader(rdbData(0)._2)
+      val filenameTable = rdbFilenameReader.getFileNames()
+      rdbFilenameReader.close()
 
-      rdbFilenameReader.getFileNames()
+      filenameTable
     } else
       throw new RdbIOException("Filename entries had 0 or more than 1 entries")
   }

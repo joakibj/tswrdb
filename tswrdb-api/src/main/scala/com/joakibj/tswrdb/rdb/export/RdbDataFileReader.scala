@@ -97,8 +97,6 @@ class RdbDataFileReader(rdbDataFile: File,
 
     val allEntries = Vector((dataEntry1, buf1.drop(rdbType1.skipBytes))) ++ entries.toVector
 
-    inputStream.close()
-
     allEntries
   }
 

@@ -27,6 +27,7 @@ object StringCommands {
       val languageTableFileName = "Data/text/" + config.language + ".tdbl"
       val stringLanguageReader = new RdbStringLanguageIndexReader(new File(config.tswDirectory, languageTableFileName), config.language)
       val languageTable = stringLanguageReader.readEntries()
+      stringLanguageReader.close()
       val stringDataExporter = RdbStringDataExporter(new File(config.tswDirectory, "RDB"), languageTable)
       stringDataExporter.exportFiltered(stringRdbType, (ie: RdbIndexEntry) => languageTable.map(_.rdbId).contains(ie.id))
     }

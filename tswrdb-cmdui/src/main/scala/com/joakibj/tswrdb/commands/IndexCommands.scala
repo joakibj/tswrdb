@@ -23,7 +23,7 @@ object IndexCommands {
     def execute(config: Config) {
       val reader = RdbIndexFileReader(new File(config.tswDirectory, "RDB/le.idx"))
       val header = reader.indexHeader
-      reader.closeFile()
+      reader.close()
 
       println("Version: " + header.version)
       println("Hash: " + toHex(header.hash))
@@ -40,6 +40,7 @@ object IndexCommands {
           val rt = RdbTypes.find(x).get
           println(rt + ": size: " + tbl.entriesForType(x).size)
       }
+      reader.close()
     }
   }
 

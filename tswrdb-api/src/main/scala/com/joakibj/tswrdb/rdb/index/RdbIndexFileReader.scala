@@ -29,8 +29,6 @@ class RdbIndexFileReader(file: File) extends RdbFileReader {
   val indexHeader = readIndexHeader()
 
   def getIndexTable: RdbDataIndexTable = new RdbDataIndexTable(indexHeader, readIndexEntries())
-
-  def closeFile() { inputStream.close() }
   
   private def readIndexEntries(): ArrayBuffer[RdbIndexEntry] = {
 
@@ -47,7 +45,6 @@ class RdbIndexFileReader(file: File) extends RdbFileReader {
       val indexEntry = indexTable(i)
       indexEntries += RdbIndexEntry(indexEntry, indexEntryDetails)
     }
-    closeFile()
 
     indexEntries
   }
