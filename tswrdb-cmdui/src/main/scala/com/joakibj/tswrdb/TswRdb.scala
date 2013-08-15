@@ -10,7 +10,7 @@
 package com.joakibj.tswrdb
 
 import java.io.File
-import rdb.strings.StringLanguage
+import rdb.strings.{StringExportFormat, StringLanguage}
 
 object ListRdbTypesMode extends Enumeration {
   val None, All, Understood = Value
@@ -21,7 +21,8 @@ case class Config(tswDirectory: File = new File("."),
                   command: String = "",
                   subCommand: String = "",
                   listMode: Enumeration#Value = ListRdbTypesMode.None,
-                  language: StringLanguage.Value = StringLanguage.English)
+                  language: StringLanguage.Value = StringLanguage.English,
+                  stringExportFormat: StringExportFormat.Value = StringExportFormat.Xml )
 
 object TswRdb extends App {
   Console.setErr(Console.out)
@@ -62,8 +63,12 @@ object TswRdb extends App {
           config.copy(language = StringLanguage.values.find(_.toString == lang).get)
       } validate {
         lang => if (StringLanguage.values.map(_.toString).contains(lang)) success else failure("Option --lang must be en, fr or de")
-      } text ("Exports all strings for the language. Valid options are en, fr or de. Required.")
-      ) text("Export strings (RdbType 1030002) as XML.")
+      } text ("Exports all strings for the language. Valid options are en, fr or de. Required."),
+        opt[Unit]("json") optional() action {
+      (lang, config) =>
+        config.copy(stringExportFormat = StringExportFormat.Json)
+    } text ("Strings are exported as JSON.")
+      ) text("Export strings (RdbType 1030002). XML is output per default, this can be overriden with Option --json. ")
     note("")
     cmd("index") action {
       (_, config) =>

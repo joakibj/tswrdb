@@ -21,15 +21,12 @@ object StringCommands {
   class StringExportCommand extends Command with ExitCommands {
     def execute(config: Config) {
       val stringRdbType = RdbTypes.Strings
+      println("Exporting language: " + config.language)
+      println("Exporting as: " + config.stringExportFormat)
       println("Exporting RdbType: " + stringRdbType + " into exported/" + stringRdbType + " ...")
 
-      println("Exporting language: " + config.language)
-      val languageTableFileName = "Data/text/" + config.language + ".tdbl"
-      val stringLanguageReader = new RdbStringLanguageIndexReader(new File(config.tswDirectory, languageTableFileName), config.language)
-      val languageTable = stringLanguageReader.readEntries()
-      stringLanguageReader.close()
-      val stringDataExporter = RdbStringDataExporter(new File(config.tswDirectory, "RDB"), languageTable)
-      stringDataExporter.exportFiltered(stringRdbType, (ie: RdbIndexEntry) => languageTable.map(_.rdbId).contains(ie.id))
+      val stringDataExporter = RdbStringDataExporter(new File(config.tswDirectory, "RDB"), config.language, config.stringExportFormat)
+      stringDataExporter.exportStrings()
     }
   }
 
