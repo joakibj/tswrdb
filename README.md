@@ -86,6 +86,10 @@ The previous command exports all Loading Screen Images to ``<tswrdb folder>/tswr
 
 The previous command exports all german strings to XML files in ``<tswrdb folder>/tswrdb-cmdui/exported/1030002 (Strings)``.
 
+    run strings --tsw """D:\Programs\TSW TestLive""" --lang en --json
+
+The previous command exports all english strings to JSON files in ``<tswrdb folder>/tswrdb-cmdui/exported/1030002 (Strings)``.
+
 See the usage below for all available commands.
 
 ```
@@ -106,9 +110,11 @@ Export entries belonging to this rdbtype
         rdbType of the data that is going to be exported.
 
 Command: strings [options]
-Export strings (RdbType 1030002) as XML.
+Export strings (RdbType 1030002). XML is output per default, this can be overriden with Option --json.
   -l <value> | --lang <value>
         Exports all strings for the language. Valid options are en, fr or de. Required.
+  --json
+        Strings are exported as JSON.
 
 Command: index [info]
 
