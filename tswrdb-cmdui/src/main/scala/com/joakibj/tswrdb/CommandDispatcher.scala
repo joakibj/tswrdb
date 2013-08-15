@@ -34,7 +34,7 @@ class CommandDispatcher(config: Config) extends ExitCommands {
         }
       case "index" =>
         config.subCommand match {
-          case "info" => execute(IndexCommands.indexInfo)
+          case "info" => execute(IndexCommands.Info)
           case _ => usageAndExit()
         }
       case _ => usageAndExit()
