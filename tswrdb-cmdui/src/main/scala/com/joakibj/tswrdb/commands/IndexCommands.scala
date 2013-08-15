@@ -16,10 +16,9 @@ import com.joakibj.tswrdb.Config
 import com.joakibj.tswrdb.rdb.util.ByteUtils
 
 object IndexCommands {
-  val indexInfo = new ShowIndexInfoCommand
-  val indexSize = new ShowIndexSizeCommand
+  val Info = new IndexInfoCommand
 
-  class ShowIndexInfoCommand extends Command with ByteUtils {
+  class IndexInfoCommand extends Command with ByteUtils {
     def execute(config: Config) {
       val reader = RdbIndexFileReader(new File(config.tswDirectory, "RDB/le.idx"))
       val header = reader.indexHeader
@@ -30,18 +29,4 @@ object IndexCommands {
       println("Number of entries: " + header.numEntries)
     }
   }
-
-  class ShowIndexSizeCommand extends Command {
-    def execute(config: Config) {
-      val reader = RdbIndexFileReader(new File(config.tswDirectory, "RDB/le.idx"))
-      val tbl = reader.getIndexTable
-      tbl.types.foreach {
-        x =>
-          val rt = RdbTypes.find(x).get
-          println(rt + ": size: " + tbl.entriesForType(x).size)
-      }
-      reader.close()
-    }
-  }
-
 }
