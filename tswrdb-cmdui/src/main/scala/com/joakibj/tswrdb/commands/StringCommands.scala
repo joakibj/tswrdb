@@ -11,9 +11,8 @@ package com.joakibj.tswrdb.commands
 
 import com.joakibj.tswrdb.Config
 import java.io.File
-import com.joakibj.tswrdb.rdb.strings.{RdbStringDataExporter, RdbStringLanguageIndexReader}
+import com.joakibj.tswrdb.rdb.strings.RdbStringDataExporter
 import com.joakibj.tswrdb.rdb.RdbTypes
-import com.joakibj.tswrdb.rdb.index.RdbIndexEntry
 
 object StringCommands {
   val default = new StringExportCommand
