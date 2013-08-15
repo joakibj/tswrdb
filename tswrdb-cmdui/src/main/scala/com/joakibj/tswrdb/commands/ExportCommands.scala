@@ -13,12 +13,13 @@ import com.joakibj.tswrdb.Config
 import com.joakibj.tswrdb.rdb.{RdbTypeNotFoundException, RdbTypes}
 import com.joakibj.tswrdb.rdb.export.RdbGenericDataExporter
 import java.io.{FileInputStream, File}
-import com.joakibj.tswrdb.rdb.strings.RdbStringFileReader
+import com.joakibj.tswrdb.rdb.strings.{RdbStringDataExporter, RdbStringFileReader}
 
 object ExportCommands {
-  val default = new DefaultExportCommand
+  val RdbType = new RdbTypeExportCommand
+  val String = new StringExportCommand
 
-  class DefaultExportCommand extends Command with ExitCommands {
+  class RdbTypeExportCommand extends Command with ExitCommands {
     def execute(config: Config) {
       try {
         val rdbType = RdbTypes.find(config.rdbType).getOrElse {
@@ -31,6 +32,18 @@ object ExportCommands {
         case ex: RdbTypeNotFoundException => exit(ex.getMessage, 1)
         case ex: RuntimeException => ex.printStackTrace(); exit(ex.getMessage, 1)
       }
+    }
+  }
+
+  class StringExportCommand extends Command with ExitCommands {
+    def execute(config: Config) {
+      val stringRdbType = RdbTypes.Strings
+      println("Exporting language: " + config.language)
+      println("Exporting as: " + config.stringExportFormat)
+      println("Exporting RdbType: " + stringRdbType + " into exported/" + stringRdbType + " ...")
+
+      val stringDataExporter = RdbStringDataExporter(new File(config.tswDirectory, "RDB"), config.language, config.stringExportFormat)
+      stringDataExporter.exportStrings()
     }
   }
 }

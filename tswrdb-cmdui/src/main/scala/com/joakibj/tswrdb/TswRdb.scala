@@ -22,7 +22,7 @@ case class Config(tswDirectory: File = new File("."),
                   subCommand: String = "",
                   listMode: Enumeration#Value = ListRdbTypesMode.None,
                   language: StringLanguage.Value = StringLanguage.English,
-                  stringExportFormat: StringExportFormat.Value = StringExportFormat.Xml )
+                  stringExportFormat: StringExportFormat.Value = StringExportFormat.Xml)
 
 object TswRdb extends App {
   Console.setErr(Console.out)
@@ -47,28 +47,32 @@ object TswRdb extends App {
     cmd("export") action {
       (_, config) =>
         config.copy(command = "export")
-    } text ("Export entries belonging to this rdbtype") children (
-      arg[Int]("<rdbType>") required() action {
-        (rdbType, config) =>
-          config.copy(rdbType = rdbType)
-      } text ("rdbType of the data that is going to be exported.")
-      )
-    note("")
-    cmd("strings") action {
-      (_, config) =>
-        config.copy(command = "strings")
-    } children (
-      opt[String]("lang") abbr ("l") required() action {
-        (lang, config) =>
-          config.copy(language = StringLanguage.values.find(_.toString == lang).get)
-      } validate {
-        lang => if (StringLanguage.values.map(_.toString).contains(lang)) success else failure("Option --lang must be en, fr or de")
-      } text ("Exports all strings for the language. Valid options are en, fr or de. Required."),
+    } children(
+      cmd("rdbtype") action {
+        (_, config) =>
+          config.copy(subCommand = "rdbtype")
+      } text ("Export any RdbType as they appear in the resource database.") children (
+        arg[Int]("<rdbType>") required() action {
+          (rdbType, config) =>
+            config.copy(rdbType = rdbType)
+        } text ("rdbType of the data that is going to be exported.")
+        ),
+      cmd("strings") action {
+        (_, config) =>
+          config.copy(subCommand = "strings")
+      } text ("Export strings (RdbType 1030002). XML is output per default, this can be overriden with Option --json. ") children(
+        opt[String]("lang") abbr ("l") required() action {
+          (lang, config) =>
+            config.copy(language = StringLanguage.values.find(_.toString == lang).get)
+        } validate {
+          lang => if (StringLanguage.values.map(_.toString).contains(lang)) success else failure("Option --lang must be en, fr or de")
+        } text ("Exports all strings for the language. Valid options are en, fr or de. Required."),
         opt[Unit]("json") optional() action {
-      (lang, config) =>
-        config.copy(stringExportFormat = StringExportFormat.Json)
-    } text ("Strings are exported as JSON.")
-      ) text("Export strings (RdbType 1030002). XML is output per default, this can be overriden with Option --json. ")
+          (lang, config) =>
+            config.copy(stringExportFormat = StringExportFormat.Json)
+        } text ("Strings are exported as JSON.")
+        )
+      )
     note("")
     cmd("index") action {
       (_, config) =>

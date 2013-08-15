@@ -78,15 +78,15 @@ Run the program (prints usage):
 
 A few examples of usage:
 
-    run export --tsw """D:\Programs\TSW TestLive""" 1010042
+    run export 1010042 --tsw """D:\Programs\TSW TestLive"""
 
 The previous command exports all Loading Screen Images to ``<tswrdb folder>/tswrdb-cmdui/exported/1010042 (Loading Screen Images)``.
 
-    run strings --tsw """D:\Programs\TSW TestLive""" --lang de
+    run export strings --lang de --tsw """D:\Programs\TSW TestLive"""
 
 The previous command exports all german strings to XML files in ``<tswrdb folder>/tswrdb-cmdui/exported/1030002 (Strings)``.
 
-    run strings --tsw """D:\Programs\TSW TestLive""" --lang en --json
+    run export strings --lang en --json --tsw """D:\Programs\TSW TestLive"""
 
 The previous command exports all english strings to JSON files in ``<tswrdb folder>/tswrdb-cmdui/exported/1030002 (Strings)``.
 
@@ -94,7 +94,7 @@ See the usage below for all available commands.
 
 ```
 tswrdb 0.1
-Usage: tswrdb [list|export|strings|index] [options] <args>...
+Usage: tswrdb [list|export|index] [options]
 
   --tsw <directory>
         tsw points to the TSW install directory and is required.
@@ -104,12 +104,13 @@ Lists the valid rdb types available. Per default and to keep the user sane, only
   -a | --all
         List all rdbtypes, regardless. Note that some are highly mysterious and/or esoteric. You will have to make sense of them yourself
 
-Command: export <rdbType>
-Export entries belonging to this rdbtype
+Command: export [rdbtype|strings] <args>...
+
+Command: export rdbtype <rdbType>
+Export any RdbType as they appear in the resource database.
   <rdbType>
         rdbType of the data that is going to be exported.
-
-Command: strings [options]
+Command: export strings [options]
 Export strings (RdbType 1030002). XML is output per default, this can be overriden with Option --json.
   -l <value> | --lang <value>
         Exports all strings for the language. Valid options are en, fr or de. Required.

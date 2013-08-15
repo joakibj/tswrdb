@@ -26,8 +26,12 @@ class CommandDispatcher(config: Config) extends ExitCommands {
           case ListRdbTypesMode.Understood => execute(ListCommands.wellUnderstood)
           case _ => exit()
         }
-      case "export" => execute(ExportCommands.default)
-      case "strings" => execute(StringCommands.default)
+      case "export" =>
+        config.subCommand match {
+          case "rdbtype" => execute(ExportCommands.RdbType)
+          case "strings" => execute(ExportCommands.String)
+          case _ => usageAndExit()
+        }
       case "index" =>
         config.subCommand match {
           case "info" => execute(IndexCommands.indexInfo)
