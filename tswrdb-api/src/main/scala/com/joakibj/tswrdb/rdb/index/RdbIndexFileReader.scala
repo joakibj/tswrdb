@@ -61,7 +61,7 @@ class RdbIndexFileReader(file: File) extends RdbFileReader {
     inputStream.skip(3) // unknown 3 bytes
     val offset = readInt()
     val length = readInt()
-    val hash = readLen(16)
+    val hash = readHash()
 
     (fileNum, offset, length, hash)
   }

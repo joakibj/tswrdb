@@ -9,7 +9,7 @@ import com.joakibj.tswrdb.rdb.util.ByteUtils
 
 @RunWith(classOf[JUnitRunner])
 class RdbDataIndexTableTest extends FunSuite with ShouldMatchers with ByteUtils {
-  val DummyHash = RdbTestIndexDataFixture.DummyHash
+  val DummyHash = toHex(RdbTestIndexDataFixture.DummyHash)
 
   test("should return length of table") {
     val indexTable = RdbDataIndexTable(testHeader, testData)
@@ -43,6 +43,6 @@ class RdbDataIndexTableTest extends FunSuite with ShouldMatchers with ByteUtils 
   }
 
   private def testHeader = {
-    RdbIndexHeader(7, toHex(DummyHash), 5)
+    RdbIndexHeader(7, DummyHash, 5)
   }
 }

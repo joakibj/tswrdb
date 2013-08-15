@@ -10,11 +10,12 @@ import org.scalatest.PrivateMethodTester._
 import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
 import com.joakibj.tswrdb.rdb.data.RdbTestIndexDataFixture
+import com.joakibj.tswrdb.rdb.util.ByteUtils
 
 @RunWith(classOf[JUnitRunner])
-class RdbIndexFileReaderTest extends FunSuite with BeforeAndAfterAll with ShouldMatchers {
+class RdbIndexFileReaderTest extends FunSuite with BeforeAndAfterAll with ShouldMatchers with ByteUtils {
 
-  val DummyHash = RdbTestIndexDataFixture.DummyHash
+  val DummyHash = toHex(RdbTestIndexDataFixture.DummyHash)
   val tmpFile: File = File.createTempFile("test", "idx")
 
   override def beforeAll {
