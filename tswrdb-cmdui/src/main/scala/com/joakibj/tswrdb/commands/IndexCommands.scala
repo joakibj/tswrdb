@@ -25,7 +25,7 @@ object IndexCommands {
       reader.close()
 
       println("Version: " + header.version)
-      println("Hash: " + toHex(header.hash))
+      println("Hash: " + header.hash)
       println("Number of entries: " + header.numEntries)
     }
   }

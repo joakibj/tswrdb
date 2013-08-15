@@ -5,9 +5,10 @@ import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import org.scalatest._
 import com.joakibj.tswrdb.rdb.data.RdbTestIndexDataFixture
+import com.joakibj.tswrdb.rdb.util.ByteUtils
 
 @RunWith(classOf[JUnitRunner])
-class RdbDataIndexTableTest extends FunSuite with ShouldMatchers {
+class RdbDataIndexTableTest extends FunSuite with ShouldMatchers with ByteUtils {
   val DummyHash = RdbTestIndexDataFixture.DummyHash
 
   test("should return length of table") {
@@ -42,6 +43,6 @@ class RdbDataIndexTableTest extends FunSuite with ShouldMatchers {
   }
 
   private def testHeader = {
-    RdbIndexHeader(7, DummyHash, 5)
+    RdbIndexHeader(7, toHex(DummyHash), 5)
   }
 }

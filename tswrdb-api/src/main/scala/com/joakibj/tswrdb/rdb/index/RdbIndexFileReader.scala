@@ -68,7 +68,7 @@ class RdbIndexFileReader(file: File) extends RdbFileReader {
 
   private def readIndexHeader() = {
     val version = readInt()
-    val hash = readLen(16)
+    val hash = readHash()
     val numEntries = readInt()
 
     RdbIndexHeader(version, hash, numEntries)
