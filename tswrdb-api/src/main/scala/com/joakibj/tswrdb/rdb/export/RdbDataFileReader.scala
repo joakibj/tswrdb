@@ -102,7 +102,7 @@ class RdbDataFileReader(rdbDataFile: File,
 
   def readDataEntry(indexEntry: RdbIndexEntry, skipBytes: Int): (RdbDataEntry, Array[Byte]) = {
     val dataEntry = readNextDataEntryHeader(indexEntry.dataOffset - skipBytes)
-    if (isCorrectDataEntry(indexEntry, dataEntry)) {
+    if (dataEntry == indexEntry) {
       val buf = readLen(indexEntry.length)
 
       (dataEntry, buf)
@@ -120,10 +120,6 @@ class RdbDataFileReader(rdbDataFile: File,
     inputStream.skip(4) //unknown 4 bytes
 
     RdbDataEntry(dataType, dataId, dataLength)
-  }
-
-  private def isCorrectDataEntry(indexEntry: RdbIndexEntry, dataEntry: RdbDataEntry): Boolean = {
-    dataEntry == indexEntry
   }
 
   private def findRdbType(rdbType: Int) = {
