@@ -72,9 +72,10 @@ abstract class RdbDataExporter(val rdbDataDirectory: File) {
     val rdbDataFileReader = RdbDataFileReader(rdbDataFile, indexEntries)
     val rdbData = rdbDataFileReader.readDataEntries()
     rdbDataFileReader.close()
-    exportData(rdbType, outputDirectory, rdbData)
 
     println("Exporting entries from: " + rdbDataFile.getName)
+    
+    exportData(rdbType, outputDirectory, rdbData)
   }
 
   private def exportData(rdbType: RdbType, outputDirectory: File, rdbData: Vector[(RdbDataEntry, Array[Byte])]) {
