@@ -68,14 +68,20 @@ abstract class RdbDataExporter(val rdbDataDirectory: File) {
   private def exportEntriesFromFileNum(rdbType: RdbType, outputDirectory: File, fileNum: Int, indexEntries: Array[RdbIndexEntry]) {
     if (!validRdbFileNums.contains(fileNum)) throw new RdbIOException("Filenum: " + fileNum + " does not exist")
 
-    val rdbDataFile = new File(rdbDataDirectory, "%02d.rdbdata" format fileNum)
-    val rdbDataFileReader = RdbDataFileReader(rdbDataFile, indexEntries)
-    val rdbData = rdbDataFileReader.readDataEntries()
-    rdbDataFileReader.close()
+    val data = getDataEntries(fileNum, indexEntries)
 
-    println("Exporting entries from: " + rdbDataFile.getName)
-    
-    exportData(rdbType, outputDirectory, rdbData)
+    println(f"Exporting entries from: $fileNum%d.rdbdata")
+
+    exportData(rdbType, outputDirectory, data)
+  }
+
+  private def getDataEntries(fileNum: Int, indexEntries: Array[RdbIndexEntry]) = {
+    val dataFile = new File(rdbDataDirectory, "%02d.rdbdata" format fileNum)
+    val dataReader = RdbDataFileReader(dataFile, indexEntries)
+    val rdbData = dataReader.readDataEntries()
+    dataReader.close()
+
+    rdbData
   }
 
   private def exportData(rdbType: RdbType, outputDirectory: File, rdbData: Vector[(RdbDataEntry, Array[Byte])]) {
@@ -94,23 +100,22 @@ abstract class RdbDataExporter(val rdbDataDirectory: File) {
     arr.groupBy((indexEntry: RdbIndexEntry) => indexEntry.fileNum.toInt)
 
   private def getIndexTable() = {
-    val rdbIndexFileReader = RdbIndexFileReader(new File(rdbDataDirectory, IndexFilename))
-    val indexTable = rdbIndexFileReader.getIndexTable
-    rdbIndexFileReader.close()
+    val indexReader = RdbIndexFileReader(new File(rdbDataDirectory, IndexFilename))
+    val indexTable = indexReader.getIndexTable
+    indexReader.close()
 
     indexTable
   }
-
+  
   private def getFilenameTable() = {
     val filenameEntries = indexTable.entriesForType(RdbTypes.Filenames.id)
     if (filenameEntries.size == 1) {
-      val rdbDataFile = new File(rdbDataDirectory, "%02d.rdbdata" format filenameEntries(0).fileNum)
-      val rdbDataFileReader = RdbDataFileReader(rdbDataFile, filenameEntries)
-      val rdbData = rdbDataFileReader.readDataEntries()
-      rdbDataFileReader.close()
-      val rdbFilenameReader = RdbFilenameReader(rdbData(0)._2)
-      val filenameTable = rdbFilenameReader.getFileNames()
-      rdbFilenameReader.close()
+
+      val data = getDataEntries(filenameEntries(0).fileNum, filenameEntries)
+
+      val filenameReader = RdbFilenameReader(data(0)._2)
+      val filenameTable = filenameReader.getFileNames()
+      filenameReader.close()
 
       filenameTable
     } else
