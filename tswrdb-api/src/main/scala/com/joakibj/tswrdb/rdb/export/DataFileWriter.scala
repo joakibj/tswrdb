@@ -19,8 +19,8 @@ object DataFileWriter {
 class DataFileWriter(outputFile: File) extends DataWriter {
 
   def writeData(buf: Array[Byte]) {
-    val fos = new FileOutputStream(outputFile)
-    fos.write(buf)
-    fos.close()
+    val output = new FileOutputStream(outputFile)
+    output.write(buf)
+    output.close()
   }
 }
