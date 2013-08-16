@@ -59,8 +59,9 @@ To use tswrdb you need the following:
 
 1. A shell (cmd.exe or any *nix shell)
 2. Java 6 runtime
-3. A legal copy of The Secret World by Funcom
-    * A set of .rdbdata files with the associated le.idx file. (TestLive is good for this)
+3. sbt
+4. A legal copy of The Secret World by Funcom
+    * An installation of TSW ([TestLive](http://forums.thesecretworld.com/showthread.php?t=55882) is recommended)
 
 When in the tswrdb root directory (e.g. ``~/dev/tswrdb``):
 
@@ -132,7 +133,7 @@ Documentation
 =============
 **Note: Work in progress!**
 
-Please see the [DOCUMENTATION](docs/DOCUMENTATION.md) file.
+Please see the [DOCUMENTATION](docs/DOCUMENTATION.md) file for documentation about the RDB data formats.
 
 Known Issues
 ============
