@@ -35,15 +35,6 @@ class RdbDataFileReaderTest extends FunSuite with BeforeAndAfterAll with ShouldM
     result should equal(RdbDataEntry(1000001, 1, 15))
   }
 
-  test("should be able to read data, after reading the data header") {
-    val reader = RdbDataFileReader(tmpRdbDataFile1, indexEntries)
-    reader.inputStream.skip(16)
-    val readData = PrivateMethod[Array[Byte]]('readData)
-    val result = reader invokePrivate readData(15)
-
-    new String(result) should equal("IHateMayansSoBd")
-  }
-
   test("should read data entry") {
     val reader = RdbDataFileReader(tmpRdbDataFile1, indexEntries)
 
