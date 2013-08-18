@@ -10,9 +10,7 @@
 package com.joakibj.tswrdb.rdb.index
 
 import java.io.{FileInputStream, File}
-import scala.collection.mutable.ArrayBuffer
 import com.joakibj.tswrdb.rdb._
-import com.joakibj.tswrdb.rdb.RdbIOException
 
 object RdbIndexFileReader {
   def apply(file: File) = new RdbIndexFileReader(file)
@@ -33,20 +31,17 @@ class RdbIndexFileReader(file: File) extends RdbFileReader {
 
   private def readIndexEntries() = {
     val numEntries = indexHeader.numEntries
-    val indexTable = ArrayBuffer[(Int, Int)]()
-    for (i <- 0 until numEntries) {
-      val indexEntry = readNextIndexEntry()
-      indexTable += indexEntry
-    }
+    val indexTable =
+      for {
+        i <- 0 until numEntries
+      } yield readNextIndexEntry()
 
-    val indexEntries = ArrayBuffer[RdbIndexEntry]()
-    for (i <- 0 until numEntries) {
-      val indexEntryDetails = readNextIndexEntryDetail()
-      val indexEntry = indexTable(i)
-      indexEntries += RdbIndexEntry(indexEntry, indexEntryDetails)
-    }
+    val indexEntries =
+      for {
+        i <- 0 until numEntries
+      } yield RdbIndexEntry(indexTable(i), readNextIndexEntryDetail())
 
-    indexEntries
+    indexEntries.toVector
   }
 
   private def readNextIndexEntry() = {

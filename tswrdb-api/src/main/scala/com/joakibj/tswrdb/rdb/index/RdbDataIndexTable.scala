@@ -9,7 +9,6 @@
 
 package com.joakibj.tswrdb.rdb.index
 
-import collection.mutable.ArrayBuffer
 import com.joakibj.tswrdb.rdb.{RdbTypeNotFoundException, RdbTypes}
 import com.joakibj.tswrdb.rdb.util.ByteUtils
 
@@ -38,12 +37,12 @@ case class RdbIndexEntry(rdbType: Int,
 }
 
 object RdbDataIndexTable {
-  def apply(header: RdbIndexHeader, table: ArrayBuffer[RdbIndexEntry]) =
+  def apply(header: RdbIndexHeader, table: Vector[RdbIndexEntry]) =
     new RdbDataIndexTable(header, table)
 }
 
 class RdbDataIndexTable(private val header: RdbIndexHeader,
-                        private val table: ArrayBuffer[RdbIndexEntry]) {
+                        private val table: Vector[RdbIndexEntry]) {
   def length = table.size
 
   def types = table.map(_.rdbType).toSet
