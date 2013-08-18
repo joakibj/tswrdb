@@ -80,24 +80,24 @@ class RdbDataFileReader(rdbDataFile: File,
     indexEntries.count((indexEntry: RdbIndexEntry) => indexEntry.fileName == rdbDataFile.getName) == indexEntries.size
 
   def readDataEntries() = {
-    if (indexEntries.length == 0) Vector()
+    if (indexEntries.length == 0)
+      Vector[(RdbDataEntry, Array[Byte])]()
+    else {
+      val firstIndexEntry = indexEntries(0)
 
-    val firstIndexEntry = indexEntries(0)
+      val (dataEntry1, buf1) = readDataEntry(firstIndexEntry, 4)
+      val rdbType1 = findRdbType(firstIndexEntry.rdbType)
 
-    val (dataEntry1, buf1) = readDataEntry(firstIndexEntry, 4)
-    val rdbType1 = findRdbType(firstIndexEntry.rdbType)
+      val entries = for {
+        ie <- indexEntries.sliding(2)
+        indexEntry1 = ie.head
+        indexEntry2 = ie.last
+        (dataEntry2, buf2) = readDataEntry(indexEntry2, indexEntry1.dataOffset + indexEntry1.length)
+        rdbType = findRdbType(indexEntry2.rdbType)
+      } yield (dataEntry2, buf2.drop(rdbType.skipBytes))
 
-    val entries = for {
-      ie <- indexEntries.sliding(2)
-      indexEntry1 = ie.head
-      indexEntry2 = ie.last
-      (dataEntry2, buf2) = readDataEntry(indexEntry2, indexEntry1.dataOffset + indexEntry1.length)
-      rdbType = findRdbType(indexEntry2.rdbType)
-    } yield (dataEntry2, buf2.drop(rdbType.skipBytes))
-
-    val allEntries = Vector((dataEntry1, buf1.drop(rdbType1.skipBytes))) ++ entries.toVector
-
-    allEntries
+      Vector((dataEntry1, buf1.drop(rdbType1.skipBytes))) ++ entries.toVector
+    }
   }
 
   def readDataEntry(indexEntry: RdbIndexEntry, skipBytes: Int): (RdbDataEntry, Array[Byte]) = {
