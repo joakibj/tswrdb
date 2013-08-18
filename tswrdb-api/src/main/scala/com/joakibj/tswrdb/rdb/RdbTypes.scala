@@ -9,7 +9,7 @@
 
 package com.joakibj.tswrdb.rdb
 
-case class FileType(val extension: String) {
+case class FileType(extension: String) {
   override def toString = extension
 }
 
