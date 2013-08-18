@@ -22,7 +22,7 @@ case class RdbStringHeader(category: Int,
                            flags: Int,
                            stringDataLength: Int,
                            numStrings: Int,
-                           hash: Array[Byte]) extends ByteUtils
+                           hash: String) extends ByteUtils
 
 case class RdbString(stringId: Int,
                      content: String) {
@@ -76,7 +76,7 @@ class RdbStringFileReader(buf: Array[Byte]) extends RdbFileReader {
     val flags = readInt()
     val stringLength = readInt()
     val numStrings = readInt()
-    val hash = readLen(16)
+    val hash = readHash()
 
     new RdbStringHeader(category, flags, stringLength, numStrings, hash)
   }
