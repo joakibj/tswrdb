@@ -9,13 +9,9 @@
 
 package com.joakibj.tswrdb.rdb.strings
 
-import com.joakibj.tswrdb.rdb.{Severity, RdbIOException, RdbFileReader}
+import com.joakibj.tswrdb.rdb.RdbFileReader
 import java.io.{ByteArrayInputStream, InputStream}
 import com.joakibj.tswrdb.rdb.util.ByteUtils
-import collection.mutable.ArrayBuffer
-
-class RdbStringIndexTable(val header: RdbStringHeader,
-                          val table: ArrayBuffer[RdbStringIndexEntry])
 
 case class RdbStringIndexEntry(index: Int,
                                unknown: Int,
@@ -32,8 +28,7 @@ case class RdbString(stringId: Int,
                      content: String) {
   def toXml = {
     <rdbString>
-      <stringId>{stringId}
-      </stringId>
+      <stringId>{stringId}</stringId>
       <content>{content}</content>
     </rdbString>
   }
@@ -54,23 +49,18 @@ class RdbStringFileReader(buf: Array[Byte]) extends RdbFileReader {
     val indexTable = readIndexTable()
 
     val strings = for {
-      ie <- indexTable.table
+      ie <- indexTable
       buf = stringBuf.slice(ie.offset, ie.offset + ie.length)
-      if(buf.size > 0)
+      if (buf.size > 0)
     } yield RdbString(ie.index, new String(buf, "UTF-8"))
 
     (header, strings.toVector)
   }
 
-  private def readIndexTable() = {
-    val indexEntries = ArrayBuffer[RdbStringIndexEntry]()
-
-    for (i <- 0 until header.numStrings) {
-      indexEntries += readNextIndexEntry()
-    }
-
-    new RdbStringIndexTable(header, indexEntries)
-  }
+  private def readIndexTable() =
+    for {
+      i <- 0 until header.numStrings
+    } yield readNextIndexEntry()
 
   private def readNextIndexEntry() = {
     val index = readInt()
