@@ -31,13 +31,18 @@ class RdbFilenameReader(buf: Array[Byte]) extends RdbFileReader {
         val filenameEntries =
           for {
             entryNum <- 0 until numEntries
-            rdbId = readInt()
-            filenameLen = readInt()
-            filename = readString(filenameLen)
-          } yield RdbFilename(rdbId, filename)
+          } yield readFilenameEntry()
         filenames += (rdbType -> filenameEntries.toVector)
       }
     }
     filenames
+  }
+
+  private def readFilenameEntry() = {
+    val rdbId = readInt()
+    val filenameLen = readInt()
+    val filename = readString(filenameLen)
+
+    RdbFilename(rdbId, filename)
   }
 }
