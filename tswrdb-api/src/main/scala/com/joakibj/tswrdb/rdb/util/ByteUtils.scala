@@ -31,5 +31,5 @@ trait ByteUtils {
 
   def padding(num: Int): Array[Byte] = Array.fill(num)(0.toByte)
 
-  def toHex(buffer: Array[Byte]): String = buffer.map("%02x" format _).mkString
+  def toHex(buffer: Array[Byte]): String = buffer.map("%02X" format _).mkString
 }

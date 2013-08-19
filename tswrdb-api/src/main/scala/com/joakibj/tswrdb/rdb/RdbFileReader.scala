@@ -39,10 +39,6 @@ abstract class RdbFileReader extends ByteUtils {
     new String(readLen(len))
   }
 
-  protected final def readHash(): String = {
-    toHex(littleEndianArray(readLen(16)))
-  }
-
   protected final def readLen(len: Int): Array[Byte] = {
     val buf = new Array[Byte](len)
     if(inputStream.read(buf) != -1) {

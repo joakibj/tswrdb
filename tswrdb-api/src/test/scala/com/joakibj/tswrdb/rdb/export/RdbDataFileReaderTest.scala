@@ -10,12 +10,11 @@ import com.joakibj.tswrdb.rdb.data.{RdbTestIndexDataFixture, RdbTestDataFixture}
 import com.joakibj.tswrdb.rdb.index.RdbIndexEntry
 import org.scalatest.PrivateMethodTester._
 import com.joakibj.tswrdb.rdb.RdbIOException
-import com.joakibj.tswrdb.rdb.util.ByteUtils
 
 @RunWith(classOf[JUnitRunner])
-class RdbDataFileReaderTest extends FunSuite with BeforeAndAfterAll with ShouldMatchers with ByteUtils {
+class RdbDataFileReaderTest extends FunSuite with BeforeAndAfterAll with ShouldMatchers {
 
-  val DummyHash = toHex(RdbTestIndexDataFixture.DummyHash)
+  val DummyHash = RdbTestIndexDataFixture.DummyHash
   val tmpOutputDirectory: File = createTmpOutputDirectory
   val tmpRdbDataFile1 = new File(tmpOutputDirectory, "01.rdbdata")
 
@@ -40,7 +39,7 @@ class RdbDataFileReaderTest extends FunSuite with BeforeAndAfterAll with ShouldM
 
     val (dataEntry, buf) = reader.readDataEntry(RdbIndexEntry(1000001, 1, 1, 20, 15, DummyHash), 4)
 
-    dataEntry should equal(RdbDataEntry(1000001, 1, 15))
+    dataEntry should equal(RdbDataEntry(1000001, 1, 15, DummyHash))
     buf should equal(new String("IHateMayansSoBd").toArray.map(_ toByte))
   }
 

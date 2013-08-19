@@ -56,14 +56,14 @@ class RdbIndexFileReader(file: File) extends RdbFileReader {
     inputStream.skip(3) // unknown 3 bytes
     val offset = readInt()
     val length = readInt()
-    val hash = readHash()
+    val hash = readLen(16)
 
     (fileNum, offset, length, hash)
   }
 
   private def readIndexHeader() = {
     val version = readInt()
-    val hash = readHash()
+    val hash = readLen(16)
     val numEntries = readInt()
 
     RdbIndexHeader(version, hash, numEntries)
