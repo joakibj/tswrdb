@@ -12,18 +12,14 @@ package com.joakibj.tswrdb.rdb.index
 import com.joakibj.tswrdb.rdb.{RdbTypeNotFoundException, RdbTypes}
 import com.joakibj.tswrdb.rdb.util.ByteUtils
 
-object RdbIndexHeader {
-  def apply(version: Int, hash: Array[Byte], numEntries: Int) =
-    new RdbIndexHeader(version, hash, numEntries)
-}
+case class RdbIndexHeader(version: Int,
+                          hash: Array[Byte],
+                          numEntries: Int) extends ByteUtils {
 
-class RdbIndexHeader(val version: Int,
-                     val hash: Array[Byte],
-                     val numEntries: Int) extends ByteUtils {
-
-  def toArray: Array[Byte] = intToBytes(version) ++ hash ++ intToBytes(numEntries)
-
-  override def toString = "(" + version + "," + toHex(hash) + "," + numEntries + ")"
+  def toArray: Array[Byte] = 
+    intToBytes(version) ++ 
+    hash ++ 
+    intToBytes(numEntries)
 }
 
 object RdbIndexEntry {
