@@ -1,62 +1,50 @@
 package com.joakibj.tswrdb.rdb.data
 
 import collection.mutable.ArrayBuffer
+import com.joakibj.tswrdb.rdb.index.{RdbIndexHeader, RdbIndexEntry}
 import com.joakibj.tswrdb.rdb.util.ByteUtils
 
 object RdbTestIndexDataFixture extends ByteUtils {
+  val MagicNumber = "IBDR".getBytes   
   val DummyHash = Array.fill(16)(0.toByte)
 
-  def generateTestData: Array[Byte] = {
-    val MagicNumber: Array[Byte] = "IBDR" map(_.toByte) toArray
-    val header: Array[Byte] =  MagicNumber ++
-      intToBytes(7) ++
-      padding(16) ++
-      intToBytes(10)
-
-    header ++
-      generateIndexTable(10) ++
-      generateIndexEntries(10)
+  def indexfile = {
+    header ++ 
+    indexTable ++
+    indexEntries
   }
 
-  def generateIndexTable(num: Int): Array[Byte] = {
-    val table: ArrayBuffer[Byte] = ArrayBuffer()
+  def entries = 
+    List(
+      RdbIndexEntry(100000, 1, 1, 0, 15, DummyHash),
+      RdbIndexEntry(100000, 2, 1, 15, 15, DummyHash),
+      RdbIndexEntry(100000, 3, 1, 30, 15, DummyHash),
+      RdbIndexEntry(100000, 4, 1, 45, 15, DummyHash),
+      RdbIndexEntry(100000, 5, 1, 60, 15, DummyHash),
+      RdbIndexEntry(100001, 6, 2, 75, 10, DummyHash),
+      RdbIndexEntry(100001, 7, 2, 85, 10, DummyHash),
+      RdbIndexEntry(100001, 8, 2, 95, 10, DummyHash),
+      RdbIndexEntry(100001, 9, 2, 105, 10, DummyHash),
+      RdbIndexEntry(100001, 10, 2, 115, 10, DummyHash)
+    )
 
-    (1 to num).foreach {
-      (i) =>
-        var entry = Array[Byte]()
-        if(i <= 5)
-          entry = intToBytes(100000) ++
-            intToBytes(i)
-        else
-          entry = intToBytes(100001) ++
-            intToBytes(i)
-        table ++= entry
-    }
-
-    table.toArray
+  def header = MagicNumber ++ RdbIndexHeader(7, DummyHash, 10).toArray
+    
+  def indexTable = {
+    val itable =
+      for {
+        ie <- entries
+      } yield ie.toArray.take(8)
+    
+    itable.toArray.flatten
   }
 
-  def generateIndexEntries(num: Int): Array[Byte] = {
-    val entries: ArrayBuffer[Byte] = ArrayBuffer()
+  def indexEntries = {
+    val details =
+      for {
+        ie <- entries
+      } yield ie.toArray.drop(8)
 
-    (0 until num).foreach {
-      (i) =>
-        var entry = Array[Byte]()
-        if(i < 5)
-          entry = byteToBytes(1) ++
-            padding(3) ++
-            intToBytes(i * 15) ++
-            intToBytes(15) ++
-            DummyHash
-        else
-          entry = byteToBytes(2) ++
-            padding(3) ++
-            intToBytes((5 * 15) +  (i - 5) * 10) ++
-            intToBytes(10) ++
-            DummyHash
-        entries ++= entry
-    }
-
-    entries.toArray
+    details.toArray.flatten
   }
 }

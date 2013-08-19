@@ -95,7 +95,7 @@ class RdbIndexFileReaderTest extends FunSuite with BeforeAndAfterAll with Should
 
   def setupData() {
   	val fos = new FileOutputStream(tmpFile)
-  	fos.write(RdbTestIndexDataFixture.generateTestData)
+  	fos.write(RdbTestIndexDataFixture.indexfile)
   	fos.close()
   }
 }

@@ -32,8 +32,17 @@ case class RdbIndexEntry(val rdbType: Int,
                     val fileNum: Byte,
                     val dataOffset: Int,
                     val length: Int,
-                    val hash: Seq[Byte]) {
+                    val hash: Seq[Byte]) extends ByteUtils {
   val fileName = "%02d.rdbdata" format fileNum
+
+  def toArray = 
+    intToBytes(rdbType) ++ 
+    intToBytes(id) ++ 
+    byteToBytes(fileNum) ++ 
+    padding(3) ++ 
+    intToBytes(dataOffset) ++ 
+    intToBytes(length) ++ 
+    hash
 }
 
 object RdbDataIndexTable {
