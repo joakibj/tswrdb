@@ -42,10 +42,7 @@ The RDB folder contains three interesting types of files:
 * ``le.idx``: The index file. Contains data about how data is arranged in the NN.rdbdata files.
 * ``RDBHashIndex``: Presumed to contain the valid files for the current patch version.
 
-The ``.rdbdata`` files are organized like a large disk image, with ``le.idx`` as the index file.
-It stores index entries, with a reference to a data entry, grouped by RdbType.
-Each index entry in ``ie.idx`` has a corresponding data entry in one of the ``.rdbdata`` files.
-The index entries belonging to an RdbType can be spread out on any of the ``.rdbdata`` files, however.
+The ``.rdbdata`` files are organized like a large disk image, with ``le.idx`` as the index file. It stores index entries, with a reference to a data entry, grouped by RdbType. Each index entry in ``ie.idx`` has a corresponding data entry in one of the ``.rdbdata`` files. The index entries belonging to an RdbType can be spread out on any of the ``.rdbdata`` files.
 
 [Back to overview](#overview)
 
@@ -86,7 +83,7 @@ The index entries belonging to an RdbType can be spread out on any of the ``.rdb
 | 4      | 4      | Offset in rdbdata file |
 | 8      | 4      | Length of entry data   |
 | 12     | 16     | Hash (MD5)             |
-    
+
 **Bundles**
 
 | Offset | Length | Contents          |
