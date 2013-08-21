@@ -55,7 +55,7 @@ The index entries belonging to an RdbType can be spread out on any of the ``.rdb
 
 | File part     | Length        |
 |---------------|---------------|
-| Header        |24             |
+| Header        |28             |
 | Index         |8 * NumEntries |
 | Entry Details |28 * NumEntries|
 | Bundles       |               |
