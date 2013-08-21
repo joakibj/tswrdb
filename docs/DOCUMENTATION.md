@@ -9,8 +9,9 @@ This document contains the currently known crowdsourced documentation for RDB fi
 2. [Introduction to the Resource DataBase (RDB)](#introduction-to-the-resource-database-rdb)
 3. [RDB Index file (le.idx)](#rdb-index-file-leidx)
 4. [RDB Data files (NN.rdbdata)](#rdb-data-files-nnrdbdata)
-5. [Hash index (RDBHashIndex.bin)](#hash-index-rdbhashindexbin)
-6. Specific RdbTypes
+5. [RDB Id data](#rdb-id-data)
+6. [Hash index (RDBHashIndex.bin)](#hash-index-rdbhashindexbin)
+7. Specific RdbTypes
     1. [Filenames (RdbType 1000010)](#filenames-rdbtype-1000010)
     2. [Text data (RdbType 1030002)](#text-data-rdbtype-1030002)
     3. [3D models (Rdbtype 1010001)](#3d-models-rdbtype-1010001)
@@ -115,6 +116,8 @@ The format of the data files is simpler. A small 4-byte header with a file signa
 
 Each file entry has a 16 byte header before the actual data. This is not taken in account in the data offset, thus to find the header, one needs to look 16 bytes in front of the data offset. This header contains some of the same information as what you find in the index. i.e. RDB Type, RDB Id and data length.
 
+**Note:** Please read about [RDB Id data](#rdb-id-data) before processing the actual data.
+
 **File Structure (NN.rdbdata)**
 
 | File part | Length |
@@ -136,7 +139,23 @@ Each file entry has a 16 byte header before the actual data. This is not taken i
 | 4      | 4          | RDB Id      |
 | 8      | 4          | Data length |
 | 12     | 4          | ???         |
-| 16     | DataLength | File data   |
+| 16     | DataLength | RDB Id data |
+
+[Back to overview](#overview)
+
+###RDB Id data
+
+The RDB Id data contains data categorized under a given RDB Type. For example, this can be images, audio, 3D models or text collections. Before processing this data, one needs to note that there is a 12 byte RDB Id data header, for each chunk of RDB Id data.
+
+Some RDB Types have RDB Id's with custom headers that extend beyond the 12 byte headers. *In each section that describes a specific RDB Type, this header will be included to avoid confusion*.
+
+**RDB Id data Header**
+
+| Offset | Length | Contents |
+|--------|--------|----------|
+| 0      | 4      | RDB Type |
+| 4      | 4      | RDB Id   |
+| 8      | 4      | Unknown  |     
 
 [Back to overview](#overview)
 
@@ -188,10 +207,11 @@ However, RDB type 1000010 contains a single file which is a table of filenames f
 
 **File Structure (1000010)**
 
-| File part | Length       |
-|-----------|--------------|
-| Header    | 4            |
-| Types     | NumTypes * x |
+| File part                 | Length       |
+|---------------------------|--------------|
+| [DataHeader](#rdb-id-data)| 12           |
+| Header                    | 4            |
+| Types                     | NumTypes * x |
 
 **Header**
 
@@ -233,11 +253,12 @@ The language of the text collection isn't stored in the files, but in "/data/tex
 
 **File Structure (RDB Type 1030002)**
 
-| File part | Length           | Note                    |
-|-----------|------------------|-------------------------|
-| Header    | 36               |                         |
-| Strings   | StringDataLength | Null-terminated strings |
-| Index     | 16 * NumStrings  |                         |
+| File part                 | Length           | Note                    |
+|---------------------------|------------------|-------------------------|
+| [DataHeader](#rdb-id-data)| 12               | Please see the link     |
+| Header                    | 36               |                         |
+| Strings                   | StringDataLength | Null-terminated strings |
+| Index                     | 16 * NumStrings  |                         |
 
 **Header**
 
