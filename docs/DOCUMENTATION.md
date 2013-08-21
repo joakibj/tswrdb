@@ -114,7 +114,7 @@ The index entries belonging to an RdbType can be spread out on any of the ``.rdb
 
 ###RDB Data files (NN.rdbdata)
 
-The format of the data files is simpler. A small 4-byte header with a file signature followed by data and more data. As mentioned earlier, you need to know the start offset of the content file you're after (which you find in the index). Each file entry has a 16 header before the actual data. This header contains some of the same information as what you find in the index, i.e. RDB type, file id, data length.
+The format of the data files is simpler. A small 4-byte header with a file signature followed by data and more data. As mentioned earlier, you need to know the start offset of the content file you're after (which you find in the index). Each file entry has a 16 byte header before the actual data. This header contains some of the same information as what you find in the index, i.e. RDB type, file id, data length.
 
 **File Structure (NN.rdbdata)**
 
@@ -133,7 +133,7 @@ The format of the data files is simpler. A small 4-byte header with a file signa
 
 | Offset | Length     | Contents    |
 |--------|------------|-------------|
-| 0      | 4          | Data type   |
+| 0      | 4          | RDB Type    |
 | 4      | 4          | RDB Id      |
 | 8      | 4          | Data length |
 | 12     | 4          | ???         |
