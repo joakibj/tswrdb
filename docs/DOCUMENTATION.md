@@ -111,7 +111,9 @@ The ``.rdbdata`` files are organized like a large disk image, with ``le.idx`` as
 
 ###RDB Data files (NN.rdbdata)
 
-The format of the data files is simpler. A small 4-byte header with a file signature followed by data and more data. As mentioned earlier, you need to know the start offset of the content file you're after (which you find in the index). Each file entry has a 16 byte header before the actual data. This header contains some of the same information as what you find in the index, i.e. RDB type, file id, data length.
+The format of the data files is simpler. A small 4-byte header with a file signature followed by data and more data. As mentioned earlier, you need to know the start offset of the content file you're after (which you find in the index). 
+
+Each file entry has a 16 byte header before the actual data. This is not taken in account in the data offset, thus to find the header, one needs to look 16 bytes in front of the data offset. This header contains some of the same information as what you find in the index. i.e. RDB Type, RDB Id and data length.
 
 **File Structure (NN.rdbdata)**
 
