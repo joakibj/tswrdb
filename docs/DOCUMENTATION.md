@@ -47,6 +47,8 @@ It stores index entries, with a reference to a data entry, grouped by RdbType.
 Each index entry in ``ie.idx`` has a corresponding data entry in one of the ``.rdbdata`` files.
 The index entries belonging to an RdbType can be spread out on any of the ``.rdbdata`` files, however.
 
+[Back to overview](#overview)
+
 ###RDB Index file (le.idx)
 
 **File Structure (le.idx)**
@@ -108,6 +110,8 @@ The index entries belonging to an RdbType can be spread out on any of the ``.rdb
 | 0      | 4      | RDB Type |
 | 4      | 4      | RDB Id   |
 
+[Back to overview](#overview)
+
 ###RDB Data files (NN.rdbdata)
 
 The format of the data files is simpler. A small 4-byte header with a file signature followed by data and more data. As mentioned earlier, you need to know the start offset of the content file you're after (which you find in the index). Each file entry has a 16 header before the actual data. This header contains some of the same information as what you find in the index, i.e. RDB type, file id, data length.
@@ -134,6 +138,8 @@ The format of the data files is simpler. A small 4-byte header with a file signa
 | 8      | 4          | Data length |
 | 12     | 4          | ???         |
 | 16     | DataLength | File data   |
+
+[Back to overview](#overview)
 
 ###Hash index (RDBHashIndex.bin)
 
@@ -173,6 +179,8 @@ The hash index isn't that interesting unless you need to grab individual files o
 | 12     | 16     | MD5 Hash                         |
 | 28     | 19     | ???                              |
 
+[Back to overview](#overview)
+
 ###Filenames (RdbType 1000010)
 
 The RDB data files doesn't store the original names of the content files so they're only identifiable by their type and id. 
@@ -208,9 +216,13 @@ However, RDB type 1000010 contains a single file which is a table of filenames f
 | 4      | 4              | FilenameLength                  |
 | 8      | FilenameLength | Null-terminated filename string |
 
+[Back to overview](#overview)
+
 ###XML data
 
 Several of the data types are stored as XML data. Most of the XML types have a corresponding BXML type which is a binary representation of the XML data. You'll also find such ascii/binary XML pairs in "/data/gui/" in the TSW folder. It appears that the game automatically generates the BXML files from the ASCII versions (in the /data/ folder, that is.)
+
+[Back to overview](#overview)
 
 ###Text data (RdbType 1030002)
 
@@ -248,12 +260,18 @@ The language of the text collection isn't stored in the files, but in "/data/tex
 | 8      | 4      | Offset      |
 | 12     | 4      | Length      |
 
+[Back to overview](#overview)
+
 ###3D models (RdbType 1010001)
 
 The 3D models are the most complex format. I don't recognize the data format and suspect that it is a custom format made by Funcom. There's too much to explain with words, hopefully the specs below are easy enough to understand for someone who knows what to do with the information.
 
 Table TODO
 
+[Back to overview](#overview)
+
 ###Textures (RdbType 1010004)
 
 Some of the textures in, for example, RdbType 1010004 are plain PNG files but most are in a custom format, FCTX (Funcom texture?). These appear to be DDS files with a custom header so with a bit of hackery, they can be turned into proper DDS files by removing the FCTX header and adding a DDS header.
+
+[Back to overview](#overview)
