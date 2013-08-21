@@ -1,9 +1,11 @@
 Documentation
 =============
 
-This document contains the currently known crowdsourced documentation for RDB files.
+This document contains the currently known crowdsourced documentation for RDB files used in The Secret World.
 
-# Overview
+It is a continuous work in progress and the reader is encouraged to contribute to this document if it is not up to date, has errors, unclear or ambiguous wording.
+
+## Overview
 
 1. [Preface](#preface)
 2. [Introduction to the Resource DataBase (RDB)](#introduction-to-the-resource-database-rdb)
@@ -17,12 +19,14 @@ This document contains the currently known crowdsourced documentation for RDB fi
     3. [3D models (Rdbtype 1010001)](#3d-models-rdbtype-1010001)
     4. [Textures (Rdbtype 1010004)](#textures-rdbtype-1010004)
 
-##Preface
+###Preface
 
 All credit of this documentation goes to Jacob Seidelin. His contribution to the TSW community made this much easier to do.
-This documentation consists most of his notes, in addition to some corrections/language done by Joakim Bjørnstad.
+This documentation consists most of his notes, with some additions/corrections/language done by Joakim Bjørnstad.
 
 ###Introduction to the Resource DataBase (RDB)
+
+The Resource DataBase format is used in The Secret World (TSW) and Age of Conan (AoC), both titles by Funcom. This documentation is focused on The Secret World, but the general information can probably used with AoC aswell.
 
 The RDB data files can be found in the <TSW game>/RDB folder. The folder structure typically looks like this:
 
