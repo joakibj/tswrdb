@@ -16,10 +16,10 @@ case class RdbIndexHeader(version: Int,
                           hash: Array[Byte],
                           numEntries: Int) extends ByteUtils {
 
-  def toArray: Array[Byte] = 
-    intToBytes(version) ++ 
-    hash ++ 
-    intToBytes(numEntries)
+  def toArray: Array[Byte] =
+    intToBytes(version) ++
+      hash ++
+      intToBytes(numEntries)
 }
 
 object RdbIndexEntry {
@@ -27,22 +27,22 @@ object RdbIndexEntry {
     new RdbIndexEntry(tup2._1, tup2._2, tup4._1, tup4._2, tup4._3, tup4._4)
 }
 
-case class RdbIndexEntry(val rdbType: Int,
-                    val id: Int,
-                    val fileNum: Byte,
-                    val dataOffset: Int,
-                    val length: Int,
-                    val hash: Seq[Byte]) extends ByteUtils {
+case class RdbIndexEntry(rdbType: Int,
+                         id: Int,
+                         fileNum: Byte,
+                         dataOffset: Int,
+                         length: Int,
+                         hash: Seq[Byte]) extends ByteUtils {
   val fileName = "%02d.rdbdata" format fileNum
 
-  def toArray = 
-    intToBytes(rdbType) ++ 
-    intToBytes(id) ++ 
-    byteToBytes(fileNum) ++ 
-    padding(3) ++ 
-    intToBytes(dataOffset) ++ 
-    intToBytes(length) ++ 
-    hash
+  def toArray =
+    intToBytes(rdbType) ++
+      intToBytes(id) ++
+      byteToBytes(fileNum) ++
+      padding(3) ++
+      intToBytes(dataOffset) ++
+      intToBytes(length) ++
+      hash
 }
 
 object RdbDataIndexTable {
