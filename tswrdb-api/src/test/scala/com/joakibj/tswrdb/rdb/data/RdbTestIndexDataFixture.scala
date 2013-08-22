@@ -1,20 +1,13 @@
 package com.joakibj.tswrdb.rdb.data
 
-import collection.mutable.ArrayBuffer
 import com.joakibj.tswrdb.rdb.index.{RdbIndexHeader, RdbIndexEntry}
 import com.joakibj.tswrdb.rdb.util.ByteUtils
 
 object RdbTestIndexDataFixture extends ByteUtils {
-  val MagicNumber = "IBDR".getBytes   
+  val MagicNumber = "IBDR".getBytes
   val DummyHash = Array.fill(16)(0.toByte)
 
-  def indexfile = {
-    header ++ 
-    indexTable ++
-    indexEntries
-  }
-
-  def entries = 
+  def entries =
     List(
       RdbIndexEntry(100000, 1, 1, 0, 15, DummyHash),
       RdbIndexEntry(100000, 2, 1, 15, 15, DummyHash),
@@ -28,14 +21,16 @@ object RdbTestIndexDataFixture extends ByteUtils {
       RdbIndexEntry(100001, 10, 2, 115, 10, DummyHash)
     )
 
+  def indexfile = header ++ indexTable ++ indexEntries
+
   def header = MagicNumber ++ RdbIndexHeader(7, DummyHash, 10).toArray
-    
+
   def indexTable = {
     val itable =
       for {
         ie <- entries
       } yield ie.toArray.take(8)
-    
+
     itable.toArray.flatten
   }
 

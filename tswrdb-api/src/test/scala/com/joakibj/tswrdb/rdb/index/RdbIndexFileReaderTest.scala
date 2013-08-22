@@ -18,11 +18,11 @@ class RdbIndexFileReaderTest extends FunSuite with BeforeAndAfterAll with Should
   val tmpFile: File = File.createTempFile("test", "idx")
 
   override def beforeAll {
-  	setupData()
+    setupData()
   }
 
   test("should create object and validate magic word") {
-  	RdbIndexFileReader(tmpFile)
+    RdbIndexFileReader(tmpFile)
   }
 
   test("should fail to create object if it is not a file") {
@@ -32,8 +32,8 @@ class RdbIndexFileReaderTest extends FunSuite with BeforeAndAfterAll with Should
   }
 
   test("should have read index header") {
-  	val reader = RdbIndexFileReader(tmpFile)
-  	val header = reader.indexHeader
+    val reader = RdbIndexFileReader(tmpFile)
+    val header = reader.indexHeader
 
     header.version should equal(7)
     header.hash should equal(DummyHash)
@@ -90,12 +90,12 @@ class RdbIndexFileReaderTest extends FunSuite with BeforeAndAfterAll with Should
   }
 
   override def afterAll {
-  	tmpFile.delete()
+    tmpFile.delete()
   }
 
   def setupData() {
-  	val fos = new FileOutputStream(tmpFile)
-  	fos.write(RdbTestIndexDataFixture.indexfile)
-  	fos.close()
+    val fos = new FileOutputStream(tmpFile)
+    fos.write(RdbTestIndexDataFixture.indexfile)
+    fos.close()
   }
 }

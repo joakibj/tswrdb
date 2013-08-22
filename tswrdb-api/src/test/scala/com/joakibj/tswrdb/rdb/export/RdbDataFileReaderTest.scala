@@ -1,6 +1,6 @@
 package com.joakibj.tswrdb.rdb.export
 
-import java.io.{BufferedInputStream, FileInputStream, File, FileOutputStream}
+import java.io.{File, FileOutputStream}
 import org.scalatest.FunSuite
 import org.scalatest.ShouldMatchers
 import org.scalatest.BeforeAndAfterAll
@@ -40,7 +40,7 @@ class RdbDataFileReaderTest extends FunSuite with BeforeAndAfterAll with ShouldM
     val (dataEntry, buf) = reader.readDataEntry(RdbIndexEntry(1000001, 1, 1, 20, 15, DummyHash), 4)
 
     dataEntry should equal(RdbDataEntry(1000001, 1, 15, DummyHash))
-    buf should equal(new String("IHateMayansSoBd").toArray.map(_ toByte))
+    buf should equal(new String("IHateMayansSoBd").getBytes)
   }
 
   test("should fail if a mismatching data entry was read") {
