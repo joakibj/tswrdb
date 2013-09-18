@@ -79,7 +79,7 @@ Run the program (prints usage):
 
 A few examples of usage:
 
-    run export 1010042 --tsw """D:\Programs\TSW TestLive"""
+    run export rdbtype 1010042 --tsw """D:\Programs\TSW TestLive"""
 
 The previous command exports all Loading Screen Images to ``<tswrdb folder>/tswrdb-cmdui/exported/1010042 (Loading Screen Images)``.
 
