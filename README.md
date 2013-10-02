@@ -34,6 +34,10 @@ Alternatively:
 
     git clone https://github.com/joakibj/tswrdb.git
 
+Make sure the ``develop`` branch is used (contains the newest version):
+
+    git checkout develop
+
 In the tswrdb root directory (e.g. ``~/dev/tswrdb``), run sbt by typing:
 
     sbt
