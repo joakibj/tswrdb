@@ -83,17 +83,17 @@ Run the program (prints usage):
 
 A few examples of usage:
 
+Export all Loading Screen Images to ``<tswrdb folder>/tswrdb-cmdui/exported/1010042 (Loading Screen Images)``:
+
     run export rdbtype 1010042 --tsw """D:\Programs\TSW TestLive"""
 
-The previous command exports all Loading Screen Images to ``<tswrdb folder>/tswrdb-cmdui/exported/1010042 (Loading Screen Images)``.
+Export all german strings to XML files in ``<tswrdb folder>/tswrdb-cmdui/exported/1030002 (Strings)``:
 
     run export strings --lang de --tsw """D:\Programs\TSW TestLive"""
 
-The previous command exports all german strings to XML files in ``<tswrdb folder>/tswrdb-cmdui/exported/1030002 (Strings)``.
+Export all english strings to JSON files in ``<tswrdb folder>/tswrdb-cmdui/exported/1030002 (Strings)``:
 
     run export strings --lang en --json --tsw """D:\Programs\TSW TestLive"""
-
-The previous command exports all english strings to JSON files in ``<tswrdb folder>/tswrdb-cmdui/exported/1030002 (Strings)``.
 
 See the usage below for all available commands.
 
