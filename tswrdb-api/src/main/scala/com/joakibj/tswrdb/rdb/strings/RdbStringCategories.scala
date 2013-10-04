@@ -18,6 +18,8 @@ object RdbStringCategories {
   def find(id: Int): Option[RdbStringCategory] = categories.find(_.id == id)
 
   private final val categories = List(
+    RdbStringCategory(2, "unknown_2"),
+    RdbStringCategory(6, "unknown_6"),
     RdbStringCategory(100, "gamecode"),
     RdbStringCategory(105, "login_problems"),
     RdbStringCategory(115, "wielding_weapon"),
@@ -42,7 +44,7 @@ object RdbStringCategories {
     RdbStringCategory(500, "money"),
     RdbStringCategory(520, "playfield_teleport_popup"),
     RdbStringCategory(600, "damage_type"),
-    RdbStringCategory(601, "unknown_1"),
+    RdbStringCategory(601, "unknown_601"),
     RdbStringCategory(602, "defensive_level"),
     RdbStringCategory(603, "sex"),
     RdbStringCategory(606, "fatness"),
@@ -69,7 +71,7 @@ object RdbStringCategories {
     RdbStringCategory(10010, "item_type_gui"),
     RdbStringCategory(10011, "item_class_gui"),
     RdbStringCategory(10012, "char_races"),
-    RdbStringCategory(10013, "unknown_2"),
+    RdbStringCategory(10013, "dungeon_finder"),
     RdbStringCategory(10015, "zoning_playfield_descriptions"),
     RdbStringCategory(10016, "actions_gui"),
     RdbStringCategory(10017, "zoning_playfield_tips"),
@@ -81,7 +83,7 @@ object RdbStringCategories {
     RdbStringCategory(10034, "weapon_type_gui"),
     RdbStringCategory(10035, "character_skill_gui"),
     RdbStringCategory(10036, "friends_gui"),
-    RdbStringCategory(10050, "unknown_3"),
+    RdbStringCategory(10050, "unknown_10050"),
     RdbStringCategory(10051, "body_markings"),
     RdbStringCategory(10052, "heads"),
     RdbStringCategory(10053, "hair_styles"),
@@ -92,7 +94,8 @@ object RdbStringCategories {
     RdbStringCategory(10058, "mission_message_boxes"),
     RdbStringCategory(10059, "video_player"),
     RdbStringCategory(10060, "achievement_gui"),
-    RdbStringCategory(10061, "unknown_4"),
+    RdbStringCategory(10061, "unknown_10061"),
+    RdbStringCategory(10062, "scenarios"),
     RdbStringCategory(13000, "installer"),
     RdbStringCategory(14000, "patcher"),
     RdbStringCategory(14250, "blocked_status"),
@@ -164,7 +167,7 @@ object RdbStringCategories {
     RdbStringCategory(55600, "climbing_points"),
     RdbStringCategory(55700, "achievement_and_lore_descriptions"),
     RdbStringCategory(55701, "achievement_and_lore_names"),
-    RdbStringCategory(56000, "unknown_6")
+    RdbStringCategory(56000, "cabal_audit")
   )
 }
 
