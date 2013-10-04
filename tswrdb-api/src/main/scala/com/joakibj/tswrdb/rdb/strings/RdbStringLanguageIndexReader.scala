@@ -43,7 +43,10 @@ class RdbStringLanguageIndexReader(languageFile: File,
       case Some(cat) =>
         val entry = RdbStringLangIndexEntry(rdbCat._2, cat)
         entries += entry
-      case None => throw new RdbIOException("category: " + rdbCat._1 + " was not found ")
+      case None =>
+        val entry = RdbStringLangIndexEntry(rdbCat._2, RdbStringCategory(rdbCat._1, "unknown_" + rdbCat._1))
+        println(entry)
+        entries += entry
     }
 
     entries.toList
