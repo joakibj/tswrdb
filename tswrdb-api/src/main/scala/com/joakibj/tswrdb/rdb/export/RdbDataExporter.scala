@@ -70,7 +70,7 @@ abstract class RdbDataExporter(val rdbDataDirectory: File) {
 
     val data = getDataEntries(fileNum, indexEntries)
 
-    println(f"Exporting entries from: $fileNum%d.rdbdata")
+    println(f"Exporting entries from: $fileNum%02d.rdbdata")
 
     exportData(rdbType, outputDirectory, data)
   }
