@@ -143,7 +143,7 @@ class RdbTypes {
 
     RdbType(1010006, "FCTX Textures", 0, FileType("dat")),
     RdbType(1010007, "Morph", 0, FileType("morph")),
-    RdbType(1010008, "Icons - PNG", 12, FileType("png"), true),
+    RdbType(1010008, "Icons - PNG (Age of Conan)", 12, FileType("png"), true),
 
     RdbType(1010011, "Unknown", 0, FileType("dat")),
     RdbType(1010012, "Materials MTI", 0, FileType("dat")),
