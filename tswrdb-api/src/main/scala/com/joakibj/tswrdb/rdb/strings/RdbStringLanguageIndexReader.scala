@@ -9,11 +9,13 @@
 
 package com.joakibj.tswrdb.rdb.strings
 
-import com.joakibj.tswrdb.rdb.{RdbIOException, RdbFileReader}
+import com.joakibj.tswrdb.rdb.RdbFileReader
 import java.io.{FileInputStream, File, InputStream}
 import scala.collection.mutable
 
 object StringLanguage extends Enumeration {
+  import scala.language.implicitConversions
+
   val English = LangVal("en", 55)
   val French = LangVal("fr", 56)
   val German = LangVal("de", 54)
