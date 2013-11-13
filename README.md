@@ -52,22 +52,54 @@ And to run tests:
 
     test
 
+To generate IntelliJ IDEA project files:
+
+    gen-idea
+
+To assemble a "binary", known as a fatjar:
+
+    assembly
+
+The jar can be found in `tswrdb\tswrdb-cmdui\target\scala-2.10`
+
 Usage
 =====
 
 **All use of tswrdb is at your own risk!**
 
-Currently there is no elegant packaging for tswrdb. It uses the sbt to manage the lifecycle, including running the application with no additional hassle.
+#### Using the packaged fatjar
+
+Currently tswrdb is packaged as a self-contained jar. Since tswrdb is in an initial development stage, it is not versioned. However, a [pre-release](https://github.com/joakibj/tswcalc/releases/tag/v0.0.1) can be found.
 
 To use tswrdb you need the following:
 
-1. A shell (cmd.exe or any *nix shell)
-2. Java 6 runtime
-3. sbt
+1. The [tswrdb-0.0.1.jar](https://github.com/joakibj/tswcalc/releases/tag/v0.0.1) in a directory of your choice. (e.g. `C:\tswrdb`)
+2. A shell (cmd.exe or any *nix shell)
+3. Java 6 runtime
 4. A legal copy of The Secret World by Funcom
     * An installation of TSW ([TestLive](http://forums.thesecretworld.com/showthread.php?t=55882) is recommended)
 
-When in the tswrdb root directory (e.g. ``~/dev/tswrdb``):
+When in the tswrdb directory (prints version):
+
+    java -jar tswrdb-0.0.1.jar --version
+
+Export all Loading Screen Images to ``./exported/1010042 (Loading Screen Images)``:
+
+    java -jar tswrdb-0.0.1.jar export rdbtype 1010042 --tsw """D:\Programs\TSW TestLive"""
+
+Export all german strings to XML files in ``./exported/1030002 (Strings)``:
+
+    java -jar tswrdb-0.0.1.jar export strings --lang de --tsw """D:\Programs\TSW TestLive"""
+
+Export all english strings to JSON files in ``./exported/1030002 (Strings)``:
+
+    java -jar tswrdb-0.0.1.jar export strings --lang en --json --tsw """D:\Programs\TSW TestLive"""
+
+#### Using sbt
+
+It is possible to run tswrdb in sbt without any additional hassle.
+
+When in the tswrdb root directory (e.g. `~/dev/tswrdb`):
 
     sbt
 
@@ -77,11 +109,11 @@ Change to the tswrdb program:
 
     project tswrdb-cmdui
 
-Run the program (prints usage):
+Run the program (prints version):
 
-    run
+    run --version
 
-A few examples of usage:
+Usage is the same as using the fatjar, except commands must be executed with the `run` task in sbt. e.g.:
 
 Export all Loading Screen Images to ``<tswrdb folder>/tswrdb-cmdui/exported/1010042 (Loading Screen Images)``:
 
@@ -98,7 +130,7 @@ Export all english strings to JSON files in ``<tswrdb folder>/tswrdb-cmdui/expor
 See the usage below for all available commands.
 
 ```
-tswrdb 0.1
+tswrdb 0.0.1
 Usage: tswrdb [list|export|index] [options]
 
   --tsw <directory>
@@ -139,10 +171,22 @@ Documentation
 
 Please see the [DOCUMENTATION](docs/DOCUMENTATION.md) file for documentation about the RDB data formats.
 
-Known Issues
-============
+Known issues / Troubleshooting
+==============================
 
-* Currently no known issues
+#### Known issues
+
+* Currently an issue with RdbType 1010008. Need to verify if this actually exist in fresh downloads of Live/TestLive. See #3
+
+#### Troubleshooting
+
+> I get a java.lang.OutOfMemoryError exception
+
+Try running tswrdb with these JVM options: `-Xmx2G -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled`. This means that we want the JVM to set the heap to max 2GB, enable the garbage collector and sweep permanent generation memory (classes and strings).
+
+e.g.:
+
+    java -Xmx2G -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled -jar tswrdb-0.0.1.jar --help
 
 Acknowledgements
 ================
