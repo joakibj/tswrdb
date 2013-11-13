@@ -28,7 +28,7 @@ object TswRdb extends App {
   Console.setErr(Console.out)
 
   val parser = new scopt.OptionParser[Config]("tswrdb") {
-    head("tswrdb", "0.1")
+    head("tswrdb", "0.0.1")
     opt[File]("tsw") required() valueName ("<directory>") action {
       (file, config) =>
         config.copy(tswDirectory = file)
