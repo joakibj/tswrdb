@@ -69,11 +69,11 @@ Usage
 
 #### Using the packaged fatjar
 
-Currently tswrdb is packaged as a self-contained jar. Since tswrdb is in an initial development stage, it is not versioned. However, a [pre-release](https://github.com/joakibj/tswcalc/releases/tag/v0.0.1) can be found.
+Currently tswrdb is packaged as a self-contained jar. Since tswrdb is in an initial development stage, it is not versioned. However, a [pre-release](https://github.com/joakibj/tswrdb/releases/tag/v0.0.1) can be found.
 
 To use tswrdb you need the following:
 
-1. The [tswrdb-0.0.1.jar](https://github.com/joakibj/tswcalc/releases/tag/v0.0.1) in a directory of your choice. (e.g. `C:\tswrdb`)
+1. The [tswrdb-0.0.1.jar](https://github.com/joakibj/tswrdb/releases/tag/v0.0.1) in a directory of your choice. (e.g. `C:\tswrdb`)
 2. A shell (cmd.exe or any *nix shell)
 3. Java 6 runtime
 4. A legal copy of The Secret World by Funcom
