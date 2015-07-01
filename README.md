@@ -79,19 +79,25 @@ To use tswrdb you need the following:
 4. A legal copy of The Secret World by Funcom
     * An installation of TSW ([TestLive](http://forums.thesecretworld.com/showthread.php?t=55882) is recommended)
 
+The following examples assume cmd.exe on a Windows installation.
+
 When in the tswrdb directory (prints version):
 
     java -jar tswrdb-0.0.1.jar --version
 
 Export all Loading Screen Images to ``./exported/1010042 (Loading Screen Images)``:
 
-    java -jar tswrdb-0.0.1.jar export rdbtype 1010042 --tsw """D:\Programs\TSW TestLive"""
+    java -jar tswrdb-0.0.1.jar export rdbtype 1010042 --tsw D:\Programs\TSW TestLive
 
 Export all german strings to XML files in ``./exported/1030002 (Strings)``:
 
-    java -jar tswrdb-0.0.1.jar export strings --lang de --tsw """D:\Programs\TSW TestLive"""
+    java -jar tswrdb-0.0.1.jar export strings --lang de --tsw D:\Programs\TSW TestLive
 
 Export all english strings to JSON files in ``./exported/1030002 (Strings)``:
+
+    java -jar tswrdb-0.0.1.jar export strings --lang en --json --tsw D:\Programs\TSW TestLive
+
+To use tswrdb with the MSYS or Cygwin shell on Windows, enclose the path in triple double-quotes. e.g.:
 
     java -jar tswrdb-0.0.1.jar export strings --lang en --json --tsw """D:\Programs\TSW TestLive"""
 
